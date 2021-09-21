@@ -1,0 +1,178 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+{% include "base/header.html" %}
+<style type="text/css">
+    label {
+        text-align: right;
+        color: darkslategray;
+        font-size-adjust: 0.45;
+    }
+</style>
+
+
+<div class="content-wrapper">
+    <form action method="POST" autocomplete="off">
+        {% csrf_token %}
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>Add Meter Request</h1>
+                    </div>
+                    <div class="ml-auto">
+                            <button type="submit" class="btn btn-success btn-sm mr-1 "><i class="fal fa-save mr-1"
+                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save</span></button>
+                            <button type="button" onClick="javascript:history.go(-1)" class="btn btn-info btn-sm"><i
+                                    class="fal fa-share-square mr-1"></i><span
+                                    style="font-size: 12px;">Cancel</span></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                            required)</i></span>
+                                </h3>
+                            </div>
+
+                            <!-- {{ area }} -->
+                            <!-- {{ form }} -->
+                            <div class="row g-0">
+                                <div class="col">
+                                    <div class="card-body">
+                                        <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
+                                            value="0">
+                                        <input type="hidden" name="active" maxlength="45" required="" id="id_active"
+                                            value="0">
+                                        <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
+                                        <div class="form-group row">
+                                            <label for="id_dateforwarded"
+                                                class="col-sm-2 col-form-label col-form-label-sm ">Date:</label>
+                                            <div class="col">
+                                                <input type="date" class="form-control form-control-sm"
+                                                    id="id_dateforwarded" name="dateforwarded" data-mask datemask
+                                                    value="{{ datetoday|date:'Y-m-d' }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
+                                                    placeholder="RR #" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_brand" class="col-sm-2 col-form-label">Brand Name:</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_brand"
+                                                    name="brand" maxlength="145" placeholder="Accura" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_metertype" class="col-sm-2 col-form-label">Meter Type:</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="id_metertype" name="metertype" placeholder="Electrical"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_units" class="col-sm-2 col-form-label">Unit:</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_units" name="units" placeholder="100" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial Starts:</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="id_serialnos" name="serialnos" placeholder="0001-9999" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>
+
+<script>
+
+    window.onload = function ()
+    {
+
+        // $('[data-mask]').inputmask();
+        // $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' });
+        // $('#brand').editableSelect({ effects: 'fade' });
+        // $('#id_brand').editableSelect({ effects: 'fade' });
+
+
+
+    }
+    function auto_qty(params) {
+        var qty = 0;
+        var num1 = $('#id_serialnos').val().split('-');
+        var num2 = 0;
+        // try {
+        num2 = (parseFloat(num1[1]) - parseFloat(num1[0]))===0 ? num1[0] : num2;
+        // } catch (error) {
+        //     num2 = num1;
+        // }
+        $('#id_units').val(num2);
+
+    }
+
+
+
+    // $("input").bind("keydown", function (e)
+    //     { //input type=id above
+    //         $eventText = $('#serialnos');
+    //         alert($eventText);
+    //         if (e.keyCode == 38)
+    //         {
+    //             var text = $("#serialnos").val();
+    //             var args = { 'serialnos': text };
+    //             alert('asdf');
+    //             // $.get("/voteup/", args).done(function (data)
+    //             // {
+    //             //     console.log("message: " + data);
+    //             //     location.reload();
+    //             // });
+    //             return false;
+    //         }
+    //         if (e.keyCode == 40)
+    //         {
+    //             var text = $("#serialnos").val();
+    //             var args = { 'serialnos': text };
+    //             alert('asdf');
+    //             // $.get("/votedown/", args).done(function (data)
+    //             // {
+    //             //     console.log("message: " + data);
+    //             //     location.reload();
+    //             // });
+    //             return false;
+    //         }
+    //     });
+
+
+
+
+
+
+
+
+</script>
+{% endblock content %}

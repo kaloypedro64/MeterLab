@@ -1,0 +1,173 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% include "base/header.html" %}
+<style type="text/css">
+    label {
+        text-align: left;
+        color: darkslategray;
+        /* font-size: 4px; */
+        font-size-adjust: 0.58;
+        /* font-weight: normal !important; */
+    }
+</style>
+
+<div class="content-wrapper">
+    <form action method="POST" autocomplete="off">
+        {% csrf_token %}
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>Assign New Meter</h1>
+                    </div>
+                    <div class="ml-auto">
+                        <button type="submit" class="btn btn-success btn-sm mr-1 "><i class="fal fa-save mr-1"
+                                tabindex="-1"></i> <span style="font-size: 12px;"> Update</span></button>
+                        <button type="button" onClick="javascript:history.go(-1)" class="btn btn-info btn-sm"><i
+                                class="fal fa-share-square mr-1"></i><span
+                                style="font-size: 12px;">Close</span></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                            required)</i></span>
+                                </h3>
+                            </div>
+
+
+                            <div class="row g-0">
+                                <div class="col">
+                                    <div class="card-body register-card-body">
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <div class="form-group row">
+                                                <label for="id_assigneddate"
+                                                    class="col-sm-2 col-form-label col-form-label-sm">Date:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="date" class="form-control form-control-sm"
+                                                        id="id_assigneddate" name="assigneddate" value="{{ datetoday|date:'Y-m-d' }}" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="idmeterserials" class="col-sm-2 col-form-label">Serial
+                                                    No.:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-control select2" id="id_idmeterserials" name="idmeterserials" onchange="selected_serialno()">
+                                                        {% for row in serials %}
+                                                        <option value="{{ row.id }}">
+                                                            {{ row.idmeterdetails__serialno }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="id_coname" class="col-sm-2 col-form-label">Name:</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-control select2" id="id_coname" name="coname"
+                                                        onchange="selected_serialno()">
+                                                        {% for row in coname %}
+                                                        <option value="{{ row.id }}">
+                                                            {{ row.0 }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="id_coname"
+                                                    class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        id="id_coname" name="coname">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="id_coaddress" class="col-sm-2 col-form-label col-form-label-sm">Address:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control form-control-sm" id="id_coaddress" name="coaddress">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="id_brand" class="col-sm-2 col-form-label col-form-label-sm">Brand:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control form-control-sm" id="id_brand" name="brand">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="id_reading" class="col-sm-2 col-form-label col-form-label-sm">Reading:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control form-control-sm" id="id_reading" name="reading">
+                                                </div>
+                                            </div>
+
+                                            <center><label class="text-danger">{{ err_msg }}</label></center>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>
+
+<script>
+
+    // --------------- toogle eye/ view password ---------------
+    // const idmeterserials = document.querySelector('#idmeterserials');
+    // idmeterserials.addEventListener('selected', function (e)
+    // {
+    //     const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    //     password.setAttribute('type', type);
+    //     password2.setAttribute('type', type);
+    //     $(togglePassword).toggleClass("fa-eye fa-eye-slash");
+    //     $(togglePassword2).toggleClass("fa-eye fa-eye-slash");
+    // });
+    // --------------- end toogle eye/ view password ---------------
+
+    function selected_serialno(params) {
+        var id =$('#id_idmeterserials').val();
+        $.ajax({
+            url: "{% url 'selected_serialno' %}",
+            method: 'GET',
+            dataType: 'json',
+            data: { id: id, },
+            success: function (data)
+            {
+                $('#id_brand').val(data['idmeters__brand']);
+                $('#id_reading').val(data['metercalibration__reading']['value']);
+            },
+            error: function (e)
+            {
+                alert('err: meterdetails.html-202');
+            }
+        });
+    }
+    window.onload = function ()
+    {
+        // $("#id_area_field").select2().val('{{ form_ex.area }}').trigger('change.select2');
+    }
+
+</script>
+
+{% endblock content %}

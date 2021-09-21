@@ -1,0 +1,165 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "base/header.html" %}
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-sm-2 mr-2">
+          </div>
+          <div class="ml-auto ">
+            <a href="add" type="button" class="btn btn-info btn-sm mb-2"><span
+                style="font-size: 12px;"><i class="fal fa-plus mr-1"></i>Add Request</span></a>
+          </div>
+        </div>
+    </div>
+    <section class="content">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <table id="table_meters" class="table table-nowrap table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox" id="select_all"><label
+                        for="select_all"><span></span></label></th>
+                    <th style="width: 60px;">Actions</th>
+                    <th style="width: 120px;">Date</th>
+                    <th>Brand</th>
+                    <th>Serials</th>
+                    <th>Meter Type</th>
+                    <th>Qty</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+    </section>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  let table_meters;
+
+  window.onload = function ()
+  {
+
+    function Load_serials_table()
+    {
+      table_meters = $('#table_meters').DataTable({
+        "searching": true,
+        "processing": true,
+        "stateSave": true,
+        "info": true,
+        "paging": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "responsive": true,
+        "columnDefs": [
+          { "targets": [0], "searchable": false, "orderable": false, "visible": true },
+          { "targets": [6], "className": "text-left"}
+        ],
+        "keys": true,
+        "keys": { "blurable": false },
+        "select": true,
+        "select": {
+          "style": "os",
+        },
+        "serverSide": true,
+        "processing": true,
+        "ajax": function (data, callback, settings)
+        {
+          var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+          var direction = "";
+          if (data.order[0].dir == "desc") { direction = "-" };
+          $.get("{% url 'rrviews' %}", {
+            limit: data.length,
+            start: data.start,
+            filter: data.search.value,
+            order_by: direction + sort_column_name
+          }, function (res)
+          {
+            callback({
+              recordsTotal: res.length,
+              recordsFiltered: res.length,
+              data: res.objects
+            });
+          });
+        },
+        columns: [
+          {
+            "data": "id", "render": function (data, type, row) {
+               return '<td class="selected"><input type="checkbox" id="item_20" value="20"><label for="item_20"><span></span></label></td>'
+            }
+          },
+          {
+            "data": "id", "render": function (data, type, row)
+            {
+              if ('{{ request.user.is_superuser }}' == 'True')
+              {
+                return '<center>' +
+                  '<div class="btn-group">' +
+                  '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                  '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meters_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                  '</div>' +
+                  '</center>'
+              }
+              else
+              {
+                return '<center>' +
+                  '<div class="btn-group">' +
+                  '<a href="edit/' + row["id"] + '" class="btn btn-warning btn-xs text-sm" title="Edit"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>'+
+                  '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meters_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                  '</div>' +
+                  '</center>'
+              }
+            }
+          },
+          {
+            "data": "dateforwarded", "render": function (data, type, row)
+            {
+              return '<td style="width: fit-content;"> <a href="meterdetails_ss/' + row["id"] + '">' + data + '</a></td>'
+            }
+          },
+          { "data": "brand" },
+          { "data": "serialnos" },
+          { "data": "metertype" },
+          { "data": "units" },
+        ]
+      });
+      // table_meters.column(0).visible(false);
+    }
+    Load_serials_table();
+  };
+
+  function meters_delete(id)
+  {
+    var ok = confirm('Are you sure to delete this entry?');
+    if (ok == true)
+    {
+      $.ajax({
+        url: "{% url 'meters_delete' 0 %}".replace('0', id),
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: { id: id, },
+        success: function (data)
+        {
+          if (data == 'deleted')
+            table_meters.draw();
+        },
+        error: function (e)
+        {
+          alert('err: meter list 158');
+        }
+      });
+    }
+  }
+
+</script>
+{% endblock content %}

@@ -1,0 +1,159 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "base/header.html" %}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2 mr-2">
+                </div>
+                <div class="ml-auto ">
+                    <a href="add" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"><i
+                                class="fal fa-plus mr-1"></i>Add Request</span></a>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table_calibration" class="table table-nowrap table-striped dtr-inline">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th style="width: 120px;"> Serial No.</th>
+                                        <th style="width: fit-content;">Brand</th>
+                                        <th>Condition</th>
+                                        <th >Accuracy</th>
+                                        <th style="width: 120px;">Seal 1</th>
+                                        <th style="width: 120px;">Seal 2</th>
+                                        <th>Type</th>
+                                        <th>Amphere</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+        </section>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    let table_meters;
+
+    window.onload = function ()
+    {
+
+        function Load_serials_table()
+        {
+            table = $('#table_calibration').DataTable({
+                "searching": true,
+                "processing": true,
+                "stateSave": true,
+                "info": true,
+                "paging": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "responsive": true,
+                "columnDefs": [
+                    { "targets": [0], "searchable": false, "orderable": false, "visible": true },
+                    // { "targets": [6], "className": "text-left" }
+                ],
+                "keys": true,
+                "keys": { "blurable": false },
+                "select": true,
+                "select": {
+                    "style": "os",
+                },
+                "serverSide": true,
+                "processing": true,
+                "ajax": function (data, callback, settings)
+                {
+                    var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                    var direction = "";
+                    if (data.order[0].dir == "desc") { direction = "-" };
+                    $.get("{% url 'calibrationviews' %}", {
+                        limit: data.length,
+                        start: data.start,
+                        filter: data.search.value,
+                        order_by: direction + sort_column_name
+                    }, function (res)
+                    {
+                        callback({
+                            recordsTotal: res.length,
+                            recordsFiltered: res.length,
+                            data: res.objects
+                        });
+                    });
+                },
+                columns: [
+                    { "data": "metercalibration__testdate" },
+                    {
+                        "data": "serialno", "render": function (data, type, row)
+                        {
+                            return '<td style="width: fit-content;">' + data + '</td>'
+                        }
+                    },
+                    { "data": "idmeters__brand" },
+                    {
+                        "data": "status", "render": function (data, type, row)
+                        {
+                            if (data == 1)
+                            {
+                                return '<span style="color: rgb(79, 139, 18);"> Passed</span>'
+                            } else if (data == 2)
+                            {
+                                return '<span style="color: rgb(255, 0, 0);">Failed</span>'
+                            } else
+                            {
+                                return '<span>Pending</span>'
+                            }
+                        }
+                    },
+                    { "data": "accuracy" },
+                    { "data": "meterseal__seal_a" },
+                    { "data": "meterseal__seal_b" },
+                    { "data": "idmeters__metertype" },
+                    { "data": "ampheres" },
+                ],
+                "fnInitComplete": function (oSettings, json)
+                {
+                    $('#table_calibration tbody tr:eq(0)').click();
+                }
+            });
+        }
+        Load_serials_table();
+    };
+
+    function meters_delete(id)
+    {
+        var ok = confirm('Are you sure to delete this entry?');
+        if (ok == true)
+        {
+            $.ajax({
+                url: "{% url 'meters_delete' 0 %}".replace('0', id),
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                contentType: false,
+                data: { id: id, },
+                success: function (data)
+                {
+                    if (data == 'deleted')
+                        table_meters.draw();
+                },
+                error: function (e)
+                {
+                    alert('err: meter list 158');
+                }
+            });
+        }
+    }
+
+</script>
+{% endblock content %}

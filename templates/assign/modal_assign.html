@@ -1,0 +1,82 @@
+
+<div class="modal fade" id="modal-assign">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">New Material Charge Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <input type="hidden" id="idissuance" name="idissuance" />
+
+            <div class="modal-body">
+
+                {{ form }}
+
+            </div>
+            <div class="modal-footer justify-content-left">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fas fa-times mr-1"></i>
+                    Close</button>
+                <button type="submit" class="btn btn-info" onclick="save_issuance()"><i class="fal fa-save mr-1"></i>
+                    Save & Open Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $('#areafrom :input').prop('disabled', true);
+    function enable_areafrom()
+    {
+        var check = $('#checkboxTransferfrom').is(':checked');
+        if (check)
+        {
+            $('#areafrom :input').prop('disabled', false);
+        } else
+        {
+            $('#areafrom :input').prop('disabled', true);
+        }
+    }
+
+    $('.inputs').keydown(function (e)
+    {
+        if (e.which === 13)
+        {
+            var index = $('.inputs').index(this) + 1;
+            $('.inputs').eq(index).focus();
+        }
+    });
+
+    function change_mrvno()
+    {
+        var transferto = $('#transferto').val();
+        $.ajax({
+            url: 'datahelpers/issuance_helper.php',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                x: x,
+                transferto: transferto,
+            },
+            success: function (data)
+            {
+                if (x == 'mct')
+                {
+                    $('#rvno').val(data.rvno);
+                } else
+                {
+                    $('#rvno').val(data.rvno);
+                }
+            },
+            error: function (ex)
+            {
+                // alert('issuance line: 122');
+            }
+        });
+
+    }
+
+</script>
