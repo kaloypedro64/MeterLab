@@ -111,6 +111,17 @@ def assign(request):
         context = { 'form': form, 'header': 'Meter Assign', 'datetoday': datetoday, 'serials': serials, 'coname':'' }
         return render(request, "assign/assign_add.html", context)
 
+# def assign_selected(request):
+#     if request.is_ajax():
+#         id = request.GET.get('id')
+#         # assign = meterassignedForm(request.POST)
+#         query = metercalibration.objects.select_related(
+#             'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
+#         # json_response = {json.dumps(query, cls=DecimalEncoder)}
+#         # print('res2', json_response)
+#     # return JsonResponse(query, content_type='application/json')
+#     # return JsonResponse({'assign': assign, 'calibrated_meter': query})
+#     return render(request, 'assign/modal_assign.html', {'assign': assign, 'calibrated_meter': query})
 
 def selected_serialno(request):
     if request.is_ajax():

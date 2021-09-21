@@ -11,8 +11,8 @@
                 <div class="col-sm-2 mr-2">
                 </div>
                 <div class="ml-auto ">
-                    <a href="" type="button" class="btn btn-info btn-sm mb-2" style="font-size: 12px;"><i
-                            class="fal fa-plus mr-1"></i>Assign Meter</span></a>
+                    <a href="add/" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;" onclick="meters_assign()"><i
+                                class="fal fa-plus mr-1"></i>Assign Selected</span></a>
                 </div>
             </div>
         </div>
@@ -114,7 +114,7 @@
 
 
             });
-            // table_meters.column(0).visible(false);
+            table_meters.column(0).visible(false);
         }
         Load_serials_table();
 
@@ -132,11 +132,17 @@
             }
         });
 
-        function meters_assign()
+
+
+    };
+
+    // Load_serials_table();
+
+    function meters_delete(id)
+    {
+        var ok = confirm('Are you sure to delete this entry?');
+        if (ok == true)
         {
-            var idmeters = $('#table_meters').DataTable().rows('.selected').data()[0][0];
-            var serialnos = $('#table_meters').DataTable().rows('.selected').data()[0][1];
-            alert(idmeters +' - '+ serialnos);
             $.ajax({
                 url: "",
                 type: 'GET',
@@ -152,4 +158,22 @@
                 error: function (e)
                 {
                     alert('err: meter list 158');
-          
+                }
+            });
+        }
+    }
+
+    function meters_assign()
+    {
+        var id = table_meters.rows('.selected').data()[0][0];
+        var name = table_meters.rows('.selected').data()[0][1];
+        var address = table_meters.rows('.selected').data()[0][2];
+
+        // $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
+
+    }
+
+
+
+</script>
+{% endblock content %}
