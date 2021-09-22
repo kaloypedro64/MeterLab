@@ -102,6 +102,7 @@ def assign(request):
             #     num1 += 1
         return redirect("..")
     else:
+        name = request.GET.get('name')
         serials = metercalibration.objects.select_related(
             'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
         # cursor = connection.cursor()

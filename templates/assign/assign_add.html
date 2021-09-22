@@ -54,7 +54,7 @@
                                             <div class="form-group row">
                                                 <label for="id_assigneddate"
                                                     class="col-sm-2 col-form-label col-form-label-sm">Date:</label>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-2">
                                                     <input type="date" class="form-control form-control-sm"
                                                         id="id_assigneddate" name="assigneddate" value="{{ datetoday|date:'Y-m-d' }}" required>
                                                 </div>
@@ -63,7 +63,7 @@
                                             <div class="form-group row">
                                                 <label for="idmeterserials" class="col-sm-2 col-form-label">Serial
                                                     No.:</label>
-                                                <div class="col-sm-4">
+                                                <div class="col">
                                                     <select class="form-control select2" id="id_idmeterserials" name="idmeterserials" onchange="selected_serialno()">
                                                         {% for row in serials %}
                                                         <option value="{{ row.id }}">
@@ -75,44 +75,30 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <label for="id_coname" class="col-sm-2 col-form-label">Name:</label>
-                                                <div class="col-sm-4">
-                                                    <select class="form-control select2" id="id_coname" name="coname"
-                                                        onchange="selected_serialno()">
-                                                        {% for row in coname %}
-                                                        <option value="{{ row.id }}">
-                                                            {{ row.0 }}
-                                                        </option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
                                                 <label for="id_coname"
                                                     class="col-sm-2 col-form-label col-form-label-sm">Name:</label>
-                                                <div class="col-sm-4">
+                                                <div class="col">
                                                     <input type="text" class="form-control form-control-sm"
                                                         id="id_coname" name="coname">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="id_coaddress" class="col-sm-2 col-form-label col-form-label-sm">Address:</label>
-                                                <div class="col-sm-4">
-                                                    <input type="text" class="form-control form-control-sm" id="id_coaddress" name="coaddress">
+                                                <div class="col">
+                                                    <textarea type="text" class="form-control form-control-sm" id="id_coaddress" name="coaddress" cols="17" rows="5"></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label for="id_brand" class="col-sm-2 col-form-label col-form-label-sm">Brand:</label>
-                                                <div class="col-sm-4">
+                                                <div class="col">
                                                     <input type="text" class="form-control form-control-sm" id="id_brand" name="brand">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <label for="id_reading" class="col-sm-2 col-form-label col-form-label-sm">Reading:</label>
-                                                <div class="col-sm-4">
+                                                <div class="col">
                                                     <input type="text" class="form-control form-control-sm" id="id_reading" name="reading">
                                                 </div>
                                             </div>
