@@ -4,25 +4,15 @@ from decimal import Decimal
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
 from Users.forms import AreaForm
-import math
 import datetime
-import time
 import json
-import json as json_util
 from django.db import connection
-from django.db.models.expressions import OrderBy, Window
 from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 
-from Meters.models import meters, meterdetails, metercalibration, meterseal, meterassigned
-from Meters.forms import meterForm, meterassignedForm, meterdetailsForm, metercalibrationForm, metersealForm
+from Meters.models import *
+from Meters.forms import *
 
-
-from django.views.generic import CreateView, FormView, RedirectView, ListView
-from django.utils.dateparse import parse_datetime
-
-from django.core.serializers.json import DjangoJSONEncoder
 
 
 # Create your views here.
@@ -85,16 +75,9 @@ def assign(request, str):
         return redirect("..")
     else:
 
-        key = call_key()
-        a = Fernet(key)
-        name = a.encrypt(str.encode())
-        # print('name', request.GET.get('name'))
-        # coded_slogan = a.encrypt(slogan)
-        # print(coded_slogan)
-
         serials = metercalibration.objects.select_related(
             'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
-        print('get', name)
+        # print('get', name)
         context = {'form': form, 'header': 'Meter Assign',
                    'datetoday': datetoday, 'serials': serials, 'coname': str}
         return render(request, "assign/assign_add.html", context)

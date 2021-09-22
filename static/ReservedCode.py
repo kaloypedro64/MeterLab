@@ -1,0 +1,6 @@
+       # key = call_key()
+        # a = Fernet(key)
+        # name = a.encrypt(str.encode())
+        # print('name', request.GET.get('name'))
+        # coded_slogan = a.encrypt(slogan)
+        # print(coded_slogan)
