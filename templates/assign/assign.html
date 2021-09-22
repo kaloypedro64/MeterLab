@@ -12,7 +12,8 @@
                 </div>
                 <div class="ml-auto ">
                     <button onclick="meters_assign()" class="btn btn-info btn-sm mb-2">
-                            <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign Selected</span></button>
+                        <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign
+                            Selected</span></button>
                 </div>
             </div>
         </div>
@@ -40,7 +41,6 @@
         </section>
     </div>
 </div>
-
 <script type="text/javascript">
 
     let table_meters;
@@ -158,34 +158,15 @@
         var id = table_meters.rows('.selected').data()[0][0];
         var name = table_meters.rows('.selected').data()[0][1];
         var address = table_meters.rows('.selected').data()[0][2];
+        var context = "{'name': " + name + ", 'address':" + address + "}";
+        var encrypted = window.btoa(context)
+        window.open("add/" + encrypted, '_self');
 
-        // var redirectWindow = window.open("add/name="+name+"&address="+address, '_blank');
-        window.open("add/name=" + name + "&address=" + address, '_self');
-
-        // window.open = "add/name=" + name + "&address=" + address;
-
-        // $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
-
-        // $.ajax({
-        //     url: "",
-        //     type: 'GET',
-        //     dataType: 'json',
-        //     contentType: 'application/json; charset=utf-8',
-        //     contentType: false,
-        //     data: { id:id, name: name, },
-        //     success: function (data)
-        //     {
-        //         window.open("add/", '_blank');
-        //     },
-        //     error: function (e)
-        //     {
-        //         alert('err: meter list 158');
-        //     }
-        // });
-
+        // var encodedString = window.btoa(baseString); // returns "bXktbmFtZS0x"
+        // var decodedString = window.atob(encodedString);  // returns "my-name-1"
     }
 
-
-
 </script>
+
+
 {% endblock content %}

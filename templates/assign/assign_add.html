@@ -11,7 +11,6 @@
     }
 </style>
 
-
 <div class="content-wrapper">
     <form action method="POST" autocomplete="off">
         {% csrf_token %}
@@ -19,8 +18,6 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <!-- {{ request.path }} -->
-                        {{ request.path_info }}
                         <h1>Assign New Meter</h1>
                     </div>
                     <div class="ml-auto">
@@ -33,7 +30,6 @@
                 </div>
             </div>
         </section>
-
 
         <section class="content">
             <div class="container-fluid">
@@ -152,7 +148,14 @@
     }
     window.onload = function ()
     {
+        var decodedString = window.atob("{{ coname }}");
+        // myJson = JSON.stringify(decodedString);
+        // alert(decodedString);
+        myJSON = JSON.parse(decodedString);
+
+        alert(myJson[0]);
         // $("#id_area_field").select2().val('{{ form_ex.area }}').trigger('change.select2');
+
     }
 
 </script>
