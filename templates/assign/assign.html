@@ -11,8 +11,8 @@
                 <div class="col-sm-2 mr-2">
                 </div>
                 <div class="ml-auto ">
-                    <a href="add/" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;" onclick="meters_assign()"><i
-                                class="fal fa-plus mr-1"></i>Assign Selected</span></a>
+                    <a href="add/" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"
+                            onclick="meters_assign()"><i class="fal fa-plus mr-1"></i>Assign Selected</span></a>
                 </div>
             </div>
         </div>
@@ -169,7 +169,27 @@
         var name = table_meters.rows('.selected').data()[0][1];
         var address = table_meters.rows('.selected').data()[0][2];
 
+        var redirectWindow = window.open("printing/issuance_print_hardcopy.php" + "?id=" + mrvid + "&doc=" + doctype, '_blank');
+        redirectWindow.location;
+
         // $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
+
+        // $.ajax({
+        //     url: "{% url 'assign_selected' %}",
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     contentType: 'application/json; charset=utf-8',
+        //     contentType: false,
+        //     data: { id:id, name: name, },
+        //     success: function (data)
+        //     {
+        //         window.open("add/", '_blank');
+        //     },
+        //     error: function (e)
+        //     {
+        //         alert('err: meter list 158');
+        //     }
+        // });
 
     }
 

@@ -108,30 +108,35 @@ def assign(request):
         # cursor = connection.cursor()
         # cursor.execute('SELECT name, address, ornumber, ordate FROM zanecoisd.newapply where ornumber is not null order by name')
         # coname = cursor.fetchall()
-        # print(coname)
-        context = { 'form': form, 'header': 'Meter Assign', 'datetoday': datetoday, 'serials': serials, 'coname':'' }
+        print('get', request)
+        context = {'form': form, 'header': 'Meter Assign',
+                   'datetoday': datetoday, 'serials': serials, 'coname': name}
         return render(request, "assign/assign_add.html", context)
 
-# def assign_selected(request):
-#     if request.is_ajax():
-#         id = request.GET.get('id')
-#         # assign = meterassignedForm(request.POST)
-#         query = metercalibration.objects.select_related(
-#             'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
-#         # json_response = {json.dumps(query, cls=DecimalEncoder)}
-#         # print('res2', json_response)
-#     # return JsonResponse(query, content_type='application/json')
-#     # return JsonResponse({'assign': assign, 'calibrated_meter': query})
-#     return render(request, 'assign/modal_assign.html', {'assign': assign, 'calibrated_meter': query})
-
-def selected_serialno(request):
+def assign_selected(request):
     if request.is_ajax():
         id = request.GET.get('id')
-        query = meterdetails.objects.select_related('idmeters', 'metercalibration').filter(
-            metercalibration__id=id).values('id', 'idmeters__brand', 'metercalibration__reading')
-        json_response = {json.dumps(query[0], cls=DecimalEncoder)}
+        # assign = meterassignedForm(request.POST)
+        print('id',id)
+        query = metercalibration.objects.select_related(
+            'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
+        # json_response = {json.dumps(query, cls=DecimalEncoder)}
         # print('res2', json_response)
-    return HttpResponse(json_response, content_type='application/json')
+    # return JsonResponse(query, content_type='application/json')
+    # return JsonResponse({'assign': assign, 'calibrated_meter': query})
+    return render(request, 'assign/modal_assign.html', {'assign': assign, 'calibrated_meter': query})
+
+# def selected_serialno(request):
+#     if request.is_ajax():
+#         id = request.GET.get('id')
+#         query = meterdetails.objects.select_related('idmeters', 'metercalibration').filter(
+#             metercalibration__id=id).values('id', 'idmeters__brand', 'metercalibration__reading')
+#         json_response = {json.dumps(query[0], cls=DecimalEncoder)}
+#         # print('res2', json_response)
+
+#         assign()
+
+#     return HttpResponse(json_response, content_type='application/json')
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
