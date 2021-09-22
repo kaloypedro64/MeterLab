@@ -11,6 +11,7 @@
     }
 </style>
 
+
 <div class="content-wrapper">
     <form action method="POST" autocomplete="off">
         {% csrf_token %}
@@ -18,6 +19,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
+                        <!-- {{ request.path }} -->
+                        {{ request.path_info }}
                         <h1>Assign New Meter</h1>
                     </div>
                     <div class="ml-auto">
@@ -130,7 +133,6 @@
     // --------------- end toogle eye/ view password ---------------
 
     function selected_serialno(params) {
-        alert('asdf');
         var id =$('#id_idmeterserials').val();
         $.ajax({
             url: "{% url 'selected_serialno' %}",

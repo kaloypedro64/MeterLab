@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     #     path('', views.meterList, name='meterList'),
     # meters
-    path('', MeterList.as_view(), name='rrviews'), 
+    path('', MeterList.as_view(), name='rrviews'),
     path('delete/<int:id>/', views.meters_delete, name='meters_delete'),
     path('add', views.meters_add, name='meters_add'),
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
@@ -15,8 +15,8 @@ urlpatterns = [
     path('selected_meter/', views.selected_meter, name='selected_meter'),
 
     # calibrate
-    path('meterdetails_ss/<int:idmeters>/calibrate_meter/<int:id>/',
-         views.calibrate_meter, name='calibrate_meter'),
+    path('meterdetails_ss/<int:idmeters>/meter_calibrate/<int:id>/',
+         views.meter_calibrate, name='meter_calibrate'),
 
     path('delete_calibration/<int:id>/',
          views.delete_calibration, name='delete_calibration'),

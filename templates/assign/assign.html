@@ -11,8 +11,8 @@
                 <div class="col-sm-2 mr-2">
                 </div>
                 <div class="ml-auto ">
-                    <a href="add/" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"
-                            onclick="meters_assign()"><i class="fal fa-plus mr-1"></i>Assign Selected</span></a>
+                    <button onclick="meters_assign()" class="btn btn-info btn-sm mb-2">
+                            <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign Selected</span></button>
                 </div>
             </div>
         </div>
@@ -41,14 +41,11 @@
     </div>
 </div>
 
-{% include "assign/modal_assign.html" %}
-
 <script type="text/javascript">
-    let table_meters;
 
+    let table_meters;
     window.onload = function ()
     {
-
         var AREA_CHOICES = [
             "Dipolog Main Office",
             "Piñan Area Services",
@@ -111,13 +108,10 @@
                     { "data": "4" },
                     { "data": "5" },
                 ]
-
-
             });
             table_meters.column(0).visible(false);
         }
         Load_serials_table();
-
 
         $('#table_meters tbody').on('click', 'tr', function ()
         {
@@ -132,11 +126,7 @@
             }
         });
 
-
-
     };
-
-    // Load_serials_table();
 
     function meters_delete(id)
     {
@@ -169,13 +159,15 @@
         var name = table_meters.rows('.selected').data()[0][1];
         var address = table_meters.rows('.selected').data()[0][2];
 
-        var redirectWindow = window.open("printing/issuance_print_hardcopy.php" + "?id=" + mrvid + "&doc=" + doctype, '_blank');
-        redirectWindow.location;
+        // var redirectWindow = window.open("add/name="+name+"&address="+address, '_blank');
+        window.open("add/name=" + name + "&address=" + address, '_self');
+
+        // window.open = "add/name=" + name + "&address=" + address;
 
         // $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
 
         // $.ajax({
-        //     url: "{% url 'assign_selected' %}",
+        //     url: "",
         //     type: 'GET',
         //     dataType: 'json',
         //     contentType: 'application/json; charset=utf-8',

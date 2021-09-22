@@ -153,7 +153,9 @@ def selected_meter(request):
 
 # SET FOREIGN_KEY_CHECKS=0;
 # SET GLOBAL FOREIGN_KEY_CHECKS=0;
-def calibrate_meter(request, id, idmeters):
+
+
+def meter_calibrate(request, id, idmeters):
     if request.method == "POST":
         form = metercalibrationForm(request.POST)
         if form.is_valid():
