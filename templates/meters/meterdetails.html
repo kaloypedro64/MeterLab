@@ -25,9 +25,13 @@
                 <div class="col-sm-2 mr-2">
                 </div>
                 <div class="ml-auto">
-                    <button type="button" onclick="return_selectedTable()" class="btn btn-warning"><i class="fas fa-clipboard-list-check mr-1"></i><span style="font-size: small">Return Meters</span></button>
-                    <a href="/calibrate_multiple" type="button" class="btn btn-info"><i class="fa fa-cog mr-1"></i><span style="font-size: small">Multiple Calibration</span></a>
-                    <a href="/meters" type="button" class="btn btn-danger"><i class="fal fa-times mr-1"></i><span style="font-size: small">Back</span></a>
+                    <button type="button" onclick="return_selectedTable()" class="btn btn-warning"><i
+                            class="fas fa-clipboard-list-check mr-1"></i><span style="font-size: small">Return
+                            Meters</span></button>
+                    <a href="calibrate_multiple" type="button" class="btn btn-info"><i class="fa fa-cog mr-1"></i><span
+                            style="font-size: small">Multiple Calibration</span></a>
+                    <a href="/meters" type="button" class="btn btn-danger"><i class="fal fa-times mr-1"></i><span
+                            style="font-size: small">Back</span></a>
                 </div>
             </div>
         </div>
@@ -37,12 +41,12 @@
                     <div class="card">
                         <div class="card-body">
                             <!-- style="max-width: 500px !important; width: 500px !important" -->
-                            <table id="table_meterdetails"
-                                class="table table-nowrap table-striped dtr-inline" >
+                            <table id="table_meterdetails" class="table table-nowrap table-striped dtr-inline">
                                 <thead>
                                     <tr>
                                         <th data-sort-class="leftmost" style="width: 20px;"><input type="checkbox"
-                                                id="select_all" onclick="select_all()"><label for="select_all"><span></span></label></th>
+                                                id="select_all" onchange="select_all()"><label
+                                                for="select_all"><span></span></label></th>
                                         <th>Actions</th>
                                         <th>Status</th>
                                         <th style="width: 220px;">Brand</th>
@@ -80,13 +84,14 @@
                 "keys": true,
                 "keys": { "blurable": false },
                 "columnDefs": [
-                    { "targets": [0], "className": 'select-checkbox', "searchable": false, "orderable": false, "visible": true },
+                    { "targets": [0], "searchable": false, "orderable": false, "visible": true }, // "className": "select-checkbox icheck-primary",
                     // { "targets": [1], "visible": false },
                     // { "targets": [6], "className": "text-left" }
                 ],
                 "select": true,
                 "select": {
-                    "style": "os",
+                    "style": 'multi',
+                    "selector": 'td:first-child',
                 },
                 "serverSide": true,
                 "processing": true,
@@ -173,17 +178,16 @@
                 {
                     $('#table_meterdetails tbody tr:eq(0)').click();
                 },
-                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
-                {
-                    if (aData[5] == 1)
-                    {
-                        //  $('td', nRow).css('color', 'green');
-                        $('td:eq(5)', nRow).css('color', 'red');
-                    } else // if (aData[5] == 2)
-                    {
-                        $('td:eq(5)', nRow).css('color', 'red');
-                    }
-                },
+                // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+                // {
+                //     if (aData[5] == 1)
+                //     {
+                //         $('td', nRow).css('color', 'green');
+                //     } else // if (aData[5] == 2)
+                //     {
+                //         $('td', nRow).css('color', 'red');
+                //     }
+                // },
             });
             // table.column(0).visible(false);
             // table.column(1).visible(false);
@@ -216,12 +220,11 @@
             $('#table3').css('width', '100%');
         });
 
-
-        // $('#table_meterdetails tbody').on('click', 'tr', function (e, datatable, cell)
-        // {
-
-
-        // });
+        $('#select_all').on('click', function ()
+        {
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
 
         function change_table3_data(id = 0, serials = 0, idmeters = 0)
         {
@@ -249,22 +252,6 @@
 
     }
 
-    function select_all() {
-        var isChecked = $('#select_all').is(':checked') ? 1 : 0;
-        alert(isChecked);
-        if (isChecked == 1)
-            table.rows().select();
-        else
-            table.rows().deselect();
-        // const isChecked = $('#select_all').is(':checked') === 1 ? table.rows().select() : table.rows().deselect();
-        // $('#select_all').is(':checked') ? table.rows().select() : table.rows().deselect();
-    }
-
-    $("#select_all").click(function ()
-        {
-            alert('xcvxcvb');
-            $('#table_meterdetails tbody input[type="checkbox"]').prop('checked', this.checked);
-        });
 
     // function return_selectedTable() {
     //     var itemcode, qty;

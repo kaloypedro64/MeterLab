@@ -20,7 +20,8 @@ urlpatterns = [
     # calibration
     path('calibrate_delete/<int:id>/',
          views.calibrate_delete, name='calibrate_delete'),
-    path('calibrate_multiple/<int:id>/', views.calibrate_multiple, name='multiple'),
+    path('details/<int:id>/calibrate_multiple/',
+         views.calibrate_multiple, name='multiple'),
 
     # path('save_selectedTable',views.save_selectedTable, name='save_selectedTable'),
 
