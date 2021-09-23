@@ -21,39 +21,33 @@
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row">
-                <input type="hidden" id="idmeters" value="{{ idmeters }}">
+            <div class="row mb-2">
+                <div class="col-sm-2 mr-2">
+                </div>
+                <div class="ml-auto">
+                    <button type="button" onclick="return_selectedTable()" class="btn btn-warning"><i class="fas fa-clipboard-list-check mr-1"></i><span style="font-size: small">Return Meters</span></button>
+                    <a href="/calibrate_multiple" type="button" class="btn btn-info"><i class="fa fa-cog mr-1"></i><span style="font-size: small">Multiple Calibration</span></a>
+                    <a href="/meters" type="button" class="btn btn-danger"><i class="fal fa-times mr-1"></i><span style="font-size: small">Back</span></a>
+                </div>
             </div>
         </div>
         <section class="content">
             <div class="row">
                 <section class="col-lg-6 connectedSortable">
                     <div class="card">
-                        <div class="card-header">
-                            <div class="col-12 row">
-                                <div class="col-sm-7">
-                                    <span>Meter List</span>
-                                </div>
-                                <div class=" ml-auto">
-                                    <button type="button" onclick="return_selectedTable()"
-                                        class="btn btn-warning btn-sm"> Return
-                                            Selected</button>
-                                    <a href="" type="button" class="btn btn-info btn-sm"><i
-                                                class="fa fa-cog mr-1"></i>Calibration</a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
-                            <table id="table_meterdetails" class="table table-nowrap table-striped dtr-inline">
+                            <!-- style="max-width: 500px !important; width: 500px !important" -->
+                            <table id="table_meterdetails"
+                                class="table table-nowrap table-striped dtr-inline" >
                                 <thead>
                                     <tr>
                                         <th data-sort-class="leftmost" style="width: 20px;"><input type="checkbox"
-                                                id="select_all"><label for="select_all"><span></span></label></th>
+                                                id="select_all" onclick="select_all()"><label for="select_all"><span></span></label></th>
                                         <th>Actions</th>
-                                        <th style="width: 120px;"> Serial No.</th>
-                                        <th style="width: fit-content;">Brand</th>
-                                        <th>Accuracy</th>
                                         <th>Status</th>
+                                        <th style="width: 220px;">Brand</th>
+                                        <th style="width: 120px;"> Serial No.</th>
+                                        <th>Accuracy</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -71,6 +65,8 @@
 
 <script type="text/javascript">
 
+
+
     let table
     window.onload = function ()
     {
@@ -81,12 +77,11 @@
                 "searching": false,
                 "info": false,
                 "lengthChange": true,
-                "responsive": false,
                 "keys": true,
                 "keys": { "blurable": false },
                 "columnDefs": [
-                    { "targets": [0], "searchable": false, "orderable": false, "visible": false },
-                    { "targets": [1], "visible": false },
+                    { "targets": [0], "className": 'select-checkbox', "searchable": false, "orderable": false, "visible": true },
+                    // { "targets": [1], "visible": false },
                     // { "targets": [6], "className": "text-left" }
                 ],
                 "select": true,
@@ -100,7 +95,7 @@
                     var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
                     var direction = "";
                     if (data.order[0].dir == "desc") { direction = "-" };
-                    $.get("{% url 'meterdetails_ss' idmeters %}", {
+                    $.get("{% url 'metersdetail' idmeters %}", {
                         limit: data.length,
                         start: data.start,
                         filter: data.search.value,
@@ -131,29 +126,11 @@
                             {
                                 if (row["status"] >= 1)
                                 {
-                                    return '<a href="calibrate_meter/' + row["id"] + '" class="btn btn-default btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrated</span ></a>'
+                                    return '<a href="calibrate/' + row["id"] + '" class="btn btn-default btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrated</span ></a>'
                                 } else
                                 {
-                                    return '<a href="calibrate_meter/' + row["id"] + '" class="btn btn-info btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrate</span ></a>'
+                                    return '<a href="calibrate/' + row["id"] + '" class="btn btn-info btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrate</span ></a>'
                                 }
-                            }
-                        }
-                    },
-                    {
-                        "data": "serialno", "render": function (data, type, row)
-                        {
-                            return '<td style="width: fit-content;">' + data + '</td>'
-                        }
-                    },
-                    { "data": "idmeters__brand" },
-                    {
-                        "data": "accuracy", "render": function (data, type, row)
-                        {
-                            if (data == "None")
-                            {
-                            } else
-                            {
-                                return data
                             }
                         }
                     },
@@ -172,16 +149,47 @@
                             }
                         }
                     },
+                    { "data": "idmeters__brand" },
+                    {
+                        "data": "serialno", "render": function (data, type, row)
+                        {
+                            return '<td style="width: fit-content;">' + data + '</td>'
+                        }
+                    },
+                    {
+                        "data": "accuracy", "render": function (data, type, row)
+                        {
+                            if (data == "None")
+                            {
+                            } else
+                            {
+                                return data
+                            }
+                        }
+                    },
+
                 ],
                 "fnInitComplete": function (oSettings, json)
                 {
                     $('#table_meterdetails tbody tr:eq(0)').click();
-                }
+                },
+                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+                {
+                    if (aData[5] == 1)
+                    {
+                        //  $('td', nRow).css('color', 'green');
+                        $('td:eq(5)', nRow).css('color', 'red');
+                    } else // if (aData[5] == 2)
+                    {
+                        $('td:eq(5)', nRow).css('color', 'red');
+                    }
+                },
             });
             // table.column(0).visible(false);
             // table.column(1).visible(false);
         }
         load_meterdetails();
+        // table.columns.adjust().draw();
 
         $('#table_meterdetails tbody').on('click', 'tr', function ()
         {
@@ -202,6 +210,13 @@
             change_table3_data(id, serials, idmeters);
         });
 
+        $(window).bind('resize', function ()
+        {
+            $('#table_meterdetails').css('width', '100%');
+            $('#table3').css('width', '100%');
+        });
+
+
         // $('#table_meterdetails tbody').on('click', 'tr', function (e, datatable, cell)
         // {
 
@@ -211,7 +226,7 @@
         function change_table3_data(id = 0, serials = 0, idmeters = 0)
         {
             $.ajax({
-                url: "{% url 'selected_meter' %}",
+                url: "{% url 'meterselected' %}",
                 method: 'GET',
                 type: 'GET',
                 data: {
@@ -234,13 +249,22 @@
 
     }
 
-    // function select_all() {
-    //     var isChecked = $('#select_all').is(':checked') ? 1 : 0;
-    //     if (isChecked == 1)
-    //         table.rows().select();
-    //     else
-    //         table.rows().deselect();
-    // }
+    function select_all() {
+        var isChecked = $('#select_all').is(':checked') ? 1 : 0;
+        alert(isChecked);
+        if (isChecked == 1)
+            table.rows().select();
+        else
+            table.rows().deselect();
+        // const isChecked = $('#select_all').is(':checked') === 1 ? table.rows().select() : table.rows().deselect();
+        // $('#select_all').is(':checked') ? table.rows().select() : table.rows().deselect();
+    }
+
+    $("#select_all").click(function ()
+        {
+            alert('xcvxcvb');
+            $('#table_meterdetails tbody input[type="checkbox"]').prop('checked', this.checked);
+        });
 
     // function return_selectedTable() {
     //     var itemcode, qty;

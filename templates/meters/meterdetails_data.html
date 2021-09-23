@@ -11,9 +11,9 @@
                 <tr>
                     <th style="display: none;"></th>
                     <th>Actions</th>
-                    <th style="width: fit-content;">Date</th>
+                    <th style="width: 100px;">Date</th>
                     <th>Findings</th>
-                    <th>Gen. Average</th>
+                    <th style="width: 80px;">Gen. Ave.</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -22,23 +22,24 @@
                 <tr>
                     <td style="display: none;"> {{row.id}} </td>
                     <td style="width: 270;">
-                            <div class="btn-group">
-                                <a href="meter_test_report/{{ row.id }}" target="_blank" class="btn btn-info btn-xs text-sm" title="Edit"><span
-                                        style="font-size: 12px;">Print</span></a>
-                                <a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="delete_serials('{{ row.id }}')"><i class="fal fa-trash-alt"></i><span
-                                        style="font-size: 12px;"></span></a>
-                            </div>
+                        <div class="btn-group">
+                            <a href="meter_test_report/{{ row.id }}" target="_blank" class="btn btn-info btn-xs text-sm"
+                                title="Edit"><span style="font-size: 12px;">Print</span></a>
+                            <a href="#" class="btn btn-danger btn-xs text-sm" title="Delete"
+                                onclick="delete_serials('{{ row.id }}')"><i class="fal fa-trash-alt"></i><span
+                                    style="font-size: 12px;"></span></a>
+                        </div>
                     </td>
                     <td style="width: fit-content;"><a href="edit/{{ row.id }}"> {{row.testdate}} </a></td>
                     <td>
                         {% if row.isdamage == 1%}
-                            Damage
+                        Damage
                         {% else %}
-                            {% if row.gen_average >= 98 %}
-                                Passed
-                            {% else %}
-                                Failed
-                            {% endif %}
+                        {% if row.gen_average >= 98 %}
+                        Passed
+                        {% else %}
+                        Failed
+                        {% endif %}
                         {% endif %}
                     </td>
                     <td> {{row.gen_average}} </td>
@@ -58,41 +59,49 @@
     // }
 
     $('#table3').DataTable({
-        "order": [1, "asc"],
+        // "scrollX": true,
         "searching": false,
         "processing": true,
-        "info": true,
-        "paging": true,
-        "lengthChange": false,
+        "info": false,
+        'autoWidth': false,
+        // "paging": true,
+        "lengthChange": true,
         // "responsive": true,
-        "columnDefs": [{
-            "targets": [4],
-            "className": "text-right",
-        }],
+        // "order": [1, "asc"],
+        "columnDefs": [
+            { "targets": [4], "className": "text-right" },
+            { "targets": [1], "visible": false },
+        ],
 
     });
 
-    function delete_serials(id) {
+    function delete_serials(id)
+    {
         var ok = confirm('Are you sure to delete this entry?');
-        if (ok == true) {
-             $.ajax({
-                url: "{% url 'delete_calibration' 0 %}".replace('0', id),
+        if (ok == true)
+        {
+            $.ajax({
+                url: "{% url 'calibrate_delete' 0 %}".replace('0', id),
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 contentType: false,
                 data: { id: id, },
-                success: function (data) {
-                    if (data == 'deleted') {
+                success: function (data)
+                {
+                    if (data == 'deleted')
+                    {
                         window.location.reload();
                     }
                 },
-                error: function (e) {
+                error: function (e)
+                {
                     alert('err: delete serials');
                 }
             });
         }
     }
+
 
     // function print_report(id) {
     //     window.location = "meter_test_report.html";

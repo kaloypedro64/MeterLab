@@ -11,29 +11,28 @@ urlpatterns = [
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
     # meter details
-    path('meterdetails_ss/<int:id>/', views.meterdetails_ss, name='meterdetails_ss'),
-    path('selected_meter/', views.selected_meter, name='selected_meter'),
+    path('details/<int:id>/', views.meters_detail, name='metersdetail'),
+    path('meter_selected/', views.meter_selected, name='meterselected'),
 
-    # calibrate
-    path('meterdetails_ss/<int:idmeters>/meter_calibrate/<int:id>/',
-         views.meter_calibrate, name='meter_calibrate'),
+    path('details/<int:idmeters>/calibrate/<int:id>/',
+         views.calibrate, name='calibrate'),
 
-    path('delete_calibration/<int:id>/',
-         views.delete_calibration, name='delete_calibration'),
+    # calibration
+    path('calibrate_delete/<int:id>/',
+         views.calibrate_delete, name='calibrate_delete'),
+    path('calibrate_multiple/<int:id>/', views.calibrate_multiple, name='multiple'),
 
     # path('save_selectedTable',views.save_selectedTable, name='save_selectedTable'),
 
-#     path('seriallist/<int:idmeters>/edit/<int:id>/',
-#          views.edit_meters, name='edit_meters'),
+    #     path('seriallist/<int:idmeters>/edit/<int:id>/',
+    #          views.edit_meters, name='edit_meters'),
 
 
-# #     path('meterlist/<int:id>', MeterList.as_view(), 'meterlist'),
+    # #     path('meterlist/<int:id>', MeterList.as_view(), 'meterlist'),
 
-#     path('multiple_calibration/<int:id>/',
-#          views.multiple_calibration, name='multiple_calibration'),
 
-#     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',
-#          views.meter_test_report, name='meter_test_report'),
+    #     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',
+    #          views.meter_test_report, name='meter_test_report'),
 
 
 ]
