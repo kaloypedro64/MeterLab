@@ -79,6 +79,7 @@ window.onload = function ()
                     }
                 },
                 { "data": "brand" },
+                { "data": "ampheres" },
                 { "data": "serialnos" },
                 { "data": "metertype" },
                 { "data": "units" },

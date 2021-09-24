@@ -29,7 +29,7 @@ urlpatterns = [
     #          views.edit_meters, name='edit_meters'),
 
 
-    # #     path('meterlist/<int:id>', MeterList.as_view(), 'meterlist'),
+    path('get_supplier/', views.get_supplier, name='get_supplier'),
 
 
     #     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',

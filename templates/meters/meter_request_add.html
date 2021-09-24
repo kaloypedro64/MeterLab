@@ -65,7 +65,7 @@
                                         <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
                                         <div class="form-group row">
                                             <label for="id_dateforwarded" class="col-sm-2 col-form-label col-form-label-sm ">Transaction
-                                                Date<i>(Auto)</i>:</label>
+                                                Date:</label>
                                             <div class="col">
                                                 <input type="date" class="form-control form-control-sm"
                                                     id="id_dateforwarded" name="dateforwarded" data-mask datemask
@@ -79,14 +79,17 @@
                                                     placeholder="RR #">
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
-                                            <label for="id_brand" class="col-sm-2 col-form-label">Brand Name:</label>
+                                        <div class="form-group row">
+                                            <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
                                             <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_brand"
-                                                    name="brand" maxlength="145" placeholder="Accura" required>
+                                                <select class="form-control form-control-sm select2" id="id_supplier" name="supplier" onchange="select_supplier()">
+                                                    {% for row in mSupplier %}
+                                                    <option value="{{row.0}}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <span class="col-form-label">Dipolog City</span>
                                             </div>
-                                        </div> -->
-
+                                        </div>
                                         <div class="form-group row">
                                             <label for="id_brand" class="col-sm-2 col-form-label">Meter Brand:</label>
                                             <div class="col">
@@ -97,17 +100,8 @@
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <!-- <div class="form-group row">
-                                            <label for="id_metertype" class="col-sm-2 col-form-label">Meter Type:</label>
-                                            <div class="col">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    id="id_metertype" name="metertype" placeholder="Electrical"
-                                                    required>
-                                            </div>
-                                        </div> -->
                                         <div class="form-group row">
-                                            <label for="id_metertype" class="col-sm-2 col-form-label">Type:</label>
+                                            <label for="id_metertype" class="col-sm-2 col-form-label">Meter Type:</label>
                                             <div class="col">
                                                 <select class="form-control form-control-sm" id="id_metertype" name="metertype">
                                                     {% for rows in mType %}
@@ -116,17 +110,29 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="form-group row">
-                                            <label for="id_units" class="col-sm-2 col-form-label">Unit:</label>
+                                            <label for="id_ampheres" class="col-sm-2 col-form-label">Amphere Rating:</label>
+                                            <div class="col">
+                                                <select class="form-control form-control-sm" id="id_ampheres" name="ampheres">
+                                                    {% for rows in mAmp %}
+                                                    <option value="{{rows.ampheres}}">{{rows.ampheres}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="id_units" class="col-sm-2 col-form-label">Unit (pcs):</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_units" name="units" placeholder="100" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial Starts:</label>
+                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial No. Start:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm"
-                                                    id="id_serialnos" name="serialnos" placeholder="0001-9999" required>
+                                                    id="id_serialnos" name="serialnos" placeholder="0001" required>
                                             </div>
                                         </div>
 
@@ -148,8 +154,24 @@
         $('.select2').select2();
         $('#id_brand').editableSelect({ effects: 'fade' });
         $('#id_metertype').editableSelect({ effects: 'fade' });
-
+        $('#id_ampheres').editableSelect({ effects: 'fade' });
+        // $('#id_ampheres').editableSelect({ effects: 'fade' });
+        // let supplierUrl = "{% url 'get_supplier' %}";
     }
+
+    function select_supplier(params) {
+        // $.ajax({
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     url: supplierUrl,
+        //     data: {id:id},
+        //     success: function (response)
+        //     {
+        //         alert(response);
+        //     },
+        // });
+    }
+
     function auto_qty(params) {
         var qty = 0;
         var num1 = $('#id_serialnos').val().split('-');

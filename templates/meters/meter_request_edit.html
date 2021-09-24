@@ -34,8 +34,8 @@
                     <div class="ml-auto">
                         <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-edit mr-1"
                                 tabindex="-1"></i> <span style="font-size: 12px;"> Update</span></button>
-                        <a type="button" href="/meters" class="btn btn-danger"><i class="fal fa-share-square mr-1"></i><span
-                                style="font-size: 12px;">Cancel</span></a>
+                        <a type="button" href="/meters" class="btn btn-danger"><i
+                                class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Cancel</span></a>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                                         <div class="form-group row">
                                             <label for="id_dateforwarded"
                                                 class="col-sm-2 col-form-label col-form-label-sm ">Transaction
-                                                Date<i>(Auto)</i>:</label>
+                                                Date:</label>
                                             <div class="col">
                                                 <input type="date" class="form-control form-control-sm"
                                                     id="id_dateforwarded" name="dateforwarded" data-mask datemask
@@ -77,42 +77,72 @@
                                             <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_rrnumber"
-                                                    name="rrnumber" maxlength="145"
-                                                    value="{{ form.rrnumber }}">
+                                                    name="rrnumber" maxlength="145" value="{{ form.rrnumber }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_brand" class="col-sm-2 col-form-label">Meter Brand</label>
+                                            <label for="id_brand" class="col-sm-2 col-form-label">Meter Brand:</label>
                                             <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_brand"
-                                                    name="brand" maxlength="145" required value="{{ form.brand }}">
+                                                <select class="form-control form-control-sm" id="id_brand" name="brand">
+                                                    {% for row in mBrand %}
+                                                    {% if row.brand == form.brand %}
+                                                    <option selected value="{{row.brand}}">{{ row.brand }}</option>
+                                                    {% else %}
+                                                    <option value="{{row.brand}}">{{ row.brand }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="id_metertype" class="col-sm-2 col-form-label">Meter
                                                 Type:</label>
                                             <div class="col">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    id="id_metertype" name="metertype" required
-                                                    value="{{ form.metertype }}">
+                                                <select class="form-control form-control-sm" id="id_metertype"
+                                                    name="metertype">
+                                                    {% for row in mType %}
+                                                    {% if row.metertype == form.metertype %}
+                                                    <option selected value="{{row.metertype}}">{{ row.metertype }}</option>
+                                                    {% else %}
+                                                    <option value="{{rows.metertype}}">{{ row.metertype }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial
-                                                No's.:</label>
+                                            <label for="id_ampheres" class="col-sm-2 col-form-label">Amphere
+                                                Rating:</label>
+                                            <div class="col">
+                                                <select class="form-control form-control-sm" id="id_ampheres"
+                                                    name="ampheres">
+                                                    {% for row in mAmp %}
+                                                    {% if row.ampheres == form.ampheres %}
+                                                    <option selected value="{{ row.ampheres }}">{{row.ampheres }}</option>
+                                                    {% else %}
+                                                    <option value="{{ row.ampheres }}">{{row.ampheres}}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_units" class="col-sm-2 col-form-label">Unit (pcs):</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_units"
+                                                    name="units" readonly value="{{ form.units }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial No.
+                                                Start:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm"
-                                                    id="id_serialnos" name="serialnos" required
+                                                    id="id_serialnos" name="serialnos" readonly
                                                     value="{{ form.serialnos }}">
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="id_units" class="col-sm-2 col-form-label">Unit:</label>
-                                            <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_units"
-                                                    name="units" placeholder="100" required value="{{ form.units }}">
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +156,12 @@
 
 <script type="text/javascript">
 
-    window.onload = function () { }
+    window.onload = function () {
+        $('.select2').select2();
+        $('#id_brand').editableSelect({ effects: 'fade' });
+        $('#id_metertype').editableSelect({ effects: 'fade' });
+        $('#id_ampheres').editableSelect({ effects: 'fade' });
+    }
 
 
 

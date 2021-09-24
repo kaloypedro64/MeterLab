@@ -6,7 +6,7 @@ class meterForm(forms.ModelForm):
     class Meta:
         model = meters
         fields = ['id', 'dateforwarded', 'rrnumber', 'brand',
-                  'metertype', 'serialnos', 'units', 'active', 'userid', 'area']
+                  'metertype', 'ampheres', 'serialnos', 'units', 'active', 'userid', 'area']
         labels = {
             'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit', 'area': 'Area'
         }
@@ -22,7 +22,7 @@ class meterForm(forms.ModelForm):
 class meterdetailsForm(forms.ModelForm):
     class Meta:
         model = meterdetails
-        fields = ['id', 'idmeters', 'serialno', 'ampheres',
+        fields = ['id', 'idmeters', 'serialno',
                   'accuracy', 'wms_status', 'status', 'active', 'userid']
         readonly_fields = ['created_at', 'updated_at']
         # labels = {

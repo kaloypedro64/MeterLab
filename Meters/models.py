@@ -14,6 +14,7 @@ class meters(models.Model):
     rrnumber = models.CharField(max_length=145, db_index=True)
     brand = models.CharField(max_length=145)
     metertype = models.CharField(max_length=145, null=True)
+    ampheres = models.CharField(max_length=45, null=True)
     serialnos = models.CharField(max_length=145, null=True)
     units = models.IntegerField(default=0)              # meter count
     active = models.PositiveSmallIntegerField(
@@ -21,6 +22,7 @@ class meters(models.Model):
     userid = models.CharField(max_length=45)
     area = models.PositiveSmallIntegerField(
         default=0, null=False)    # 0=dmo, 1=pas, 2=sas, 3=las
+    supplierid = models.IntegerField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -33,7 +35,6 @@ class meterdetails(models.Model):
     idmeters = models.ForeignKey(
         meters, db_column='idmeters', on_delete=models.CASCADE)
     serialno = models.CharField(max_length=45, null=False)
-    ampheres = models.CharField(max_length=45, null=True)
     accuracy = models.CharField(max_length=45, null=True)
     wms_status = models.PositiveSmallIntegerField(
         default=0, null=True)    # 0=forwarded, 1=pending, 2=returned
