@@ -6,7 +6,20 @@
     label {
         text-align: right;
         color: darkslategray;
-        font-size-adjust: 0.45;
+        /* font-size-adjust: 0.45; */
+        /* font-weight: 500; */
+        /* font-size: small; */
+    }
+
+    .form-control {
+        text-transform: capitalize;
+        /* color: blue; */
+    }
+
+    .col-form-label {
+        font-size: 13px;
+        /* font-weight: 500; */
+        /* font-size-adjust: 0.45; */
     }
 </style>
 
@@ -21,11 +34,11 @@
                         <h1>Add Meter Request</h1>
                     </div>
                     <div class="ml-auto">
-                            <button type="submit" class="btn btn-success btn-sm mr-1 "><i class="fal fa-save mr-1"
-                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save</span></button>
-                            <button type="button" onClick="javascript:history.go(-1)" class="btn btn-info btn-sm"><i
+                            <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
+                                    tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button>
+                            <a type="button" href="/meters" class="btn btn-danger"><i
                                     class="fal fa-share-square mr-1"></i><span
-                                    style="font-size: 12px;">Cancel</span></button>
+                                    style="font-size: 12px;">Cancel</span></a>
                     </div>
                 </div>
             </div>
@@ -42,9 +55,6 @@
                                             required)</i></span>
                                 </h3>
                             </div>
-
-                            <!-- {{ area }} -->
-                            <!-- {{ form }} -->
                             <div class="row g-0">
                                 <div class="col">
                                     <div class="card-body">
@@ -54,8 +64,8 @@
                                             value="0">
                                         <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
                                         <div class="form-group row">
-                                            <label for="id_dateforwarded"
-                                                class="col-sm-2 col-form-label col-form-label-sm ">Date:</label>
+                                            <label for="id_dateforwarded" class="col-sm-2 col-form-label col-form-label-sm ">Transaction
+                                                Date<i>(Auto)</i>:</label>
                                             <div class="col">
                                                 <input type="date" class="form-control form-control-sm"
                                                     id="id_dateforwarded" name="dateforwarded" data-mask datemask
@@ -66,22 +76,44 @@
                                             <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
-                                                    placeholder="RR #" required>
+                                                    placeholder="RR #">
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <!-- <div class="form-group row">
                                             <label for="id_brand" class="col-sm-2 col-form-label">Brand Name:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_brand"
                                                     name="brand" maxlength="145" placeholder="Accura" required>
                                             </div>
-                                        </div>
+                                        </div> -->
+
                                         <div class="form-group row">
+                                            <label for="id_brand" class="col-sm-2 col-form-label">Meter Brand:</label>
+                                            <div class="col">
+                                                <select class="form-control form-control-sm" id="id_brand" name="brand">
+                                                    {% for row in mBrand %}
+                                                    <option value="{{row.brand}}">{{ row.brand }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group row">
                                             <label for="id_metertype" class="col-sm-2 col-form-label">Meter Type:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm"
                                                     id="id_metertype" name="metertype" placeholder="Electrical"
                                                     required>
+                                            </div>
+                                        </div> -->
+                                        <div class="form-group row">
+                                            <label for="id_metertype" class="col-sm-2 col-form-label">Type:</label>
+                                            <div class="col">
+                                                <select class="form-control form-control-sm" id="id_metertype" name="metertype">
+                                                    {% for rows in mType %}
+                                                    <option value="{{rows.metertype}}">{{ rows.metertype }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -113,13 +145,9 @@
 
     window.onload = function ()
     {
-
-        // $('[data-mask]').inputmask();
-        // $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' });
-        // $('#brand').editableSelect({ effects: 'fade' });
-        // $('#id_brand').editableSelect({ effects: 'fade' });
-
-
+        $('.select2').select2();
+        $('#id_brand').editableSelect({ effects: 'fade' });
+        $('#id_metertype').editableSelect({ effects: 'fade' });
 
     }
     function auto_qty(params) {

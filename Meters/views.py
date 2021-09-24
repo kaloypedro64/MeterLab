@@ -22,8 +22,8 @@ datetoday = datetime.date.today()
 
 header = 'Dashboard'
 html_meterlist = 'meters/meter_list.html'
-html_addmeters = "meters/add_meter_request.html"
-html_edtmeters = "meters/edit_meter_request.html"
+html_mAdd = "meters/meter_request_add.html"
+html_mEdit = "meters/meter_request_edit.html"
 html_meterdetails_data = 'meters/meterdetails_data.html'
 html_metertestreport = 'meters/meter_test_report.html'
 
@@ -84,12 +84,15 @@ def meters_add(request):
                                'values ("' + str(idmeters) + '","' + num + '","0","' + str(request.user.id) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
                 cursor.fetchall()
                 num1 += 1
-        return redirect("..")
+        return redirect("/meters")
     else:
         form = meterForm(request.POST)
-        context = {'form': form, 'header': 'Add Meter',
-                   'datetoday': datetoday, 'area': transaction_area.area, 'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
-        return render(request, html_addmeters, context)
+        # ProductOrder.objects.order_by('category').values_list(
+        #     'category', flat=True).distinct()
+        mBrand = meters.objects.order_by('brand').distinct()
+        mType = meters.objects.order_by('metertype').distinct()
+        context = {'form': form, 'header': 'Add Meter', 'datetoday': datetoday, 'area': transaction_area.area, 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType}
+        return render(request, html_mAdd, context)
 
 def meters_edit(request, id):
     transaction_area = userarea.objects.get(userid=request.user.id)
@@ -103,12 +106,12 @@ def meters_edit(request, id):
             rec.created_at = datetoday
             rec.save()
             # form.save()
-        return redirect(".")
+        return redirect("/meters")
     else:
         queryset = meters.objects.get(pk=id)
         context = {'form': queryset, 'header': 'Edit Meter',
                    'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
-        return render(request, html_edtmeters, context)
+        return render(request, html_mEdit, context)
 
 def meters_delete(request, id):
     if request.is_ajax():
