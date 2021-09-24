@@ -11,8 +11,9 @@
     </div> -->
     <div class="sidebar">
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-flat " data-widget="treeview" role="menu" data-accordion="false" data-api="treeview" >
-            <!-- <ul class="nav nav-pills nav-sidebar flex-column nav-flat " data-widget="treeview" role="menu" data-accordion="false"   > -->
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-flat " data-widget="treeview"
+                role="menu" data-accordion="false" data-api="treeview">
+                <!-- <ul class="nav nav-pills nav-sidebar flex-column nav-flat " data-widget="treeview" role="menu" data-accordion="false"   > -->
                 <li class="nav-item">
                     <a href="/" class="nav-link" id=""><i class="nav-icon far fa-chart-network"></i>
                         <p>Dashboard</p>
@@ -20,14 +21,34 @@
                 </li>
                 <li class="nav-item has-treeview menu-open" id="sb_otherinfo">
                     <a href="#" class="nav-link" id="">
-                                            <i class="nav-icon fal fa-tachometer-alt-fast"></i>
-                                            <p>Meter Transaction<i class="right fas fa-angle-left"></i></p>
-                                        </a>
-
+                        <i class="nav-icon fal fa-tachometer-alt-fast"></i>
+                        <p>Meter & Seal<i class="right fas fa-angle-left"></i></p>
+                    </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="/meters" class="nav-link" id=""><i class="nav-icon fad fa-angle-double-right"></i>
-                                <p>Forwarded Meters</p>
+                            <a href="/meters" class="nav-link" id=""><i class="nav-icon fal fa-watch-calculator"></i>
+                                <p>Meters</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/meters" class="nav-link" id=""><i class="nav-icon fal fa-tags"></i>
+                                <p>Seal</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview menu-open" id="sb_otherinfo">
+                    <a href="#" class="nav-link" id="">
+                        <i class="nav-icon fal fa-tachometer-alt-fast"></i>
+                        <p>Laboratory<i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="/meters" class="nav-link" id=""><i class="nav-icon fal fa-stethoscope"></i>
+                                <p>Meter Test</p>
                             </a>
                         </li>
                     </ul>
@@ -39,17 +60,12 @@
                             </a>
                         </li>
                     </ul>
-
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/assign" class="nav-link" id=""><i class="nav-icon fal fa-tachometer-alt-average"></i>
-                                <p>Assigned Meter</p>
-                            </a>
-                        </li>
-                    </ul>
-
-
-
+                </li>
+                <li class="nav-item">
+                    <a href="/assign" class="nav-link" id=""><i
+                            class="nav-icon fal fa-users-class"></i>
+                        <p>Meter Assign</p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="/signatory" class="nav-link" id=""><i class="nav-icon fal fa-signature"></i>

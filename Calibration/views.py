@@ -1,16 +1,11 @@
+from django.http.response import HttpResponse
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
-from Users.forms import AreaForm
-import math
 import datetime
-import time
 import json
-import json as json_util
 from django.db import connection
 from django.db.models.expressions import Window
 from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 
 from Meters.models import meters, meterdetails, metercalibration, meterseal
 from Meters.forms import meterForm, meterdetailsForm, metercalibrationForm, metersealForm

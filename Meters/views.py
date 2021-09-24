@@ -208,7 +208,7 @@ def calibrate(request, id, idmeters):
 
 # multiple calibration
 def calibrate_multiple(request, id):
-    html = 'meters/calibration_multiple.html'
+    html = 'calibration/calibration_multiple.html'
     serials = meterdetails.objects.filter(idmeters=id).filter(wms_status__exact=0)
     form = metercalibrationForm(request.POST)
     if request.method == "POST":

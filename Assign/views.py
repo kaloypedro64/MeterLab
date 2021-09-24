@@ -29,8 +29,6 @@ def AssignedList(request):
         filter = request.GET.get('filter')
         order_by = request.GET.get('order_by')
 
-
-
         cursor = connection.cursor()
         query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null'
         cursor.execute(query)
