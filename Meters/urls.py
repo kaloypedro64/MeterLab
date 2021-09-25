@@ -38,9 +38,14 @@ urlpatterns = [
     #     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',
     #          views.meter_test_report, name='meter_test_report'),
 
-#     serverside extra
-    path('brand', views.brand_ss, name='ssbrand'),
+     #   brand
+    path('brand', views.brand_ss, name='brandss'),
     path('brandsave', views.brand_save, name='brandsave'),
+    path('branddelete', views.brand_delete, name='branddelete'),
 
+    #   mTypes
+    path('mtypes', views.mtypes_ss, name='mtypesss'),
+    path('mtypessave', views.mtypes_save, name='mtypessave'),
+    path('mtypesdelete', views.mtypes_delete, name='mtypesdelete'),
 
 ]

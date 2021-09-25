@@ -1,3 +1,4 @@
+import types
 from django.db.models import query
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
@@ -354,6 +355,8 @@ def meter_test_report(request, id, idmeters):
 #         return HttpResponse(json.dumps(data, default=default), 'application/json')
 #     else:
 #         return render(request, 'meters/meterdetails.html', {'idmeters': id, 'header': 'Meter Details'})
+
+#  start brand
 def brand_ss(request):
     if request.is_ajax():
         start = int(request.GET.get('start'))
@@ -369,7 +372,6 @@ def brand_ss(request):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-
 def brand_save(request):
     if request.is_ajax():
         brand = str(request.GET.get('brand'))
@@ -382,9 +384,64 @@ def brand_save(request):
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
-        # else:
-        # return JsonResponse(data)
 
+def brand_delete(request):
+    if request.is_ajax():
+        id = int(request.GET.get('id'))
+        cursor = connection.cursor()
+        cursor.execute('delete from zanecometerpy.brands where id = "' + str(id) + '"')
+        cursor.fetchall()
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+#  end brand
+
+# start meter type
+def mtypes_ss(request):
+    if request.is_ajax():
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        order_by = request.GET.get('order_by')
+        query = mtype.objects.values('id', 'metertype').order_by(order_by)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def mtypes_save(request):
+    if request.is_ajax():
+        metertype = str(request.GET.get('metertype'))
+        cursor = connection.cursor()
+        cursor.execute(
+            'insert into zanecometerpy.metertype (metertype) values ("' + str(metertype) + '")')
+        cursor.fetchall()
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def mtypes_delete(request):
+    if request.is_ajax():
+        id = int(request.GET.get('id'))
+        cursor = connection.cursor()
+        cursor.execute(
+            'delete from zanecometerpy.metertype where id = "' + str(id) + '"')
+        cursor.fetchall()
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+# end meter type
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):

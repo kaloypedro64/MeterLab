@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% block content %}
+{% load static %}
 
 {% include "base/header.html" %}
 <style type="text/css">
@@ -86,12 +87,12 @@
                                                 <select class="form-control form-control-sm select2" id="id_supplier"
                                                     name="supplier" onchange="select_supplier()">
                                                     {% for row in mSupplier %}
-                                                    <!-- {% if row == 0 %}
+                                                    {% if row == 0 %}
                                                     <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}</option>
-                                                    {% else %} -->
+                                                    {% else %}
                                                     <option value="{{row.id}}" data-address="{{row.address}}">
                                                         {{row.suppliername}}</option>
-                                                    <!-- {% endif %} -->
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                                 <label class="col-form-label mr-2" id="lblAddress"></label>
@@ -124,9 +125,7 @@
                                                     <option value="{{row.id}}">{{ row.brand }}</option>
                                                     {% endfor %}
                                                 </select>
-                                                <div><a href="#" onclick="modal_brand()"><span style="font-size: 12px;">
-                                                            Add
-                                                            Brand</span></a></div>
+                                                <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;"> Add Brand</span></a></div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -138,14 +137,13 @@
                                                     <option value="{{row.id}}">{{ row.metertype }}</option>
                                                     {% endfor %}
                                                 </select>
-                                                <a href="/meters"><span style="font-size: 12px;"> Add Meter
-                                                        Type</span></a>
+                                                <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add Meter                                                        Type</span></a>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
                                             <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_units"
+                                                <input type="number" class="form-control form-control-sm" id="id_units"
                                                     name="units" placeholder="100" required>
                                             </div>
                                         </div>
@@ -159,7 +157,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="ml-auto">
-                                                <button type="button" class="btn btn-success mr-1 "><i
+                                                <button type="button" onclick="meter_to_datatable()" class="btn btn-success mr-1 "><i
                                                         class="fal fa-save mr-1" tabindex="-1"></i> <span
                                                         style="font-size: 12px;"> Add </span></button>
                                             </div>
@@ -171,11 +169,13 @@
                                         <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
                                             <thead>
                                                 <tr>
-                                                    <th style="display: none;"></th>
+                                                    <th></th>
                                                     <th>Brand</th>
                                                     <th>Type</th>
                                                     <th>Units</th>
                                                     <th>Serial No.</th>
+                                                    <th>brandID</th>
+                                                    <th>typeID</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -215,6 +215,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th style="width: 80;">Action</th>
                                 <th>Brand</th>
                             </tr>
                         </thead>
@@ -225,159 +226,53 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-types">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">Meter Types</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col input-group input-group-sm">
+                        <input type="text" class="form-control form-control-sm" id="id_metertype" name="metertype"
+                            placeholder="Enter meter type" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-success mr-1" onclick="mtypes_save()"><span
+                                    style="font-size: 12px;"> Add
+                                </span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <table id="table_types" class="table table-nowrap table-striped table-sm dtr-inline">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th style="width: 80;">Action</th>
+                                <th>Types</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    let ssbrandUrl = "{% url 'ssbrand' %}";
+    let tablex, table_brand, table_types;
+    let brandssUrl = "{% url 'brandss' %}";
     let brandsaveUrl = "{% url 'brandsave' %}";
+    let branddelUrl = "{% url 'branddelete' %}";
 
-
-    window.onload = function ()
-    {
-        $('.select2').select2();
-        // $('#id_brand').editableSelect({ effects: 'fade' });
-        // $('#id_metertype').editableSelect({ effects: 'fade' });
-        // $('#id_ampheres').editableSelect({ effects: 'fade' });
-        // $('#id_ampheres').editableSelect({ effects: 'fade' });
-
-        $('#tablex').DataTable({
-            // "scrollX": true,
-            "searching": false,
-            "processing": true,
-            "info": false,
-            'autoWidth': false,
-            // "paging": true,
-            "lengthChange": false,
-            // "responsive": true,
-            // "order": [1, "asc"],
-            "columnDefs": [
-                { "targets": [4], "className": "text-right" },
-                // { "targets": [1], "visible": false },
-            ],
-
-        });
-
-        select_supplier(0);
-
-        function loadBrand()
-        {
-            $('#table_brand').DataTable({
-                "searching": false,
-                "processing": true,
-                "stateSave": true,
-                "info": false,
-                "paging": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "responsive": true,
-                "columnDefs": [
-                    { "targets": [0], "searchable": false, "orderable": false, "visible": true },
-                ],
-                "keys": true,
-                "keys": { "blurable": false },
-                "select": true,
-                "select": {
-                    "style": 'multi',
-                    "selector": 'td:first-child',
-                },
-                "serverSide": true,
-                "processing": true,
-                "ajax": function (data, callback, settings)
-                {
-                    var sort_column_namex = data.columns[data.order[0].column].data.replace(/\./g, "__");
-                    var direction = "";
-                    if (data.order[0].dir == "desc") { direction = "-" };
-                    $.get(ssbrandUrl, {
-                        limit: data.length,
-                        start: data.start,
-                        filter: data.search.value,
-                        order_by: direction + sort_column_namex
-                    }, function (res)
-                    {
-                        callback({
-                            recordsTotal: res.length,
-                            recordsFiltered: res.length,
-                            data: res.objects
-                        });
-                    });
-                },
-                columns: [
-                    { "data": "id" },
-                    { "data": "brand" },
-                ]
-            });
-        }
-        loadBrand();
-    }
-
-    function modal_brand(params)
-    {
-        $('#modal-brand').modal('show').draggable({ handle: ".modal-header" });
-    }
-
-    function brand_save(params)
-    {
-        var brand = $('#id_brand').val();
-        $.ajax({
-            url: brandsaveUrl,
-            type: 'GET',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            contentType: false,
-            data: { brand: brand, },
-            success: function (data)
-            {
-                if (data.msg == 'saved')
-                {
-                    loadBrand();
-                    $('#modal-brand').modal('hide');
-                }
-            },
-            error: function (e)
-            {
-                alert('err: brand_save');
-            }
-        });
-    }
-
-
-
-
-
-    function select_supplier(params)
-    {
-        var e = document.getElementById("id_supplier");
-        if (params == '') params = e.selectedIndex
-        var option = e.options[params];
-        var attrs = option.attributes;
-        var data = option.getAttribute("data-address");
-        $('#id_supplierid').val(option.value);
-        document.getElementById('lblAddress').innerHTML = data;
-        // var e = document.getElementById("elementId");
-        // var value = e.options[e.selectedIndex].value;
-        // var text = e.options[e.selectedIndex].text;
-    }
-
-    // function auto_qty(params)
-    // {
-    //     var qty = 0;
-    //     var num1 = $('#id_serialnos').val().split('-');
-    //     var num2 = 0;
-    //     // try {
-    //     num2 = (parseFloat(num1[1]) - parseFloat(num1[0])) === 0 ? num1[0] : num2;
-    //     // } catch (error) {
-    //     //     num2 = num1;
-    //     // }
-    //     $('#id_units').val(num2);
-
-    // }
-
-
-
-
-
-
-
-
-
-
+    let mtypesssUrl = "{% url 'mtypesss' %}";
+    let mtypessaveUrl = "{% url 'mtypessave' %}";
+    let mtypesdelUrl = "{% url 'mtypesdelete' %}";
 </script>
+<script src="{% static "js/acquisition.js" %}" type="text/javascript"></script>
+<script src="{% static "js/alert.js" %}" type="text/javascript"></script>
+
 {% endblock content %}
