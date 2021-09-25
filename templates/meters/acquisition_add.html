@@ -12,8 +12,8 @@
     }
 
     /* .form-control { */
-        /* text-transform: capitalize; */
-        /* color: blue; */
+    /* text-transform: capitalize; */
+    /* color: blue; */
     /* } */
 
     .col-form-label {
@@ -45,7 +45,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
+                    <section class="col-lg-12 connectedSortable">
                         <div class="card card-default">
                             <div class="card-header">
                                 <h3 class="card-title">
@@ -59,17 +59,15 @@
                                     <div class="card-body">
                                         <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
                                             value="0">
-                                        <input type="hidden" name="active" maxlength="45" required="" id="id_active"
-                                            value="0">
                                         <input type="hidden" name="area" maxlength="45" required="" id="id_area"
                                             value="{{ area }}">
                                         <div class="form-group row">
-                                            <label for="id_dateforwarded"
+                                            <label for="id_transactiondate"
                                                 class="col-sm-2 col-form-label col-form-label-sm ">Transaction
                                                 Date:</label>
                                             <div class="col">
                                                 <input type="date" class="form-control form-control-sm"
-                                                    id="id_dateforwarded" name="dateforwarded" data-mask datemask
+                                                    id="id_transactiondate" name="transactiondate" data-mask datemask
                                                     value="{{ datetoday|date:'Y-m-d' }}">
                                             </div>
                                         </div>
@@ -77,80 +75,106 @@
                                             <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_rrnumber"
-                                                    name="rrnumber" maxlength="145" placeholder="RR #" style="text-transform: uppercase;">
+                                                    name="rrnumber" maxlength="145" placeholder="RR #"
+                                                    style="text-transform: uppercase;">
                                             </div>
                                         </div>
                                         <input type="hidden" name="supplierid" id="id_supplierid">
                                         <div class="form-group row">
                                             <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                            <div class="col">
+                                            <div class="col-sm-10">
                                                 <select class="form-control form-control-sm select2" id="id_supplier"
                                                     name="supplier" onchange="select_supplier()">
                                                     {% for row in mSupplier %}
-                                                    <option value="{{row.0}}" data-address="{{row.2}}">{{ row.1 }}
-                                                    </option>
+                                                    <!-- {% if row == 0 %}
+                                                    <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}</option>
+                                                    {% else %} -->
+                                                    <option value="{{row.id}}" data-address="{{row.address}}">{{row.suppliername}}</option>
+                                                    <!-- {% endif %} -->
                                                     {% endfor %}
                                                 </select>
                                                 <label class="col-form-label mr-2" id="lblAddress"></label>
                                             </div>
                                         </div>
+                                        <input type="text" class="form-control form-control-sm" id="id_units"
+                                            name="units" placeholder="Units" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="col-lg-12 connectedSortable">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                            required)</i></span>
+                                </h3>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-5">
+                                    <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="id_brand" class="col-sm-2 col-form-label">Meter Brand:</label>
-                                            <div class="col">
-                                                <select class="form-control form-control-sm" id="id_brand" name="brand">
+                                            <label for="id_brandid"
+                                                class="col-sm-3 col-form-label col-form-label-sm ">Brand:</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control form-control-sm select2" id="id_brandid"
+                                                    name="brandid">
                                                     {% for row in mBrand %}
-                                                    <option value="{{row.brand}}">{{ row.brand }}</option>
+                                                    <option value="{{row.id}}">{{ row.brand }}</option>
                                                     {% endfor %}
                                                 </select>
+                                                <div><a href="/meters"><span style="font-size: 12px;"> Add Brand</span></a></div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_metertype" class="col-sm-2 col-form-label">Meter
-                                                Type:</label>
-                                            <div class="col">
-                                                <select class="form-control form-control-sm" id="id_metertype"
-                                                    name="metertype">
-                                                    {% for rows in mType %}
-                                                    <option value="{{rows.metertype}}">{{ rows.metertype }}</option>
+                                            <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control form-control-sm select2" id="id_mtypeid"
+                                                    name="mtypeid">
+                                                    {% for row in mTypes %}
+                                                    <option value="{{row.id}}">{{ row.metertype }}</option>
                                                     {% endfor %}
                                                 </select>
+                                                <a href="/meters"><span style="font-size: 12px;"> Add Meter Type</span></a>
                                             </div>
                                         </div>
-
                                         <div class="form-group row">
-                                            <label for="id_ampheres" class="col-sm-2 col-form-label">Amphere
-                                                Rating:</label>
-                                            <div class="col">
-                                                <select class="form-control form-control-sm" id="id_ampheres"
-                                                    name="ampheres">
-                                                    {% for rows in mAmp %}
-                                                    <option value="{{rows.ampheres}}">{{rows.ampheres}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="id_units" class="col-sm-2 col-form-label">Unit (pcs):</label>
+                                            <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_units"
                                                     name="units" placeholder="100" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_serialnos" class="col-sm-2 col-form-label">Serial No.
+                                            <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
                                                 Start:</label>
                                             <div class="col">
-                                                <input type="number" class="form-control form-control-sm"
-                                                    id="id_serialnos" name="serialnos" placeholder="0001" required>
+                                                <input type="number" class="form-control form-control-sm" id="id_serialnos" name="serialnos" placeholder="0001"
+                                                    required>
                                             </div>
                                         </div>
-
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <table id="table3" class="table table-nowrap table-striped dtr-inline">
+                                            <thead>
+                                                <tr>
+                                                    <th style="display: none;"></th>
+                                                    <th>Brand</th>
+                                                    <th>Type</th>
+                                                    <th>Units</th>
+                                                    <th>Serial No.</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </section>
@@ -162,18 +186,20 @@
     window.onload = function ()
     {
         $('.select2').select2();
-        $('#id_brand').editableSelect({ effects: 'fade' });
-        $('#id_metertype').editableSelect({ effects: 'fade' });
-        $('#id_ampheres').editableSelect({ effects: 'fade' });
+        // $('#id_brand').editableSelect({ effects: 'fade' });
+        // $('#id_metertype').editableSelect({ effects: 'fade' });
         // $('#id_ampheres').editableSelect({ effects: 'fade' });
+        // $('#id_ampheres').editableSelect({ effects: 'fade' });
+        select_supplier(0);
     }
 
     function select_supplier(params)
     {
-        var e       = document.getElementById("id_supplier");
-        var option  = e.options[e.selectedIndex];
-        var attrs   = option.attributes;
-        var data    = option.getAttribute("data-address");
+        var e = document.getElementById("id_supplier");
+        if (params == '') params = e.selectedIndex
+        var option = e.options[params];
+        var attrs = option.attributes;
+        var data = option.getAttribute("data-address");
         $('#id_supplierid').val(option.value);
         document.getElementById('lblAddress').innerHTML = data;
         // var e = document.getElementById("elementId");

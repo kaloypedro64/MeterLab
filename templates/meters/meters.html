@@ -9,44 +9,52 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-2 mr-2">
+          <h1>Meter Acquisition</h1>
         </div>
         <div class="ml-auto ">
           <!-- <i class="fad fa-books-medical"></i> -->
-          <a href="add" type="button" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
-                class="fal fad fa-books-medical mr-2"></i>Add Meters</span></a>
+          <a href="acquisition" type="button" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
+                class="fal fad fa-books-medical mr-2"></i>Add Acquisition</span></a>
         </div>
       </div>
     </div>
     <section class="content">
       <div class="row">
-        <div class="col">
+        <section class="col-lg-12 connectedSortable">
           <div class="card">
+            <!-- <div class="card-header">
+
+            </div> -->
             <div class="card-body">
-              <table id="table_meters" class="table table-nowrap table-striped table-hover">
+              <table id="acqTable" class="table table-nowrap table-striped dtr-inline">
                 <thead>
                   <tr>
-                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox"
-                        id="select_all"><label for="select_all"><span></span></label></th>
+                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox" id="select_all"><label
+                        for="select_all"><span></span></label></th>
                     <th style="width: 60px;">Actions</th>
                     <th style="width: 120px;">Date</th>
-                    <th>Brand</th>
-                    <th>Ampheres</th>
-                    <th>Serials</th>
-                    <th>Meter Type</th>
-                    <th>Qty</th>
+                    <th>Supplier</th>
+                    <th>Address</th>
+                    <th>Units</th>
                   </tr>
                 </thead>
               </table>
             </div>
           </div>
+        </section>
+        <!-- <section class="col-lg-6 connectedSortable">
+          <div id="metersdata"></div>
+        </section> -->
     </section>
   </div>
 </div>
 
 
 <script type="text/javascript">
-  let table
-  let mList = "{% url 'rrviews' %}";
+  let acqTable
+  let acqListUrl = "{% url 'acqList' %}";
+  let acqSelectedUrl = "{% url 'acqselected' %}";
+
   let mDelete = "{% url 'meters_delete' 0 %}";
 </script>
 <script src="{% static "js/meters.js" %}" type="text/javascript"></script>

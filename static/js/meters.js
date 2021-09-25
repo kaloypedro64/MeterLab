@@ -1,25 +1,27 @@
 window.onload = function ()
 {
-    function Load_serials_table()
+
+    function loadAcquisition()
     {
-        table = $('#table_meters').DataTable({
-            "searching": true,
+        acqTable = $('#acqTable').DataTable({
+            "searching": false,
             "processing": true,
             "stateSave": true,
-            "info": true,
+            "info": false,
             "paging": true,
             "lengthChange": true,
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
                 { "targets": [0], "searchable": false, "orderable": false, "visible": true },
-                { "targets": [6], "className": "text-left" }
+                { "targets": [5], "className": "text-left" }
             ],
             "keys": true,
             "keys": { "blurable": false },
             "select": true,
             "select": {
-                "style": "os",
+                "style": 'multi',
+                "selector": 'td:first-child',
             },
             "serverSide": true,
             "processing": true,
@@ -28,7 +30,7 @@ window.onload = function ()
                 var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
-                $.get(mList, {
+                $.get(acqListUrl, {
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -73,21 +75,56 @@ window.onload = function ()
                     }
                 },
                 {
-                    "data": "dateforwarded", "render": function (data, type, row)
+                    "data": "transactiondate", "render": function (data, type, row)
                     {
                         return '<td style="width: fit-content;"> <a href="details/' + row["id"] + '">' + data + '</a></td>'
                     }
                 },
-                { "data": "brand" },
-                { "data": "ampheres" },
-                { "data": "serialnos" },
-                { "data": "metertype" },
+                { "data": "supplierid__suppliername" },
+                { "data": "supplierid__address" },
                 { "data": "units" },
             ]
         });
-        table.column(0).visible(false);
+        acqTable.column(0).visible(false);
     }
-    Load_serials_table();
+    loadAcquisition();
+
+    $('#acqTable tbody').on('click', 'tr', function ()
+    {
+        if ($(this).hasClass('selected'))
+        {
+            $(this).removeClass('selected');
+        }
+        else
+        {
+            acqTable.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+
+        var data = acqTable.rows(this).data();
+        var id = data[0]['id'];
+        show_details(id );
+    });
+
+    function show_details(id)
+    {
+        $.ajax({
+            url: acqSelectedUrl,
+            method: 'GET',
+            type: 'GET',
+            data: { id: id,
+            },
+            success: function (data)
+            {
+                $("#metersdata").html(data);
+            },
+            error: function (e)
+            {
+                alert('err: meters.js - show_details');
+            }
+        });
+    } change_table3_data(id, 0);
+
 };
 
 function meters_delete(id)
@@ -105,7 +142,7 @@ function meters_delete(id)
             success: function (data)
             {
                 if (data == 'deleted')
-                    table.draw();
+                    acqTable.draw();
             },
             error: function (e)
             {

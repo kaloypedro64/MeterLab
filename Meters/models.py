@@ -8,23 +8,56 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
+class suppliers(models.Model):
+    id = models.AutoField(primary_key=True)
+    suppliername = models.CharField(max_length=145)
+    address = models.CharField(max_length=145, null=True)
+    class Meta:
+        db_table = "suppliers"
+
+
+class brands(models.Model):
+    id = models.AutoField(primary_key=True)
+    brand = models.CharField(max_length=45, db_index=True)
+    class Meta:
+        db_table = "brands"
+
+
+class mtype(models.Model):
+    id = models.AutoField(primary_key=True)
+    metertype = models.CharField(max_length=45, db_index=True)
+    class Meta:
+        db_table = "metertype"
+
+class acquisition(models.Model):
+    id = models.AutoField(primary_key=True)
+    transactiondate = models.DateField(("Date"), default=date.today)
+    rrnumber = models.CharField(max_length=145, db_index=True)
+    supplierid = models.ForeignKey(
+        suppliers, db_column='supplierid', related_name='suppliers', on_delete=models.PROTECT, db_index=True)
+    units = models.IntegerField(default=0)
+    area = models.PositiveSmallIntegerField(
+        default=0, null=False)
+    userid = models.CharField(max_length=45) # 0=dmo, 1=pas, 2=sas, 3=las          # meter count
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = "acquisition"
+
 class meters(models.Model):
     id = models.AutoField(primary_key=True)
-    dateforwarded = models.DateField(("Date"), default=date.today)
-    rrnumber = models.CharField(max_length=145, db_index=True)
-    brand = models.CharField(max_length=145)
-    metertype = models.CharField(max_length=145, null=True)
+
+    acquisitionid = models.ForeignKey(
+        acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
+    brandid = models.ForeignKey(
+        brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
+    mtypeid = models.ForeignKey(
+        mtype, db_column='mtypeid', on_delete=models.PROTECT, db_index=True)
     ampheres = models.CharField(max_length=45, null=True)
     serialnos = models.CharField(max_length=145, null=True)
     units = models.IntegerField(default=0)              # meter count
-    active = models.PositiveSmallIntegerField(
-        default=0, null=False)        # active, deleted
-    userid = models.CharField(max_length=45)
-    area = models.PositiveSmallIntegerField(
-        default=0, null=False)    # 0=dmo, 1=pas, 2=sas, 3=las
-    supplierid = models.IntegerField(default=None)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "meters"
@@ -32,8 +65,8 @@ class meters(models.Model):
 
 class meterdetails(models.Model):
     id = models.AutoField(primary_key=True)
-    idmeters = models.ForeignKey(
-        meters, db_column='idmeters', on_delete=models.CASCADE)
+    meterid = models.ForeignKey(
+        meters, db_column='meterid', on_delete=models.CASCADE, db_index=True)
     serialno = models.CharField(max_length=45, null=False)
     accuracy = models.CharField(max_length=45, null=True)
     wms_status = models.PositiveSmallIntegerField(
@@ -42,19 +75,14 @@ class meterdetails(models.Model):
         default=0, null=True)    # pending, passed, failed
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
-
-    userid = models.CharField(max_length=45)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     class Meta:
         db_table = "meterdetails"
 
 
-class metercalibration(models.Model):
+class calibration(models.Model):
     id = models.AutoField(primary_key=True)
-    idmeterdetails = models.ForeignKey(
-        meterdetails, db_column='idmeterdetails', on_delete=models.CASCADE)
+    meterdetailsid = models.ForeignKey(
+        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
     testdate = models.DateField(("Date"), default=date.today)
     gen_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                       MinValueValidator(Decimal('0.00'))])
@@ -93,34 +121,34 @@ class metercalibration(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "metercalibration"
+        db_table = "calibration"
         # abstract = True
 
 
-class meterseal(models.Model):
-    id = models.AutoField(primary_key=True)
-    idmeterdetails = models.ForeignKey(
-        meterdetails, db_column='idmeterdetails', on_delete=models.CASCADE)
-    # idmeterdetails = models.ManyToManyField(
-    #     meterdetails, db_column='idmeterdetails')
-    sealdate = models.DateField(("Date"), default=date.today)
-    seal_a = models.CharField(max_length=45, null=True)
-    seal_b = models.CharField(max_length=45, null=True)
+# class meterseal(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     meterdetailsid = models.ForeignKey(
+#         meterdetails, db_column='meterdetailsid', on_delete=models.SET_DEFAULT, db_index=True)
+#     # idmeterdetails = models.ManyToManyField(
+#     #     meterdetails, db_column='idmeterdetails')
+#     sealdate = models.DateField(("Date"), default=date.today)
+#     seal_a = models.CharField(max_length=45, null=True)
+#     seal_b = models.CharField(max_length=45, null=True)
 
-    active = models.PositiveSmallIntegerField(
-        default=0, null=True)        # active, deleted
-    userid = models.CharField(max_length=45)
+#     active = models.PositiveSmallIntegerField(
+#         default=0, null=True)        # active, deleted
+#     userid = models.CharField(max_length=45)
 
-    class Meta:
-        db_table = "meterseal"
+#     class Meta:
+#         db_table = "meterseal"
 
 
 class meterassigned(models.Model):
     id = models.AutoField(primary_key=True)
     assigneddate = models.DateField(("Date"), default=date.today)
     datepaid = models.DateField(("Date"), default=date.today)
-    idmeterdetails = models.ForeignKey(
-        meterdetails, db_column='idmeterdetails', on_delete=models.CASCADE)
+    meterdetailsid = models.ForeignKey(
+        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
     accountno = models.CharField(max_length=145)
     ornumber = models.CharField(max_length=145)
     coname = models.CharField(max_length=145, null=True)

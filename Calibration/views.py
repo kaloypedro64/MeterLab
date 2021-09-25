@@ -7,8 +7,8 @@ from django.db import connection
 from django.db.models.expressions import Window
 from django.shortcuts import render, redirect
 
-from Meters.models import meters, meterdetails, metercalibration, meterseal
-from Meters.forms import meterForm, meterdetailsForm, metercalibrationForm, metersealForm
+from Meters.models import *
+from Meters.forms import*
 
 from django.views.generic import CreateView, FormView, RedirectView, ListView
 from django.utils.dateparse import parse_datetime

@@ -5,7 +5,10 @@ from .views import *
 urlpatterns = [
     #     path('', views.meterList, name='meterList'),
     # meters
-    path('', MeterList.as_view(), name='rrviews'),
+    path('', acquisitionList.as_view(), name='acqList'),
+    path('acquisition', views.acquisition_add, name='acquisition'),
+    path('acqselected/', views.acquisition_selected, name='acqselected'),
+
     path('delete/<int:id>/', views.meters_delete, name='meters_delete'),
     path('add', views.meters_add, name='meters_add'),
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
@@ -29,7 +32,7 @@ urlpatterns = [
     #          views.edit_meters, name='edit_meters'),
 
 
-    path('get_supplier/', views.get_supplier, name='get_supplier'),
+#     path('get_supplier/<int:id>', views.get_supplier, name='get_supplier'),
 
 
     #     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',

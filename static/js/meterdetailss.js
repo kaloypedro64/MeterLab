@@ -81,7 +81,6 @@ window.onload = function ()
                         }
                     }
                 },
-                { "data": "idmeters__brand" },
                 {
                     "data": "serialno", "render": function (data, type, row)
                     {
