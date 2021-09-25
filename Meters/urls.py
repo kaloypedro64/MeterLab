@@ -39,7 +39,8 @@ urlpatterns = [
     #          views.meter_test_report, name='meter_test_report'),
 
 #     serverside extra
-    path('brand', views.ss_brand, name='ssbrand'),
+    path('brand', views.brand_ss, name='ssbrand'),
+    path('brandsave', views.brand_save, name='brandsave'),
 
 
 ]

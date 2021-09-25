@@ -199,19 +199,17 @@
                     <span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="form-group row">
-                        <div class="col input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" id="id_brand" name="brand"
-                                placeholder="Enter meter brand">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-success mr-1 "><span style="font-size: 12px;"> Add
-                                    </span></button>
-                            </div>
+                <div class="form-group row">
+                    <div class="col input-group input-group-sm">
+                        <input type="text" class="form-control form-control-sm" id="id_brand" name="brand"
+                            placeholder="Enter meter brand" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-success mr-1" onclick="brand_save()"><span
+                                    style="font-size: 12px;"> Add
+                                </span></button>
                         </div>
                     </div>
-                </form>
+                </div>
                 <div class="col">
                     <table id="table_brand" class="table table-nowrap table-striped table-sm dtr-inline">
                         <thead>
@@ -229,6 +227,8 @@
 
 <script>
     let ssbrandUrl = "{% url 'ssbrand' %}";
+    let brandsaveUrl = "{% url 'brandsave' %}";
+
 
     window.onload = function ()
     {
@@ -313,6 +313,30 @@
         $('#modal-brand').modal('show').draggable({ handle: ".modal-header" });
     }
 
+    function brand_save(params)
+    {
+        var brand = $('#id_brand').val();
+        $.ajax({
+            url: brandsaveUrl,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { brand: brand, },
+            success: function (data)
+            {
+                if (data.msg == 'saved')
+                {
+                    loadBrand();
+                    $('#modal-brand').modal('hide');
+                }
+            },
+            error: function (e)
+            {
+                alert('err: brand_save');
+            }
+        });
+    }
 
 
 
@@ -332,51 +356,21 @@
         // var text = e.options[e.selectedIndex].text;
     }
 
-    function auto_qty(params)
-    {
-        var qty = 0;
-        var num1 = $('#id_serialnos').val().split('-');
-        var num2 = 0;
-        // try {
-        num2 = (parseFloat(num1[1]) - parseFloat(num1[0])) === 0 ? num1[0] : num2;
-        // } catch (error) {
-        //     num2 = num1;
-        // }
-        $('#id_units').val(num2);
+    // function auto_qty(params)
+    // {
+    //     var qty = 0;
+    //     var num1 = $('#id_serialnos').val().split('-');
+    //     var num2 = 0;
+    //     // try {
+    //     num2 = (parseFloat(num1[1]) - parseFloat(num1[0])) === 0 ? num1[0] : num2;
+    //     // } catch (error) {
+    //     //     num2 = num1;
+    //     // }
+    //     $('#id_units').val(num2);
 
-    }
+    // }
 
 
-
-    // $("input").bind("keydown", function (e)
-    //     { //input type=id above
-    //         $eventText = $('#serialnos');
-    //         alert($eventText);
-    //         if (e.keyCode == 38)
-    //         {
-    //             var text = $("#serialnos").val();
-    //             var args = { 'serialnos': text };
-    //             alert('asdf');
-    //             // $.get("/voteup/", args).done(function (data)
-    //             // {
-    //             //     console.log("message: " + data);
-    //             //     location.reload();
-    //             // });
-    //             return false;
-    //         }
-    //         if (e.keyCode == 40)
-    //         {
-    //             var text = $("#serialnos").val();
-    //             var args = { 'serialnos': text };
-    //             alert('asdf');
-    //             // $.get("/votedown/", args).done(function (data)
-    //             // {
-    //             //     console.log("message: " + data);
-    //             //     location.reload();
-    //             // });
-    //             return false;
-    //         }
-    //     });
 
 
 
