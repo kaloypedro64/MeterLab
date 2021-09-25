@@ -1,3 +1,4 @@
+from django.db.models import query
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
 from Users.forms import AreaForm
@@ -87,7 +88,6 @@ class acquisitionList(ListView):
         if request.is_ajax():
             start = int(request.GET.get('start'))
             limit = int(request.GET.get('limit'))
-            # print('query', self.get_queryset().query)
             list_data = []
             for index, item in enumerate(self.get_queryset().filter(area=transaction_area.area)[start:start+limit], start):
                 list_data.append(item)
@@ -229,7 +229,7 @@ def meter_selected(request):
     if request.is_ajax():
         id = request.GET.get('id')
         idmeters = request.GET.get('idmeters')
-        queryset = metercalibration.objects.filter(idmeterdetails=id).order_by('idmeterdetails')
+        queryset = calibration.objects.filter(idmeterdetails=id).order_by('idmeterdetails')
         context = {'trans': queryset, 'id': id, 'idmeters': idmeters}
         return render(request, html_meterdetails_data, context)
 
@@ -295,7 +295,7 @@ def calibrate_multiple(request, id):
 def calibrate_delete(request, id):
     if request.is_ajax():
         id = request.GET.get('id')
-        serialinfo = metercalibration.objects.get(pk=id)
+        serialinfo = calibration.objects.get(pk=id)
         serialinfo.delete()
         json_response = {json.dumps('deleted')}
     return HttpResponse(json_response, content_type='application/json')
@@ -321,6 +321,40 @@ def meter_test_report(request, id, idmeters):
 #         cursor.fetchall()
 #         return render(request, html_meterlist)
 
+# serverside
+# def meterdetails_ss(request, id):
+#     if request.is_ajax():
+#         start = int(request.GET.get('start'))
+#         limit = int(request.GET.get('limit'))
+#         filter = request.GET.get('filter')
+#         order_by = request.GET.get('order_by')
+#         query = meterdetails.objects.select_related('meters').filter(idmeters=id,
+#                                                                      serialno__icontains=filter,).values('id', 'idmeters', 'serialno', 'ampheres',
+#                                                                                                          'accuracy', 'wms_status', 'status', 'active', 'userid', 'idmeters__brand').order_by(order_by)
+#         list_data = []
+#         for index, item in enumerate(query[start:start+limit], start):
+#             list_data.append(item)
+#         data = {
+#             'length': query.count(),
+#             'objects': list_data,
+#         }
+#         return HttpResponse(json.dumps(data, default=default), 'application/json')
+#     else:
+#         return render(request, 'meters/meterdetails.html', {'idmeters': id, 'header': 'Meter Details'})
+def ss_brand(request):
+    if request.is_ajax():
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        order_by = request.GET.get('order_by')
+        query = brands.objects.values('id', 'brand').order_by(order_by)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):

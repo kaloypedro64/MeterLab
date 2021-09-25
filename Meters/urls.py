@@ -38,5 +38,8 @@ urlpatterns = [
     #     path('seriallist/<int:idmeters>/meter_test_report/<int:id>/',
     #          views.meter_test_report, name='meter_test_report'),
 
+#     serverside extra
+    path('brand', views.ss_brand, name='ssbrand'),
+
 
 ]

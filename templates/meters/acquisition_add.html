@@ -50,7 +50,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-exclamation-triangle"></i>
-                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                    Acquisition Information <span style="font-size: 12px;"><i>(All fields are
                                             required)</i></span>
                                 </h3>
                             </div>
@@ -89,15 +89,14 @@
                                                     <!-- {% if row == 0 %}
                                                     <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}</option>
                                                     {% else %} -->
-                                                    <option value="{{row.id}}" data-address="{{row.address}}">{{row.suppliername}}</option>
+                                                    <option value="{{row.id}}" data-address="{{row.address}}">
+                                                        {{row.suppliername}}</option>
                                                     <!-- {% endif %} -->
                                                     {% endfor %}
                                                 </select>
                                                 <label class="col-form-label mr-2" id="lblAddress"></label>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm" id="id_units"
-                                            name="units" placeholder="Units" required>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +107,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-exclamation-triangle"></i>
-                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                    Meter Information <span style="font-size: 12px;"><i>(All fields are
                                             required)</i></span>
                                 </h3>
                             </div>
@@ -125,7 +124,9 @@
                                                     <option value="{{row.id}}">{{ row.brand }}</option>
                                                     {% endfor %}
                                                 </select>
-                                                <div><a href="/meters"><span style="font-size: 12px;"> Add Brand</span></a></div>
+                                                <div><a href="#" onclick="modal_brand()"><span style="font-size: 12px;">
+                                                            Add
+                                                            Brand</span></a></div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -137,7 +138,8 @@
                                                     <option value="{{row.id}}">{{ row.metertype }}</option>
                                                     {% endfor %}
                                                 </select>
-                                                <a href="/meters"><span style="font-size: 12px;"> Add Meter Type</span></a>
+                                                <a href="/meters"><span style="font-size: 12px;"> Add Meter
+                                                        Type</span></a>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -151,15 +153,22 @@
                                             <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
                                                 Start:</label>
                                             <div class="col">
-                                                <input type="number" class="form-control form-control-sm" id="id_serialnos" name="serialnos" placeholder="0001"
-                                                    required>
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="id_serialnos" name="serialnos" placeholder="0001" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="ml-auto">
+                                                <button type="button" class="btn btn-success mr-1 "><i
+                                                        class="fal fa-save mr-1" tabindex="-1"></i> <span
+                                                        style="font-size: 12px;"> Add </span></button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="card-body">
-                                        <table id="table3" class="table table-nowrap table-striped dtr-inline">
+                                        <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
                                             <thead>
                                                 <tr>
                                                     <th style="display: none;"></th>
@@ -181,7 +190,45 @@
     </form>
 </div>
 
+<div class="modal fade" id="modal-brand">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">Meter Brand</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <div class="col input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" id="id_brand" name="brand"
+                                placeholder="Enter meter brand">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-success mr-1 "><span style="font-size: 12px;"> Add
+                                    </span></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col">
+                    <table id="table_brand" class="table table-nowrap table-striped table-sm dtr-inline">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Brand</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    let ssbrandUrl = "{% url 'ssbrand' %}";
 
     window.onload = function ()
     {
@@ -190,8 +237,86 @@
         // $('#id_metertype').editableSelect({ effects: 'fade' });
         // $('#id_ampheres').editableSelect({ effects: 'fade' });
         // $('#id_ampheres').editableSelect({ effects: 'fade' });
+
+        $('#tablex').DataTable({
+            // "scrollX": true,
+            "searching": false,
+            "processing": true,
+            "info": false,
+            'autoWidth': false,
+            // "paging": true,
+            "lengthChange": false,
+            // "responsive": true,
+            // "order": [1, "asc"],
+            "columnDefs": [
+                { "targets": [4], "className": "text-right" },
+                // { "targets": [1], "visible": false },
+            ],
+
+        });
+
         select_supplier(0);
+
+        function loadBrand()
+        {
+            $('#table_brand').DataTable({
+                "searching": false,
+                "processing": true,
+                "stateSave": true,
+                "info": false,
+                "paging": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "responsive": true,
+                "columnDefs": [
+                    { "targets": [0], "searchable": false, "orderable": false, "visible": true },
+                ],
+                "keys": true,
+                "keys": { "blurable": false },
+                "select": true,
+                "select": {
+                    "style": 'multi',
+                    "selector": 'td:first-child',
+                },
+                "serverSide": true,
+                "processing": true,
+                "ajax": function (data, callback, settings)
+                {
+                    var sort_column_namex = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                    var direction = "";
+                    if (data.order[0].dir == "desc") { direction = "-" };
+                    $.get(ssbrandUrl, {
+                        limit: data.length,
+                        start: data.start,
+                        filter: data.search.value,
+                        order_by: direction + sort_column_namex
+                    }, function (res)
+                    {
+                        callback({
+                            recordsTotal: res.length,
+                            recordsFiltered: res.length,
+                            data: res.objects
+                        });
+                    });
+                },
+                columns: [
+                    { "data": "id" },
+                    { "data": "brand" },
+                ]
+            });
+        }
+        loadBrand();
     }
+
+    function modal_brand(params)
+    {
+        $('#modal-brand').modal('show').draggable({ handle: ".modal-header" });
+    }
+
+
+
+
+
 
     function select_supplier(params)
     {
