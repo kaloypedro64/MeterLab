@@ -77,7 +77,7 @@ window.onload = function ()
                 {
                     "data": "transactiondate", "render": function (data, type, row)
                     {
-                        return '<td style="width: fit-content;"> <a href="details/' + row["id"] + '">' + data + '</a></td>'
+                        return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '">' + data + '</a></td>'
                     }
                 },
                 { "data": "supplierid__suppliername" },
@@ -126,10 +126,53 @@ window.onload = function ()
 
 };
 
-// function modal_acquisition(params)
-// {
-//     $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
-// }
+function modal_acquisition(params)
+{
+    $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
+    select_supplier(0);
+}
+
+function acquisition_save()
+{
+    var transactiondate = $('#id_transactiondate').val();
+    var rrno = $('#id_rrnumber').val();
+    var supplierid = $('#id_supplierid').val();
+    var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+    $.ajax({
+        url: acqSave,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: { csrfmiddlewaretoken: csrf, transactiondate: transactiondate, rrno: rrno, supplierid: supplierid },
+        success: function (data)
+        {
+            alert(data.msg);
+            if (data.msg == 'saved')
+            {
+                $('#modal-acquisition').hide();
+                msgAlert('Save', 'Successfully saved!', 1);
+                window.open(acqAdd.replace('0',data.id), "_self");
+                // window.location('acquisition/', '_black');
+            }
+        },
+        error: function (e)
+        {
+            alert('err: acquisition_save');
+        }
+    });
+}
+
+function select_supplier(params)
+{
+    var e = document.getElementById("id_supplier");
+    if (params == null) params = e.selectedIndex
+    var option = e.options[params];
+    // var attrs = option.attributes;
+    var data = option.getAttribute("data-address");
+    $('#id_supplierid').val(option.value);
+    document.getElementById('lblAddress').innerHTML = data;
+}
 
 
 // function meter_save(id)
@@ -158,7 +201,7 @@ function meter_delete(id)
     if (ok == true)
     {
         $.ajax({
-            url: mDelete.replace('0', id),
+            url: acqDelete.replace('0', id),
             type: 'GET',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -166,8 +209,11 @@ function meter_delete(id)
             data: { id: id, },
             success: function (data)
             {
-                if (data == 'deleted')
+                if (data.msg == 'deleted')
+                {
                     acqTable.draw();
+                    msgAlert('Delete', 'Successfully deleted!', 3);
+                }
             },
             error: function (e)
             {

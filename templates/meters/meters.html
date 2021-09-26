@@ -4,6 +4,25 @@
 {% block content %}
 {% include "base/header.html" %}
 
+<style type="text/css">
+  /* .modal-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+  } */
+  .mlabel {
+    text-align: right;
+    font-size: 12px;
+  }
+</style>
+
 <div class="content-wrapper">
   <div class="content-header">
     <div class="container-fluid">
@@ -14,6 +33,8 @@
         <div class="ml-auto ">
           <!-- <i class="fad fa-books-medical"></i> -->
           <a href="acquisition" type="button" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
+                class="fal fad fa-books-medical mr-2"></i>Add Acquisition</span></a>
+          <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
                 class="fal fad fa-books-medical mr-2"></i>Add Acquisition</span></a>
         </div>
       </div>
@@ -48,13 +69,74 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal-acquisition">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary ">
+        <h5 class="modal-title">Acquisition Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+
+        <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="{{ request.user.id }}">
+        <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
+        <div class="form-group row">
+          <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Transaction
+            Date:</label>
+          <div class="col">
+            <input type="date" class="form-control form-control-sm" id="id_transactiondate" name="transactiondate" data-mask
+              datemask value="{{ datetoday|date:'Y-m-d' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_brand" class="col-sm-3 col-form-label mlabel">RR Number:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
+              placeholder="RR #" style="text-transform: uppercase;">
+          </div>
+        </div>
+        <input type="hidden" name="supplierid" id="id_supplierid">
+        <div class="form-group row">
+          <label for="id_supplier" class="col-sm-3 col-form-label mlabel">Supplier:</label>
+          <div class="col-sm-9">
+            <select class="form-control form-control-sm select2" id="id_supplier" name="supplier" onchange="select_supplier()">
+              {% for row in mSupplier %}
+              {% if row == 0 %}
+              <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}</option>
+              {% else %}
+              <option value="{{row.id}}" data-address="{{row.address}}">
+                {{row.suppliername}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+            <span class="col-form-label mr-2" id="lblAddress"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-left">
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="acquisition_save()"><i
+            class="fal fa-save mr-1"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   let acqTable
   let acqListUrl = "{% url 'acqList' %}";
   let acqSelectedUrl = "{% url 'acqselected' %}";
+  let acqAdd = "{% url 'acqadd' 0 %}";
+  let acqSave = "{% url 'acqsave' %}";
 
-  let mDelete = "{% url 'meters_delete' 0 %}";
+
+
+  let acqDelete = "{% url 'acqdelete' 0 %}";
+
+
 </script>
-<script src="{% static "js/meters.js" %}"></script>
+<script src="{% static "js/meterss.js" %}"></script>
+<script src="{% static "js/alert.js" %}"></script>
 
 {% endblock content %}

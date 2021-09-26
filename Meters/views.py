@@ -98,7 +98,9 @@ class acquisitionList(ListView):
             }
             return HttpResponse(json.dumps(data, default=default), 'application/json')
         else:
-            return render(request, self.html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
+            mform = acquisitionForm(request.POST)
+            mSupplier = suppliers.objects.order_by('suppliername').distinct()
+            return render(request, self.html, {'header': 'Meters', 'form': mform, 'mSupplier': mSupplier, 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'datetoday': datetoday, 'area': transaction_area.area})
 
 
 def acquisition_selected(request):
@@ -109,28 +111,38 @@ def acquisition_selected(request):
         return render(request, html_meters_data, context)
 
 
-def acquisition_add(request):
+def acquisition_save(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
-    if request.method == "POST":
-        form = acquisitionForm(request.POST)
-        if form.is_valid():
-            rec = form.save()
-            rec.save()
-            return redirect("/meters")
-        else:
-            data = {"err_msg": form.errors}
-            return JsonResponse(data)
-    else:
-        # acqform = acquisitionForm(request.POST)
-        mform = meterForm(request.POST)
+    if request.method == "GET":
 
-        mBrand = brands.objects.order_by('brand').distinct()
-        mTypes = mtype.objects.order_by('metertype').distinct()
-        mAmp = meters.objects.order_by('ampheres').distinct()
-        mSupplier = suppliers.objects.order_by('suppliername').distinct()
-        context = {'form': mform, 'header': 'Meter Acquisition', 'datetoday': datetoday, 'area': transaction_area.area,
-                   'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
-        return render(request, html_aAdd, context)
+        date = request.GET.get('transactiondate')
+        rrno = request.GET.get('rrno')
+        supplierid = request.GET.get('supplierid')
+        now = datetime.datetime.utcnow()
+        cursor = connection.cursor()
+        cursor.execute('insert into zanecometerpy.acquisition (transactiondate, rrnumber, area, userid, supplierid, created_at, updated_at) values ("' + date + '","' + rrno + '","' + transaction_area.area + '","' + str(request.user.id) + '","' + str(supplierid) + '", "' + now.strftime('%Y-%m-%d %H:%M:%S') +'", "' + now.strftime('%Y-%m-%d %H:%M:%S') +'")')
+        cursor.fetchall()
+        id = cursor.lastrowid
+        if True:
+            data = {"id":id, "msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        print('data',data)
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+def acquisition_add(request, id):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+
+    acq = acquisition.objects.select_related('supplierid').values(
+        'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
+    print('acq', acq)
+    mBrand = brands.objects.order_by('brand').distinct()
+    mTypes = mtype.objects.order_by('metertype').distinct()
+    mAmp = meters.objects.order_by('ampheres').distinct()
+    mSupplier = suppliers.objects.order_by('suppliername').distinct()
+    context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
+                'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
+    return render(request, html_aAdd, context)
 
 
 def meters_add(request):
@@ -198,17 +210,20 @@ def meters_edit(request, id):
         return render(request, html_mEdit, context)
 
 
-def meters_delete(request, id):
+def acquisition_delete(request, id):
     if request.is_ajax():
         id = request.GET.get('id')
-        meterinfo = meters.objects.get(pk=id)
-        meterinfo.delete()
+        acqinfo = acquisition.objects.get(pk=id)
+        acqinfo.delete()
 
         # meterinfo_details = meterdetails.objects.get(idmeters=id)
         # meterinfo_details.delete()
 
-        json_response = {json.dumps('deleted')}
-    return HttpResponse(json_response, content_type='application/json')
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
 
 def meters_detail(request, id):
@@ -414,7 +429,6 @@ def mtypes_ss(request):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-
 def mtypes_save(request):
     if request.is_ajax():
         metertype = str(request.GET.get('metertype'))
@@ -427,7 +441,6 @@ def mtypes_save(request):
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
-
 
 def mtypes_delete(request):
     if request.is_ajax():
@@ -442,12 +455,10 @@ def mtypes_delete(request):
             data = {"msg": 'Not deleted'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 # end meter type
-
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):
         return x.isoformat()
     raise TypeError("Unknown type")
-
 
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):

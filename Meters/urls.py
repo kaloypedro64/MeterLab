@@ -6,10 +6,11 @@ urlpatterns = [
     #     path('', views.meterList, name='meterList'),
     # meters
     path('', acquisitionList.as_view(), name='acqList'),
-    path('acquisition', views.acquisition_add, name='acquisition'),
+    path('acqadd/<int:id>', views.acquisition_add, name='acqadd'),
+    path('acqsave', views.acquisition_save, name='acqsave'),
     path('acqselected/', views.acquisition_selected, name='acqselected'),
 
-    path('delete/<int:id>/', views.meters_delete, name='meters_delete'),
+    path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
     path('add', views.meters_add, name='meters_add'),
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 

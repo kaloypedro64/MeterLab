@@ -35,8 +35,8 @@
                         <h1>Add Meter Request</h1>
                     </div>
                     <div class="ml-auto">
-                        <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
-                                tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button>
+                        <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
+                                tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button> -->
                         <a type="button" href="/meters" class="btn btn-danger"><i
                                 class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Cancel</span></a>
                     </div>
@@ -50,9 +50,8 @@
                         <div class="card card-default">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Acquisition Information <span style="font-size: 12px;"><i>(All fields are
-                                            required)</i></span>
+                                    <i class="fas fa-check-circle"></i>
+                                    Acquisition Information <span style="font-size: 12px;"><i></i></span>
                                 </h3>
                             </div>
                             <div class="row g-0">
@@ -69,35 +68,24 @@
                                             <div class="col">
                                                 <input type="date" class="form-control form-control-sm"
                                                     id="id_transactiondate" name="transactiondate" data-mask datemask
-                                                    value="{{ datetoday|date:'Y-m-d' }}">
+                                                    value="{{ acq.transactiondate|date:'Y-m-d' }}" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_rrnumber"
-                                                    name="rrnumber" maxlength="145" placeholder="RR #"
-                                                    style="text-transform: uppercase;">
+                                                    name="rrnumber" maxlength="145" value="{{ acq.rrnumber }}" readonly>
                                             </div>
                                         </div>
                                         <input type="hidden" name="supplierid" id="id_supplierid">
                                         <div class="form-group row">
                                             <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control form-control-sm select2" id="id_supplier"
-                                                    name="supplier" onchange="select_supplier()">
-                                                    {% for row in mSupplier %}
-                                                    {% if row == 0 %}
-                                                    <option selected="selected" value="{{row.id}}"
-                                                        data-address="{{row.address}}">{{ row.suppliername }}</option>
-                                                    {% else %}
-                                                    <option value="{{row.id}}" data-address="{{row.address}}">
-                                                        {{row.suppliername}}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                                <span class="col-form-label mr-2" id="lblAddress"></span>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_supplier" name="supplier"  value="{{ acq.supplierid__suppliername }}" readonly>
+                                                    <span class="col-form-label mr-2" id="lblAddress">{{ acq.supplierid__address }}</span>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
