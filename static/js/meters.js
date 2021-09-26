@@ -14,7 +14,7 @@ window.onload = function ()
             "responsive": true,
             "columnDefs": [
                 { "targets": [0], "searchable": false, "orderable": false, "visible": true },
-                { "targets": [5], "className": "text-left" }
+                // { "targets": [5], "className": "text-left" }
             ],
             "keys": true,
             "keys": { "blurable": false },
@@ -59,7 +59,7 @@ window.onload = function ()
                             return '<center>' +
                                 '<div class="btn-group">' +
                                 '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meters_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -68,7 +68,7 @@ window.onload = function ()
                             return '<center>' +
                                 '<div class="btn-group">' +
                                 '<a href="edit/' + row["id"] + '" class="btn btn-warning btn-xs text-sm" title="Edit"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meters_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -82,52 +82,77 @@ window.onload = function ()
                 },
                 { "data": "supplierid__suppliername" },
                 { "data": "supplierid__address" },
-                { "data": "units" },
             ]
         });
         acqTable.column(0).visible(false);
     }
     loadAcquisition();
 
-    $('#acqTable tbody').on('click', 'tr', function ()
-    {
-        if ($(this).hasClass('selected'))
-        {
-            $(this).removeClass('selected');
-        }
-        else
-        {
-            acqTable.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
+    // $('#acqTable tbody').on('click', 'tr', function ()
+    // {
+    //     if ($(this).hasClass('selected'))
+    //     {
+    //         $(this).removeClass('selected');
+    //     }
+    //     else
+    //     {
+    //         acqTable.$('tr.selected').removeClass('selected');
+    //         $(this).addClass('selected');
+    //     }
 
-        var data = acqTable.rows(this).data();
-        var id = data[0]['id'];
-        show_details(id );
-    });
+    //     var data = acqTable.rows(this).data();
+    //     var id = data[0]['id'];
+    //     show_details(id );
+    // });
 
-    function show_details(id)
-    {
-        $.ajax({
-            url: acqSelectedUrl,
-            method: 'GET',
-            type: 'GET',
-            data: { id: id,
-            },
-            success: function (data)
-            {
-                $("#metersdata").html(data);
-            },
-            error: function (e)
-            {
-                alert('err: meters.js - show_details');
-            }
-        });
-    } change_table3_data(id, 0);
+    // function show_details(id)
+    // {
+    //     $.ajax({
+    //         url: acqSelectedUrl,
+    //         method: 'GET',
+    //         type: 'GET',
+    //         data: { id: id,
+    //         },
+    //         success: function (data)
+    //         {
+    //             $("#metersdata").html(data);
+    //         },
+    //         error: function (e)
+    //         {
+    //             alert('err: meters.js - show_details');
+    //         }
+    //     });
+    // } change_table3_data(id, 0);
 
 };
 
-function meters_delete(id)
+// function modal_acquisition(params)
+// {
+//     $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
+// }
+
+
+// function meter_save(id)
+// {
+//     $.ajax({
+//         url: mDelete.replace('0', id),
+//         type: 'GET',
+//         dataType: 'json',
+//         contentType: 'application/json; charset=utf-8',
+//         contentType: false,
+//         data: { id: id, },
+//         success: function (data)
+//         {
+
+//         },
+//         error: function (e)
+//         {
+//             alert('err: meter list 158');
+//         }
+//     });
+// }
+
+function meter_delete(id)
 {
     var ok = confirm('Are you sure to delete this entry?');
     if (ok == true)

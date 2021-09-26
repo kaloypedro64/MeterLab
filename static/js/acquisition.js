@@ -1,11 +1,6 @@
+
 window.onload = function ()
 {
-    $('.select2').select2();
-    // $('#id_brand').editableSelect({ effects: 'fade' });
-    // $('#id_metertype').editableSelect({ effects: 'fade' });
-    // $('#id_ampheres').editableSelect({ effects: 'fade' });
-    // $('#id_ampheres').editableSelect({ effects: 'fade' });
-
     tablex = $('#tablex').DataTable({
         // "scrollX": true,
         "searching": false,
@@ -18,10 +13,11 @@ window.onload = function ()
         // "order": [1, "asc"],
         "columnDefs": [
             { "targets": [4], "className": "text-right" },
-            { "targets": [0,5,6], "visible": false },
+            { "targets": [0, 5, 6], "visible": false },
         ],
 
     });
+
     // tablex.column(0).visible(false);
     // tablex.column(5).visible(false);
     // tablex.column(6).visible(false);
@@ -96,8 +92,7 @@ window.onload = function ()
             ],
             "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
-        table_brand.column(0).visible(false);
-
+        // table_brand.column(0).visible(false);
     }
     loadBrand();
 
@@ -150,7 +145,7 @@ window.onload = function ()
                             return '<center>' +
                                 '<div class="btn-group">' +
                                 '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="brand_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="mtypes_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -159,7 +154,7 @@ window.onload = function ()
                             return '<center>' +
                                 '<div class="btn-group">' +
                                 '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="brand_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="mtypes_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -261,6 +256,34 @@ function mtypes_save(params)
             alert('err: brand_save');
         }
     });
+}
+
+function mtypes_delete(params)
+{
+    var ok = confirm('Are you sure to delete this record?');
+    if (ok == true)
+    {
+        $.ajax({
+            url: mtypesdelUrl,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params, },
+            success: function (data)
+            {
+                if (data.msg == 'deleted')
+                {
+                    msgAlert('Delete', 'Successfully deleted!', 3);
+                    $('#table_types').DataTable().ajax.reload(null, false);
+                }
+            },
+            error: function (e)
+            {
+                alert('err: brand_save');
+            }
+        });
+    }
 }
 
 function meter_to_datatable(params)

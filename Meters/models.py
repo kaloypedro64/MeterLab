@@ -35,7 +35,7 @@ class acquisition(models.Model):
     rrnumber = models.CharField(max_length=145, db_index=True)
     supplierid = models.ForeignKey(
         suppliers, db_column='supplierid', related_name='suppliers', on_delete=models.PROTECT, db_index=True)
-    units = models.IntegerField(default=0)
+    # units = models.IntegerField(default=0)
     area = models.PositiveSmallIntegerField(
         default=0, null=False)
     userid = models.CharField(max_length=45) # 0=dmo, 1=pas, 2=sas, 3=las          # meter count

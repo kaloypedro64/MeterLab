@@ -138,94 +138,94 @@
 <script>
 
     $('.select2').select2();
-    var rrnumber = '';
+    // var rrnumber = '';
 
-    $(document).ready(function () {
+    // $(document).ready(function () {
 
-        // let table_rr = $('#table_rrs').DataTable({
-        //     "searching": true,
-        //     "processing": true,
-        //     "stateSave": true,
-        //     "info": true,
-        //     "paging": true,
-        //     "lengthChange": true,
-        //     "autoWidth": false,
-        //     "responsive": true,
-        //     "columnDefs": [{
-        //         "targets": [ 6 ],
-        //         "className": "text-right",
-        //     }],
-        //     "keys": true,
-        //     "keys": { "blurable": false },
-        //     "select": true,
-        //     "select": {
-        //         "style": "os",
-        //     },
-        //     "serverSide": true,
-        //     "processing": true,
-        //     "ajax": function (data, callback, settings) {
-        //         var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
-        //         var direction = "";
-        //         if (data.order[0].dir == "desc") { direction = "-" };
-        //         $.get("{% url 'list' %}", {
-        //             limit: data.length,
-        //             start: data.start,
-        //             filter: data.search.value,
-        //             order_by: direction + sort_column_name
-        //         }, function (res) {
-        //             callback({
-        //                 recordsTotal: res.length,
-        //                 recordsFiltered: res.length,
-        //                 data: res.objects
-        //             });
-        //         });
-        //     },
-        //     columns: [
-        //         { "data": "id" },
-        //         { "data": "dateforwarded" },
-        //         { "data": "rrnumber", "render": function (data, type, row) {
-        //                 return '<td style="width: fit-content;"> <a href="seriallist/'+ row["id"] +'">' + data + '</a></td>'
-        //             }
-        //         },
-        //         { "data": "brand" },
-        //         { "data": "serialnos" },
-        //         { "data": "metertype" },
-        //         { "data": "units" },
-        //         { "data": "id", "render": function (data, type, row) {
-        //             if ('{{ request.user.is_superuser }}' == 'True') {
-        //             return '<center><a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "delete_meters(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"> Delete</span></a></center>'
-        //             } else {
-        //             return '<center><a href="#" class="btn btn-default btn-xs text-sm" title="Delete"><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"> Delete</span></a></center>'
-        //             }
-        //             }
-        //         },
-        //     ]
-        // });
-        // table_rr.column(0).visible(false);
-    });
+    //     // let table_rr = $('#table_rrs').DataTable({
+    //     //     "searching": true,
+    //     //     "processing": true,
+    //     //     "stateSave": true,
+    //     //     "info": true,
+    //     //     "paging": true,
+    //     //     "lengthChange": true,
+    //     //     "autoWidth": false,
+    //     //     "responsive": true,
+    //     //     "columnDefs": [{
+    //     //         "targets": [ 6 ],
+    //     //         "className": "text-right",
+    //     //     }],
+    //     //     "keys": true,
+    //     //     "keys": { "blurable": false },
+    //     //     "select": true,
+    //     //     "select": {
+    //     //         "style": "os",
+    //     //     },
+    //     //     "serverSide": true,
+    //     //     "processing": true,
+    //     //     "ajax": function (data, callback, settings) {
+    //     //         var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+    //     //         var direction = "";
+    //     //         if (data.order[0].dir == "desc") { direction = "-" };
+    //     //         $.get("{% url 'list' %}", {
+    //     //             limit: data.length,
+    //     //             start: data.start,
+    //     //             filter: data.search.value,
+    //     //             order_by: direction + sort_column_name
+    //     //         }, function (res) {
+    //     //             callback({
+    //     //                 recordsTotal: res.length,
+    //     //                 recordsFiltered: res.length,
+    //     //                 data: res.objects
+    //     //             });
+    //     //         });
+    //     //     },
+    //     //     columns: [
+    //     //         { "data": "id" },
+    //     //         { "data": "dateforwarded" },
+    //     //         { "data": "rrnumber", "render": function (data, type, row) {
+    //     //                 return '<td style="width: fit-content;"> <a href="seriallist/'+ row["id"] +'">' + data + '</a></td>'
+    //     //             }
+    //     //         },
+    //     //         { "data": "brand" },
+    //     //         { "data": "serialnos" },
+    //     //         { "data": "metertype" },
+    //     //         { "data": "units" },
+    //     //         { "data": "id", "render": function (data, type, row) {
+    //     //             if ('{{ request.user.is_superuser }}' == 'True') {
+    //     //             return '<center><a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "delete_meters(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"> Delete</span></a></center>'
+    //     //             } else {
+    //     //             return '<center><a href="#" class="btn btn-default btn-xs text-sm" title="Delete"><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"> Delete</span></a></center>'
+    //     //             }
+    //     //             }
+    //     //         },
+    //     //     ]
+    //     // });
+    //     // table_rr.column(0).visible(false);
+    // });
 
-    let opt_supplier = '{{ opt_supplier }}';
-    let opt_rr = '{{ opt_rr }}';
-    if (opt_supplier != '') $("#id_supplier").select2().val(opt_supplier).trigger('change.select2');
-    if (opt_rr != '') $("#id_rrnumber").select2().val(opt_rr).trigger('change.select2');
+    // let opt_supplier = '{{ opt_supplier }}';
+    // let opt_rr = '{{ opt_rr }}';
+    // if (opt_supplier != '') $("#id_supplier").select2().val(opt_supplier).trigger('change.select2');
+    // if (opt_rr != '') $("#id_rrnumber").select2().val(opt_rr).trigger('change.select2');
 
-    function meter_serial(params) {
-        $('#add-serials').modal('show').draggable({ handle: ".modal-header" });
-    }
+    // function meter_serial(params) {
+    //     $('#add-serials').modal('show').draggable({ handle: ".modal-header" });
+    // }
 
-    function msgalert(header, remarks, ico) {
-        if (ico == 1) icon = 'fal fa-save fa-lg';
-        if (ico == 2) icon = 'fas fa-pencil-alt fa-lg';
-        if (ico == 3) icon = 'fal fa-trash-alt fa-lg';
-        $(document).Toasts('create', {
-            class: 'bg-white',
-            title: '<span style="font-size: 12px;"> ' + header + ' </span>',
-            subtitle: '<a href="" class="nav-link" id="">reserved!</a>',
-            position: 'bottomRight',
-            icon: icon,
-            body: '<div class="col-md-9 row" style="width: 300px"><span style="font-size:13px;">' + remarks + '</span></div>',
-            autohide: true,
-            delay: 10000,
-        });
-};
+    // function msgalert(header, remarks, ico) {
+    //     if (ico == 1) icon = 'fal fa-save fa-lg';
+    //     if (ico == 2) icon = 'fas fa-pencil-alt fa-lg';
+    //     if (ico == 3) icon = 'fal fa-trash-alt fa-lg';
+    //     $(document).Toasts('create', {
+    //         class: 'bg-white',
+    //         title: '<span style="font-size: 12px;"> ' + header + ' </span>',
+    //         subtitle: '<a href="" class="nav-link" id="">reserved!</a>',
+    //         position: 'bottomRight',
+    //         icon: icon,
+    //         body: '<div class="col-md-9 row" style="width: 300px"><span style="font-size:13px;">' + remarks + '</span></div>',
+    //         autohide: true,
+    //         delay: 10000,
+    //     });
+// };
 </script>

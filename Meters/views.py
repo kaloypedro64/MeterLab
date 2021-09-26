@@ -82,7 +82,7 @@ class acquisitionList(ListView):
     html = 'meters/meters.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'units', 'area').order_by(self.request.GET.get('order_by'))
+        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area').order_by(self.request.GET.get('order_by'))
 
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
