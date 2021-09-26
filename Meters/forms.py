@@ -60,9 +60,8 @@ class meterForm(forms.ModelForm):
 class meterdetailsForm(forms.ModelForm):
     class Meta:
         model = meterdetails
-        fields = ['id', 'meterid', 'serialno',
-                  'accuracy', 'wms_status', 'status', 'active']
-        readonly_fields = ['created_at', 'updated_at']
+        fields = ['id', 'meterid', 'serialno', 'accuracy', 'wms_status', 'status', 'active']
+        # readonly_fields = ['created_at', 'updated_at']
         # labels = {
         #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit'
         # }

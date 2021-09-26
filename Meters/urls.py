@@ -9,9 +9,10 @@ urlpatterns = [
     path('acqadd/<int:id>', views.acquisition_add, name='acqadd'),
     path('acqsave', views.acquisition_save, name='acqsave'),
     path('acqselected/', views.acquisition_selected, name='acqselected'),
-
     path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
-    path('add', views.meters_add, name='meters_add'),
+
+    path('save', views.meter_save, name='msave'),
+
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
     # meter details
@@ -49,4 +50,5 @@ urlpatterns = [
     path('mtypessave', views.mtypes_save, name='mtypessave'),
     path('mtypesdelete', views.mtypes_delete, name='mtypesdelete'),
 
+    path('meters', views.meter_ss, name='meterss'),
 ]

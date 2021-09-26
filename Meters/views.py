@@ -1,5 +1,6 @@
 import types
 from django.db.models import query
+from django.db.models.query_utils import Q
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
 from Users.forms import AreaForm
@@ -130,12 +131,11 @@ def acquisition_save(request):
         print('data',data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+
 def acquisition_add(request, id):
     transaction_area = userarea.objects.get(userid=request.user.id)
-
     acq = acquisition.objects.select_related('supplierid').values(
         'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
-    print('acq', acq)
     mBrand = brands.objects.order_by('brand').distinct()
     mTypes = mtype.objects.order_by('metertype').distinct()
     mAmp = meters.objects.order_by('ampheres').distinct()
@@ -143,6 +143,62 @@ def acquisition_add(request, id):
     context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
                 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
     return render(request, html_aAdd, context)
+
+def meter_ss(request):
+    if request.is_ajax():
+        id = str(request.GET.get('id'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        query = meters.objects.select_related('brand', 'mtype').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
+                                                                                            'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units').order_by(order_by)
+        # print('query', query.query)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def meter_save(request):
+    if request.is_ajax():
+    #  'id', 'acquisitionid', 'brandid', 'mtypeid', 'ampheres', 'serialnos', 'units'
+
+        acquisitionid = str(request.GET.get('acquisitionid'))
+        brandid = str(request.GET.get('brandid'))
+        mtypeid = str(request.GET.get('mtypeid'))
+        ampheres = str(request.GET.get('ampheres'))
+        serialnos = str(request.GET.get('serialnos'))
+        units = str(request.GET.get('units'))
+
+
+        cursor = connection.cursor()
+        cursor.execute('insert into zanecometerpy.meters (acquisitionid, brandid, mtypeid, ampheres, serialnos, units) values ("' + acquisitionid + '","' + brandid + '","' + mtypeid + '","' + ampheres + '","' + serialnos + '","' + units + '")')
+        cursor.fetchall()
+        meterid = cursor.lastrowid
+
+        serials = request.POST['serialnos'].split('-')
+
+        num1 = int(serials[0])
+        zerofill = len(serials[0])
+
+        for index in range(1, int(units) + 1):
+            num = num1
+            num = str(num).zfill(zerofill)
+            cursor.execute('insert into zanecometerpy.meterdetails (meterid,serialno,accuracy,wms_status, status, active) ' +
+                           'values ("' + str(meterid) + '","' + num + '",0,0,0,0)')
+            cursor.fetchall()
+            num1 += 1
+
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 
 def meters_add(request):

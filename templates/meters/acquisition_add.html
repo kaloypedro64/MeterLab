@@ -26,83 +26,87 @@
 
 
 <div class="content-wrapper">
-    <form action method="POST" autocomplete="off">
-        {% csrf_token %}
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>Add Meter Request</h1>
-                    </div>
-                    <div class="ml-auto">
-                        <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1>Add Meter Request</h1>
+                </div>
+                <div class="ml-auto">
+                    <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
                                 tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button> -->
-                        <a type="button" href="/meters" class="btn btn-danger"><i
-                                class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Cancel</span></a>
-                    </div>
+                    <a type="button" href="/meters" class="btn btn-danger"><i class="fal fa-share-square mr-1"></i><span
+                            style="font-size: 12px;">Cancel</span></a>
                 </div>
             </div>
-        </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <section class="col-lg-12 connectedSortable">
-                        <div class="card card-default">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fas fa-check-circle"></i>
-                                    Acquisition Information <span style="font-size: 12px;"><i></i></span>
-                                </h3>
-                            </div>
-                            <div class="row g-0">
-                                <div class="col">
-                                    <div class="card-body">
-                                        <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
-                                            value="0">
-                                        <input type="hidden" name="area" maxlength="45" required="" id="id_area"
-                                            value="{{ area }}">
-                                        <div class="form-group row">
-                                            <label for="id_transactiondate"
-                                                class="col-sm-2 col-form-label col-form-label-sm ">Transaction
-                                                Date:</label>
-                                            <div class="col">
-                                                <input type="date" class="form-control form-control-sm"
-                                                    id="id_transactiondate" name="transactiondate" data-mask datemask
-                                                    value="{{ acq.transactiondate|date:'Y-m-d' }}" readonly>
-                                            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <section class="col-lg-12 connectedSortable">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-check-circle"></i>
+                                Acquisition Information <span style="font-size: 12px;"><i></i></span>
+                            </h3>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col">
+                                <div class="card-body">
+                                    <input type="hidden" name="id" maxlength="45" required="" id="id_id"
+                                        value="{{ acq.id }}">
+                                    <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
+                                        value="0">
+                                    <input type="hidden" name="area" maxlength="45" required="" id="id_area"
+                                        value="{{ area }}">
+                                    <div class="form-group row">
+                                        <label for="id_transactiondate"
+                                            class="col-sm-2 col-form-label col-form-label-sm ">Transaction
+                                            Date:</label>
+                                        <div class="col">
+                                            <input type="date" class="form-control form-control-sm"
+                                                id="id_transactiondate" name="transactiondate" data-mask datemask
+                                                value="{{ acq.transactiondate|date:'Y-m-d' }}" readonly>
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
-                                            <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_rrnumber"
-                                                    name="rrnumber" maxlength="145" value="{{ acq.rrnumber }}" readonly>
-                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control form-control-sm" id="id_rrnumber"
+                                                name="rrnumber" maxlength="145" value="{{ acq.rrnumber }}" readonly>
                                         </div>
-                                        <input type="hidden" name="supplierid" id="id_supplierid">
-                                        <div class="form-group row">
-                                            <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                            <div class="col">
-                                                <input type="text" class="form-control form-control-sm" id="id_supplier" name="supplier"  value="{{ acq.supplierid__suppliername }}" readonly>
-                                                    <span class="col-form-label mr-2" id="lblAddress">{{ acq.supplierid__address }}</span>
-                                            </div>
+                                    </div>
+                                    <input type="hidden" name="supplierid" id="id_supplierid">
+                                    <div class="form-group row">
+                                        <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control form-control-sm" id="id_supplier"
+                                                name="supplier" value="{{ acq.supplierid__suppliername }}" readonly>
+                                            <span class="col-form-label mr-2" id="lblAddress">{{acq.supplierid__address}}</span>
+                                        </div>
 
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    <section class="col-lg-12 connectedSortable">
-                        <div class="card card-default">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Meter Information <span style="font-size: 12px;"><i>(All fields are
-                                            required)</i></span>
-                                </h3>
-                            </div>
-                            <div class="row g-0">
-                                <div class="col-md-5">
+                    </div>
+                </section>
+                <section class="col-lg-12 connectedSortable">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Meter Information <span style="font-size: 12px;"><i>(All fields are
+                                        required)</i></span>
+                            </h3>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <!-- <form action method="POST" autocomplete="off" > -->
+                                    {% csrf_token %}
                                     <div class="card-body">
                                         <div class="form-group row">
                                             <label for="id_brandid"
@@ -132,6 +136,13 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="id_serialnos" class="col-sm-3 col-form-label">Ampheres:</label>
+                                            <div class="col">
+                                                <input type="number" class="form-control form-control-sm" id="id_ampheres" name="ampheres"
+                                                    placeholder="10 (30)">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm" id="id_units"
@@ -148,38 +159,37 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="ml-auto">
-                                                <button type="button" onclick="meter_to_datatable()"
-                                                    class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
-                                                        tabindex="-1"></i> <span style="font-size: 12px;"> Add
+                                                <button type="button" onclick="meter_save()" class="btn btn-success mr-1 "><i
+                                                        class="fal fa-save mr-1" tabindex="-1"></i> <span
+                                                        style="font-size: 12px;"> Add
                                                     </span></button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="card-body">
-                                        <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Brand</th>
-                                                    <th>Type</th>
-                                                    <th>Units</th>
-                                                    <th>Serial No.</th>
-                                                    <th>brandID</th>
-                                                    <th>typeID</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
+                                <!-- </form> -->
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Actions</th>
+                                                <th>Brand</th>
+                                                <th>Type</th>
+                                                <th>Units</th>
+                                                <th>Serial No.</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
             </div>
-        </section>
-    </form>
+        </div>
+    </section>
 </div>
 
 <div class="modal fade" id="modal-brand">
@@ -263,9 +273,16 @@
     let mtypesssUrl = "{% url 'mtypesss' %}";
     let mtypessaveUrl = "{% url 'mtypessave' %}";
     let mtypesdelUrl = "{% url 'mtypesdelete' %}";
+    let mListUrl = "{% url 'meterss' %}";
+    var id = '{{ acq.id }}';
+
+    let mSaveUrl = "{% url 'msave' %}";
+
+
+
 
 </script>
-<script src="{% static "js/acquisition.js" %}"></script>
+<script src="{% static "js/acquisitionss.js" %}"></script>
 <script src="{% static "js/alert.js" %}"></script>
 
 {% endblock content %}

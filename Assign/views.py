@@ -73,7 +73,7 @@ def assign(request, str):
         return redirect("..")
     else:
 
-        serials = metercalibration.objects.select_related(
+        serials = calibration.objects.select_related(
             'idmeterdetails').filter().values('id', 'idmeterdetails__serialno')
         # print('get', name)
         context = {'form': form, 'header': 'Meter Assign',
