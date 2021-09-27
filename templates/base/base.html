@@ -37,8 +37,7 @@
     <link rel="stylesheet" href="{% static "plugins/select2/css/select2.min.css" %}">
     <link rel="stylesheet" href="{% static "plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" %}">
 
-    <!-- <link rel="stylesheet" href="{% static "plugins/optionedit/jquery-editable-select.css" %}" type="text/css"> -->
-    <link rel="stylesheet" href="{% static "plugins/optionedit/jquery-editable-select.min.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "plugins/optionedit/jquery-editable-select.min.css" %}">
 
     <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/jquery.dataTables.min.css" %}">
     <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/select.dataTables.min.css" %}">
@@ -96,6 +95,7 @@
 
 <script src="{% static "plugins/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
 <script src="{% static "plugins/datatables/jquery.dataTables.min.js" %}"></script>
+
 <script src="{% static "plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" %}"></script>
 <script src="{% static "plugins/datatables-responsive/js/dataTables.responsive.min.js" %}"></script>
 <script src="{% static "plugins/datatables-responsive/js/responsive.bootstrap4.min.js" %}"></script>
@@ -137,4 +137,5 @@
 
 <script>
     $('.select2').select2();
+    $('#id_ampheres').editableSelect({ effects: 'fade' });
 </script>

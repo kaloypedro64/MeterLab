@@ -82,6 +82,7 @@ window.onload = function ()
                 },
                 { "data": "supplierid__suppliername" },
                 { "data": "supplierid__address" },
+                { "data": "rrnumber" },
             ]
         });
         acqTable.column(0).visible(false);

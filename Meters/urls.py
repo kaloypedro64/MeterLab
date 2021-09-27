@@ -11,8 +11,6 @@ urlpatterns = [
     path('acqselected/', views.acquisition_selected, name='acqselected'),
     path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
 
-    path('save', views.meter_save, name='msave'),
-
     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
     # meter details
@@ -51,4 +49,6 @@ urlpatterns = [
     path('mtypesdelete', views.mtypes_delete, name='mtypesdelete'),
 
     path('meters', views.meter_ss, name='meterss'),
+    path('meterssave', views.meter_save, name='meterssave'),
+    path('metersdelete', views.meter_delete, name='metersdelete'),
 ]

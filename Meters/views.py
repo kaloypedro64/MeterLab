@@ -138,7 +138,7 @@ def acquisition_add(request, id):
         'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
     mBrand = brands.objects.order_by('brand').distinct()
     mTypes = mtype.objects.order_by('metertype').distinct()
-    mAmp = meters.objects.order_by('ampheres').distinct()
+    mAmp = meters.objects.values('ampheres').order_by('ampheres').distinct()
     mSupplier = suppliers.objects.order_by('suppliername').distinct()
     context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
                 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
@@ -166,8 +166,6 @@ def meter_ss(request):
 
 def meter_save(request):
     if request.is_ajax():
-    #  'id', 'acquisitionid', 'brandid', 'mtypeid', 'ampheres', 'serialnos', 'units'
-
         acquisitionid = str(request.GET.get('acquisitionid'))
         brandid = str(request.GET.get('brandid'))
         mtypeid = str(request.GET.get('mtypeid'))
@@ -181,7 +179,7 @@ def meter_save(request):
         cursor.fetchall()
         meterid = cursor.lastrowid
 
-        serials = request.POST['serialnos'].split('-')
+        serials = serialnos.split('-')
 
         num1 = int(serials[0])
         zerofill = len(serials[0])
@@ -189,7 +187,7 @@ def meter_save(request):
         for index in range(1, int(units) + 1):
             num = num1
             num = str(num).zfill(zerofill)
-            cursor.execute('insert into zanecometerpy.meterdetails (meterid,serialno,accuracy,wms_status, status, active) ' +
+            cursor.execute('insert into zanecometerpy.meterdetails (meterid,serialno,accuracy,wms_status,status,active) ' +
                            'values ("' + str(meterid) + '","' + num + '",0,0,0,0)')
             cursor.fetchall()
             num1 += 1
@@ -201,43 +199,55 @@ def meter_save(request):
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 
-def meters_add(request):
-    transaction_area = userarea.objects.get(userid=request.user.id)
-    if request.method == "POST":
-        form = meterForm(request.POST)
-        if form.is_valid():
-            rec = form.save()
-            rec.save()
+def meter_delete(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        meterinfo = meters.objects.get(pk=id)
+        meterinfo.delete()
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
-            # save meter serials for manual meter entry
-            cursor = connection.cursor()
-            idmeters = rec.id
-            units = request.POST['units']
-            now = datetime.datetime.utcnow()
-            serials = request.POST['serialnos'].split('-')
 
-            num1 = int(serials[0])
-            zerofill = len(serials[0])
+# def meters_add(request):
+#     transaction_area = userarea.objects.get(userid=request.user.id)
+#     if request.method == "POST":
+#         form = meterForm(request.POST)
+#         if form.is_valid():
+#             rec = form.save()
+#             rec.save()
 
-            for index in range(1, int(units) + 1):
-                num = num1
-                num = str(num).zfill(zerofill)
-                cursor.execute('insert into zanecometerpy.meterdetails (idmeters, serialno, wms_status, userid, created_at, updated_at) ' +
-                               'values ("' + str(idmeters) + '","' + num + '","0","' + str(request.user.id) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
-                cursor.fetchall()
-                num1 += 1
-        return redirect("/meters")
-    else:
-        form = meterForm(request.POST)
-        mBrand = meters.objects.values('brand').order_by('brand').distinct()
-        mType = meters.objects.values(
-            'metertype').order_by('metertype').distinct()
-        mAmp = meters.objects.values(
-            'ampheres').order_by('ampheres').distinct()
-        mSupplier = get_supplier()
-        context = {'form': form, 'header': 'Add Meter', 'datetoday': datetoday, 'area': transaction_area.area,
-                   'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}
-        return render(request, html_mAdd, context)
+#             # save meter serials for manual meter entry
+#             cursor = connection.cursor()
+#             idmeters = rec.id
+#             units = request.POST['units']
+#             now = datetime.datetime.utcnow()
+#             serials = request.POST['serialnos'].split('-')
+
+#             num1 = int(serials[0])
+#             zerofill = len(serials[0])
+
+#             for index in range(1, int(units) + 1):
+#                 num = num1
+#                 num = str(num).zfill(zerofill)
+#                 cursor.execute('insert into zanecometerpy.meterdetails (idmeters, serialno, wms_status, userid, created_at, updated_at) ' +
+#                                'values ("' + str(idmeters) + '","' + num + '","0","' + str(request.user.id) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
+#                 cursor.fetchall()
+#                 num1 += 1
+#         return redirect("/meters")
+#     else:
+#         form = meterForm(request.POST)
+#         mBrand = meters.objects.values('brand').order_by('brand').distinct()
+#         mType = meters.objects.values(
+#             'metertype').order_by('metertype').distinct()
+#         mAmp = meters.objects.values(
+#             'ampheres').order_by('ampheres').distinct()
+#         mSupplier = get_supplier()
+#         context = {'form': form, 'header': 'Add Meter', 'datetoday': datetoday, 'area': transaction_area.area,
+#                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}
+#         return render(request, html_mAdd, context)
 
 
 def meters_edit(request, id):

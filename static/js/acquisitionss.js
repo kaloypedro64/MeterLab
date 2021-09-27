@@ -1,6 +1,9 @@
-
 window.onload = function ()
 {
+
+    select_brand(0);
+    select_mtypes(0);
+
     function loadMeters(params)
     {
         tablex = $('#tablex').DataTable({
@@ -10,7 +13,8 @@ window.onload = function ()
             "autoWidth": false,
             "columnDefs": [
                 { "targets": [0], "searchable": false, "orderable": false, "visible": false },
-                { "targets": [1], "className": 'dt-body-left', "width": "20%", "orderable": false, "visible": true },
+                { "targets": [1, 5], "width": "14%", "orderable": false, "visible": true },
+                { "targets": [5], "className": 'text-right', },
             ],
             "keys": true,
             "keys": { "blurable": false },
@@ -27,7 +31,7 @@ window.onload = function ()
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
                 $.get(mListUrl, {
-                    id:id,
+                    id: id,
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -50,8 +54,8 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="mtypes_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" ondblclick="meter_edit(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -59,8 +63,8 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="mtypes_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" ondblclick="meter_edit(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -68,6 +72,7 @@ window.onload = function ()
                 },
                 { "data": "brandid__brand" },
                 { "data": "mtypeid__metertype" },
+                { "data": "ampheres" },
                 { "data": "units" },
                 { "data": "serialnos" },
             ],
@@ -76,8 +81,6 @@ window.onload = function ()
         // tablex.column(0).visible(false);
     }
     loadMeters();
-
-    // select_supplier(0);
 
     function loadBrand()
     {
@@ -341,38 +344,16 @@ function mtypes_delete(params)
     }
 }
 
-// function meter_to_datatable(params)
-// {
-//     if ($('#id_serialnos').val() == '')
-//     {
-//         $('#id_serialnos').focus();
-//         return;
-//     }
-//     if ($('#id_units').val() == '')
-//     {
-//         $('#id_units').focus();
-//         return;
-//     }
-//     tablex.row.add([
-//         0,
-//         $("#id_brandid option:selected").text(),
-//         $("#id_mtypeid option:selected").text(),
-//         $('#id_units').val(),
-//         $('#id_serialnos').val(),
-//         $('#id_brandid').val(),
-//         $('#id_mtypeid').val(),
-//     ]).draw(false);
-// }
-
 function meter_save(params)
 {
 
     var acquisitionid = $('#id_id').val();
-    var units = $('#id_units').val();
-    var serialnos = $('#id_serialnos').val();
     var brandid = $('#id_brandid').val();
     var mtypeid = $('#id_mtypeid').val();
-    var ampheres = $('#id_mtypeid').val();
+    var units = $('#id_units').val();
+    var serialnos = $('#id_serialnos').val();
+    var ampheres = $('#id_ampheres').val();
+
     var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
     $.ajax({
         url: mSaveUrl,
@@ -387,16 +368,65 @@ function meter_save(params)
         },
         success: function (data)
         {
-            alert(data.msg);
-            // if (data.msg == 'deleted')
-            // {
-            //     msgAlert('Delete', 'Successfully deleted!', 3);
-            //     $('#table_types').DataTable().ajax.reload(null, false);
-            // }
+            if (data.msg == 'saved')
+            {
+                msgAlert('Save', 'Successfully saved!', 1);
+                $('#tablex').DataTable().ajax.reload(null, false);
+            }
         },
         error: function (e)
         {
             alert('err: brand_save');
         }
     });
+}
+
+function meter_edit(params) {
+    alert(params);
+}
+
+function meter_delete(params)
+{
+    var ok = confirm('Are you sure to delete this record?');
+    if (ok == true)
+    {
+        $.ajax({
+            url: mDeleteUrl,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params, },
+            success: function (data)
+            {
+                if (data.msg == 'deleted')
+                {
+                    msgAlert('Delete', 'Successfully deleted!', 3);
+                    $('#tablex').DataTable().ajax.reload(null, false);
+                }
+            },
+            error: function (e)
+            {
+                alert('err: brand_save');
+            }
+        });
+    }
+}
+
+function select_brand(params)
+{
+    var e = document.getElementById("id_brandid");
+    if (params == null)
+        params = e.selectedIndex;
+    var option = e.options[params];
+    $('#id_brandid').val(option.value);
+}
+
+function select_mtypes(params)
+{
+    var e = document.getElementById("id_mtypeid");
+    if (params == null)
+        params = e.selectedIndex;
+    var option = e.options[params];
+    $('#id_mtypeid').val(option.value);
 }

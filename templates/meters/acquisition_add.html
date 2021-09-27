@@ -12,6 +12,13 @@
         /* font-size: small; */
     }
 
+    .info {
+         font-weight: bold;
+         color:darkslategray;
+         font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+
+    }
+
     /* .form-control { */
     /* text-transform: capitalize; */
     /* color: blue; */
@@ -35,8 +42,8 @@
                 <div class="ml-auto">
                     <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
                                 tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button> -->
-                    <a type="button" href="/meters" class="btn btn-danger"><i class="fal fa-share-square mr-1"></i><span
-                            style="font-size: 12px;">Cancel</span></a>
+                    <a type="button" href="/meters" class="btn btn-info"><i class="fal fa-share-square mr-1"></i><span
+                            style="font-size: 12px;">Done</span></a>
                 </div>
             </div>
         </div>
@@ -61,33 +68,19 @@
                                         value="0">
                                     <input type="hidden" name="area" maxlength="45" required="" id="id_area"
                                         value="{{ area }}">
-                                    <div class="form-group row">
-                                        <label for="id_transactiondate"
-                                            class="col-sm-2 col-form-label col-form-label-sm ">Transaction
-                                            Date:</label>
-                                        <div class="col">
-                                            <input type="date" class="form-control form-control-sm"
-                                                id="id_transactiondate" name="transactiondate" data-mask datemask
-                                                value="{{ acq.transactiondate|date:'Y-m-d' }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="id_brand" class="col-sm-2 col-form-label">RR Number:</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control form-control-sm" id="id_rrnumber"
-                                                name="rrnumber" maxlength="145" value="{{ acq.rrnumber }}" readonly>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="supplierid" id="id_supplierid">
-                                    <div class="form-group row">
-                                        <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control form-control-sm" id="id_supplier"
-                                                name="supplier" value="{{ acq.supplierid__suppliername }}" readonly>
-                                            <span class="col-form-label mr-2" id="lblAddress">{{acq.supplierid__address}}</span>
-                                        </div>
 
-                                    </div>
+
+                                    <label class="col-sm-2 col-form-label col-form-label-sm ">Transaction Date:</label>
+                                    <span class="info">{{acq.transactiondate|date:'Y-m-d'}}</span>
+                                    <br>
+                                    <label class="col-sm-2 col-form-label">RR Number:</label>
+                                    <span class="info">{{acq.rrnumber}}</span>
+                                    <input type="hidden" name="supplierid" id="id_supplierid">
+                                    <br>
+                                    <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
+                                    <span class="info">{{acq.supplierid__suppliername}}, {{acq.supplierid__address}}</span>
+
+
                                 </div>
                             </div>
                         </div>
@@ -105,68 +98,70 @@
 
                         <div class="row g-0">
                             <div class="col-md-5">
-                                <!-- <form action method="POST" autocomplete="off" > -->
-                                    {% csrf_token %}
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <label for="id_brandid"
-                                                class="col-sm-3 col-form-label col-form-label-sm ">Brand:</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control form-control-sm select2" id="id_brandid"
-                                                    name="brandid">
-                                                    {% for row in mBrand %}
-                                                    <option value="{{row.id}}">{{ row.brand }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;">
-                                                            Add Brand</span></a></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control form-control-sm select2" id="id_mtypeid"
-                                                    name="mtypeid">
-                                                    {% for row in mTypes %}
-                                                    <option value="{{row.id}}">{{ row.metertype }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
-                                                        Meter Type</span></a>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id_serialnos" class="col-sm-3 col-form-label">Ampheres:</label>
-                                            <div class="col">
-                                                <input type="number" class="form-control form-control-sm" id="id_ampheres" name="ampheres"
-                                                    placeholder="10 (30)">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
-                                            <div class="col">
-                                                <input type="number" class="form-control form-control-sm" id="id_units"
-                                                    name="units" placeholder="100">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
-                                                Start:</label>
-                                            <div class="col">
-                                                <input type="number" class="form-control form-control-sm"
-                                                    id="id_serialnos" name="serialnos" placeholder="0001">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="ml-auto">
-                                                <button type="button" onclick="meter_save()" class="btn btn-success mr-1 "><i
-                                                        class="fal fa-save mr-1" tabindex="-1"></i> <span
-                                                        style="font-size: 12px;"> Add
-                                                    </span></button>
-                                            </div>
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="id_brandid"
+                                            class="col-sm-3 col-form-label col-form-label-sm ">Brand:</label>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm select2" id="id_brandid"
+                                                name="brandid">
+                                                {% for row in mBrand %}
+                                                <option value="{{row.id}}">{{ row.brand }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;"> Add
+                                                        Brand</span></a></div>
                                         </div>
                                     </div>
-                                <!-- </form> -->
+                                    <div class="form-group row">
+                                        <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm select2" id="id_mtypeid"
+                                                name="mtypeid">
+                                                {% for row in mTypes %}
+                                                <option value="{{row.id}}">{{ row.metertype }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
+                                                    Meter Type</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                                        <div class="col">
+                                            <select class="form-control form-control-sm " id="id_ampheres"
+                                                name="ampheres">
+                                                {% for row in mAmp %}
+                                                <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
+                                        <div class="col">
+                                            <input type="number" class="form-control form-control-sm" id="id_units"
+                                                name="units" placeholder="100">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
+                                            Start:</label>
+                                        <div class="col">
+                                            <input type="number" class="form-control form-control-sm" id="id_serialnos"
+                                                name="serialnos" placeholder="0001">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="ml-auto">
+                                            <button type="button" onclick="meter_save()"
+                                                class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
+                                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save Meter Info
+                                                </span></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-7">
                                 <div class="card-body">
@@ -177,6 +172,7 @@
                                                 <th>Actions</th>
                                                 <th>Brand</th>
                                                 <th>Type</th>
+                                                <th>Ampheres</th>
                                                 <th>Units</th>
                                                 <th>Serial No.</th>
                                             </tr>
@@ -265,6 +261,7 @@
 </div>
 
 <script type="text/javascript">
+
     let tablex, table_brand, table_types;
     let brandssUrl = "{% url 'brandss' %}";
     let brandsaveUrl = "{% url 'brandsave' %}";
@@ -274,14 +271,15 @@
     let mtypessaveUrl = "{% url 'mtypessave' %}";
     let mtypesdelUrl = "{% url 'mtypesdelete' %}";
     let mListUrl = "{% url 'meterss' %}";
+
     var id = '{{ acq.id }}';
+    let mSaveUrl = "{% url 'meterssave' %}";
+    let mDeleteUrl = "{% url 'metersdelete' %}";
 
-    let mSaveUrl = "{% url 'msave' %}";
-
-
-
+    $("#id_brandid").select2().val(1).trigger('change.select2');
 
 </script>
+
 <script src="{% static "js/acquisitionss.js" %}"></script>
 <script src="{% static "js/alert.js" %}"></script>
 
