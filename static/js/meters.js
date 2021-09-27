@@ -109,7 +109,7 @@ window.onload = function ()
     // function show_details(id)
     // {
     //     $.ajax({
-    //         url: acqSelectedUrl,
+    //         url: '',
     //         method: 'GET',
     //         type: 'GET',
     //         data: { id: id,
