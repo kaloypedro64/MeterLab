@@ -5,23 +5,23 @@ from .views import *
 urlpatterns = [
     #     path('', views.meterList, name='meterList'),
     # meters
-    path('', meterList.as_view(), name='acqList'),
+    path('', meterList.as_view(), name='meterList'),
 
 
-    path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
+#     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
-    # meter details
-    path('details/<int:id>/', views.meters_detail, name='metersdetail'),
-    path('meter_selected/', views.meter_selected, name='meterselected'),
+#     # meter details
+#     path('details/<int:id>/', views.meters_detail, name='metersdetail'),
+#     path('meter_selected/', views.meter_selected, name='meterselected'),
 
-    path('details/<int:idmeters>/calibrate/<int:id>/',
-         views.calibrate, name='calibrate'),
+#     path('details/<int:idmeters>/calibrate/<int:id>/',
+#          views.calibrate, name='calibrate'),
 
-    # calibration
-    path('calibrate_delete/<int:id>/',
-         views.calibrate_delete, name='calibrate_delete'),
-    path('details/<int:id>/calibrate_multiple/',
-         views.calibrate_multiple, name='multiple'),
+#     # calibration
+#     path('calibrate_delete/<int:id>/',
+#          views.calibrate_delete, name='calibrate_delete'),
+#     path('details/<int:id>/calibrate_multiple/',
+#          views.calibrate_multiple, name='multiple'),
 
     # path('save_selectedTable',views.save_selectedTable, name='save_selectedTable'),
 

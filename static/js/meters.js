@@ -1,23 +1,20 @@
+
 window.onload = function ()
 {
-
-    function loadAcquisition()
+    function load_meterdetails()
     {
-        acqTable = $('#acqTable').DataTable({
+        table = $('#table_meterdetails').DataTable({
+            "scrollX": true,
             "searching": false,
-            "processing": true,
-            "stateSave": true,
             "info": false,
-            "paging": true,
             "lengthChange": true,
-            "autoWidth": false,
-            "responsive": true,
-            "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": true },
-                // { "targets": [5], "className": "text-left" }
-            ],
             "keys": true,
             "keys": { "blurable": false },
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": true }, // "className": "select-checkbox icheck-primary",
+                // { "targets": [1], "visible": false },
+                // { "targets": [6], "className": "text-left" }
+            ],
             "select": true,
             "select": {
                 "style": 'multi',
@@ -30,7 +27,7 @@ window.onload = function ()
                 var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
-                $.get(acqListUrl, {
+                $.get(mDetailUrl, {
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -52,174 +49,169 @@ window.onload = function ()
                     }
                 },
                 {
-                    "data": "id", "render": function (data, type, row)
+                    "data": "wms_status", "render": function (data, type, row)
                     {
-                        if ('{{ request.user.is_superuser }}' == 'True')
+                        if (data == 2)
                         {
-                            return '<center>' +
-                                '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
-                                '</div>' +
-                                '</center>'
-                        }
-                        else
+                            return '<span style="font-size: 12px;" title="Returned to warehouse"> Returned</span></a>'
+                        } else
                         {
-                            return '<center>' +
-                                '<div class="btn-group">' +
-                                '<a href="edit/' + row["id"] + '" class="btn btn-warning btn-xs text-sm" title="Edit"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
-                                '</div>' +
-                                '</center>'
+                            if (row["status"] >= 1)
+                            {
+                                return '<a href="calibrate/' + row["id"] + '" class="btn btn-default btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrated</span ></a>'
+                            } else
+                            {
+                                return '<a href="calibrate/' + row["id"] + '" class="btn btn-info btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrate</span ></a>'
+                            }
                         }
                     }
                 },
                 {
-                    "data": "transactiondate", "render": function (data, type, row)
+                    "data": "status", "render": function (data, type, row)
                     {
-                        return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '">' + data + '</a></td>'
+                        if (data == 1)
+                        {
+                            return '<span style="color: rgb(79, 139, 18);"> Passed</span>'
+                        } else if (data == 2)
+                        {
+                            return '<span style="color: rgb(255, 0, 0);">Failed</span>'
+                        } else
+                        {
+                            return '<span>Pending</span>'
+                        }
                     }
                 },
-                { "data": "supplierid__suppliername" },
-                { "data": "supplierid__address" },
-                { "data": "rrnumber" },
-            ]
-        });
-        acqTable.column(0).visible(false);
-    }
-    loadAcquisition();
+                {
+                    "data": "serialno", "render": function (data, type, row)
+                    {
+                        return '<td style="width: fit-content;">' + data + '</td>'
+                    }
+                },
+                {
+                    "data": "accuracy", "render": function (data, type, row)
+                    {
+                        if (data == "None")
+                        {
+                        } else
+                        {
+                            return data
+                        }
+                    }
+                },
 
-    // $('#acqTable tbody').on('click', 'tr', function ()
-    // {
-    //     if ($(this).hasClass('selected'))
-    //     {
-    //         $(this).removeClass('selected');
-    //     }
-    //     else
-    //     {
-    //         acqTable.$('tr.selected').removeClass('selected');
-    //         $(this).addClass('selected');
-    //     }
-
-    //     var data = acqTable.rows(this).data();
-    //     var id = data[0]['id'];
-    //     show_details(id );
-    // });
-
-    // function show_details(id)
-    // {
-    //     $.ajax({
-    //         url: '',
-    //         method: 'GET',
-    //         type: 'GET',
-    //         data: { id: id,
-    //         },
-    //         success: function (data)
-    //         {
-    //             $("#metersdata").html(data);
-    //         },
-    //         error: function (e)
-    //         {
-    //             alert('err: meters.js - show_details');
-    //         }
-    //     });
-    // } change_table3_data(id, 0);
-
-};
-
-function modal_acquisition(params)
-{
-    $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
-    select_supplier(0);
-}
-
-function acquisition_save()
-{
-    var transactiondate = $('#id_transactiondate').val();
-    var rrno = $('#id_rrnumber').val();
-    var supplierid = $('#id_supplierid').val();
-    var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
-    $.ajax({
-        url: acqSave,
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        contentType: false,
-        data: { csrfmiddlewaretoken: csrf, transactiondate: transactiondate, rrno: rrno, supplierid: supplierid },
-        success: function (data)
-        {
-            alert(data.msg);
-            if (data.msg == 'saved')
+            ],
+            "fnInitComplete": function (oSettings, json)
             {
-                $('#modal-acquisition').hide();
-                msgAlert('Save', 'Successfully saved!', 1);
-                window.open(acqAdd.replace('0',data.id), "_self");
-                // window.location('acquisition/', '_black');
-            }
-        },
-        error: function (e)
+                $('#table_meterdetails tbody tr:eq(0)').click();
+            },
+            // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+            // {
+            //     if (aData[5] == 1)
+            //     {
+            //         $('td', nRow).css('color', 'green');
+            //     } else // if (aData[5] == 2)
+            //     {
+            //         $('td', nRow).css('color', 'red');
+            //     }
+            // },
+        });
+        // table.column(0).visible(false);
+        // table.column(1).visible(false);
+    }
+    load_meterdetails();
+    // table.columns.adjust().draw();
+
+    $('#table_meterdetails tbody').on('click', 'tr', function ()
+    {
+        if ($(this).hasClass('selected'))
         {
-            alert('err: acquisition_save');
+            $(this).removeClass('selected');
         }
+        else
+        {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+
+        var data = table.rows(this).data();
+        var id = data[0]['id'];
+        var idmeters = data[0]['idmeters'];
+        var serials = data[0]['serialno'];
+        change_table3_data(id, serials, idmeters);
     });
-}
 
-function select_supplier(params)
-{
-    var e = document.getElementById("id_supplier");
-    if (params == null) params = e.selectedIndex
-    var option = e.options[params];
-    // var attrs = option.attributes;
-    var data = option.getAttribute("data-address");
-    $('#id_supplierid').val(option.value);
-    document.getElementById('lblAddress').innerHTML = data;
-}
+    $(window).bind('resize', function ()
+    {
+        $('#table_meterdetails').css('width', '100%');
+        $('#table3').css('width', '100%');
+    });
 
+    $('#select_all').on('click', function ()
+    {
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+    });
 
-// function meter_save(id)
-// {
-//     $.ajax({
-//         url: mDelete.replace('0', id),
-//         type: 'GET',
-//         dataType: 'json',
-//         contentType: 'application/json; charset=utf-8',
-//         contentType: false,
-//         data: { id: id, },
-//         success: function (data)
-//         {
-
-//         },
-//         error: function (e)
-//         {
-//             alert('err: meter list 158');
-//         }
-//     });
-// }
-
-function meter_delete(id)
-{
-    var ok = confirm('Are you sure to delete this entry?');
-    if (ok == true)
+    function change_table3_data(id = 0, serials = 0, idmeters = 0)
     {
         $.ajax({
-            url: acqDelete.replace('0', id),
+            url: mSelectedUrl,
+            method: 'GET',
             type: 'GET',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            contentType: false,
-            data: { id: id, },
+            data: {
+                id: id,
+                serials: serials,
+                idmeters: idmeters
+            },
             success: function (data)
             {
-                if (data.msg == 'deleted')
-                {
-                    acqTable.draw();
-                    msgAlert('Delete', 'Successfully deleted!', 3);
-                }
+                $("#meter-history").html(data);
+                $('#id_serial').html(serials);
+                $('#idmeterserials').val(id);
             },
             error: function (e)
             {
-                alert('err: meter list 158');
+                alert('err: meterdetails.html-202');
             }
         });
-    }
+    } change_table3_data(id, 0);
+
 }
+
+
+    // function return_selectedTable() {
+    //     var itemcode, qty;
+    //     var count = table.rows('.selected').count();
+    //     if (count <= 0) return;
+    //     var ok = confirm('Are you sure to return selected row(s) to warehouse?');
+    //     if (ok == true) {
+    //         data = table.rows('.selected').data();
+    //         data.each(function (value, index) {
+    //             if (value['status'] == "None" || value['status'] == null ) {
+    //                 alert('Meter ' + value['serialno'] + " is not yet calibrated!")
+    //             } else {
+    //                 save_return_selectedTable(value['id'], value['serialno']);
+    //             }
+    //         });
+    //     }
+    // }
+
+    // function save_return_selectedTable(id=0, serialno='') {
+    //     $.ajax({
+    //         url: "",
+    //         method: 'GET',
+    //         type: 'GET',
+    //         data: { id: id, },
+    //         success: function (data) {
+    //              $.ajax({
+    //                 success: function (data) {
+    //                     table.ajax.reload(null, false);
+    //                     msgalert("Returned", "Meter ["+ serialno +"] successfully returned to warehouse", 1);
+    //                 },
+    //                 error: function () {
+    //                     alert('Err: save_return_selectedTable');
+    //                 }
+    //             });
+    //         },
+    //     });
+    // }

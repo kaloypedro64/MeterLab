@@ -79,12 +79,12 @@ html_calibration = 'calibration/calibrate.html'
 #         return render(request, html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
 
 class meterList(ListView):
-    model = acquisition
-    html = 'acquisition/acquisitions.html'
+    model = meters
+    html = 'meters/meters.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area').order_by(self.request.GET.get('order_by'))
-
+        return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'brandid', 'brandid__brand',
+                                                                                         'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
         if request.is_ajax():
@@ -99,10 +99,7 @@ class meterList(ListView):
             }
             return HttpResponse(json.dumps(data, default=default), 'application/json')
         else:
-            mform = acquisitionForm(request.POST)
-            mSupplier = suppliers.objects.order_by('suppliername').distinct()
-            return render(request, self.html, {'header': 'Meters', 'form': mform, 'mSupplier': mSupplier, 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'datetoday': datetoday, 'area': transaction_area.area})
-
+            return render(request, self.html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
 
 
 # def meters_add(request):

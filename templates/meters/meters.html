@@ -1,139 +1,80 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+<!-- {% block header %}
+{% include 'base/header.html' %}
+{% endblock header %} -->
 {% block content %}
-{% include "base/header.html" %}
 
 <style type="text/css">
-  /* .modal-header {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #e9ecef;
-    border-top-left-radius: 0.3rem;
-    border-top-right-radius: 0.3rem;
-  } */
-  .mlabel {
-    text-align: right;
-    font-size: 12px;
-  }
+    label {
+        text-align: right;
+        color: darkslategray;
+        font-size-adjust: 0.45;
+    }
+
+    btn-txt-sm {
+        font-size-adjust: 0.45;
+        font-size: 12px;
+    }
 </style>
 
 <div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-2 mr-2">
-          <h1>Meter Acquisition</h1>
-        </div>
-        <div class="ml-auto ">
-          <!-- <i class="fad fa-books-medical"></i> -->
-          <!-- <a href="acquisition" type="button" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
-                class="fal fad fa-books-medical mr-2"></i>Add Acquisition</span></a> -->
-          <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2"><span style="font-size: 12px;"><i
-                class="fal fad fa-books-medical mr-2"></i>Add Acquisition</span></a>
-        </div>
-      </div>
-    </div>
-    <section class="content">
-      <div class="row">
-        <section class="col-lg-12 connectedSortable">
-          <div class="card">
-            <!-- <div class="card-header">
-
-            </div> -->
-            <div class="card-body">
-              <table id="acqTable" class="table table-nowrap table-striped dtr-inline">
-                <thead>
-                  <tr>
-                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox"
-                        id="select_all"><label for="select_all"><span></span></label></th>
-                    <th style="width: 60px;">Actions</th>
-                    <th style="width: 120px;">Date</th>
-                    <th>Supplier</th>
-                    <th>Address</th>
-                    <th>RR Number</th>
-                  </tr>
-                </thead>
-              </table>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-2 mr-2">
+                    <h1 style="text-transform: uppercase">{{ mBrand.brand }}</h1>
+                </div>
+                <div class="ml-auto">
+                    <button type="button" onclick="return_selectedTable()" class="btn btn-warning"><i
+                            class="fas fa-clipboard-list-check mr-1"></i><span style="font-size: small">Return
+                            Meters</span></button>
+                    <a href="calibrate_multiple" type="button" class="btn btn-info"><i class="fa fa-cog mr-1"></i><span
+                            style="font-size: small">Multiple Calibration</span></a>
+                    <a href="/meters" type="button" class="btn btn-danger"><i class="fal fa-times mr-1"></i><span
+                            style="font-size: small">Back</span></a>
+                </div>
             </div>
-          </div>
+        </div>
+        <section class="content">
+            <div class="row">
+                <section class="col-lg-6 connectedSortable">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- style="max-width: 500px !important; width: 500px !important" -->
+                            <table id="table_meterdetails" class="table table-nowrap table-striped dtr-inline">
+                                <thead>
+                                    <tr>
+                                        <th data-sort-class="leftmost" style="width: 20px;"><input type="checkbox"
+                                                id="select_all" onchange="select_all()"><label
+                                                for="select_all"><span></span></label></th>
+                                        <th>Actions</th>
+                                        <th>Status</th>
+                                        <!-- <th style="width: 220px;">Brand</th> -->
+                                        <th style="width: 120px;"> Serial No.</th>
+                                        <th>Accuracy</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <section class="col-lg-6 connectedSortable">
+                    <div id="meter-history"></div>
+                </section>
+            </div>
         </section>
-        <!-- <section class="col-lg-6 connectedSortable">
-          <div id="metersdata"></div>
-        </section> -->
-    </section>
-  </div>
-</div>
-
-<div class="modal fade" id="modal-acquisition">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-primary ">
-        <h5 class="modal-title">Acquisition Information</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="modal-body">
-        {% csrf_token %}
-
-        <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="{{ request.user.id }}">
-        <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
-        <div class="form-group row">
-          <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Transaction
-            Date:</label>
-          <div class="col">
-            <input type="date" class="form-control form-control-sm" id="id_transactiondate" name="transactiondate" data-mask
-              datemask value="{{ datetoday|date:'Y-m-d' }}">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="id_brand" class="col-sm-3 col-form-label mlabel">RR Number:</label>
-          <div class="col">
-            <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
-              placeholder="RR #" style="text-transform: uppercase;">
-          </div>
-        </div>
-        <input type="hidden" name="supplierid" id="id_supplierid">
-        <div class="form-group row">
-          <label for="id_supplier" class="col-sm-3 col-form-label mlabel">Supplier:</label>
-          <div class="col-sm-9">
-            <select class="form-control form-control-sm select2" id="id_supplier" name="supplier" onchange="select_supplier()">
-              {% for row in mSupplier %}
-              {% if row == 0 %}
-              <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}</option>
-              {% else %}
-              <option value="{{row.id}}" data-address="{{row.address}}">
-                {{row.suppliername}}</option>
-              {% endif %}
-              {% endfor %}
-            </select>
-            <span class="col-form-label mr-2" id="lblAddress"></span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer justify-content-left">
-        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="acquisition_save()"><i
-            class="fal fa-save mr-1"></i> Save</button>
-      </div>
     </div>
-  </div>
 </div>
+
 
 <script type="text/javascript">
-  let acqTable
-  let acqListUrl = "{% url 'acqList' %}";
-  let acqAdd = "{% url 'acqadd' 0 %}";
-  let acqSave = "{% url 'acqsave' %}";
-  let acqDelete = "{% url 'acqdelete' 0 %}";
-
-
+    let table
+    let mDetailUrl = "";
+    let mSelectedUrl = "";
 </script>
-<script src="{% static "js/meters.js" %}"></script>
-<script src="{% static "js/alert.js" %}"></script>
+<script src="{% static "js/meters.js" %}" type="text/javascript"></script>
+{% block javascripts %}{% endblock javascripts %}
+
 
 {% endblock content %}
