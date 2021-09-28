@@ -197,6 +197,7 @@ def meter_selected(request):
         queryset = meterdetails.objects.filter(
             meterid=id).order_by('serialno')
         context = {'trans': queryset, 'id': id}
+        print('query', queryset)
         return render(request, html_meterdetails_data, context)
 
 # # SET FOREIGN_KEY_CHECKS=0;

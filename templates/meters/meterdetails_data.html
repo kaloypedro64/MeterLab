@@ -1,17 +1,17 @@
 <div class="card">
-    <div class="card-header">
-        <div class="col row">
+    <!-- <div class="card-header"> -->
+        <!-- <div class="col row">
             <i class="fad fa-tools mt-1 mr-2"></i>
             <h6 id="id_serial"></h6>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
     <div class="card-body">
         <table id="table_meterdetails" class="table table-nowrap table-striped dtr-inline">
             <thead>
                 <tr>
                     <th style="display: none;"></th>
                     <th>Actions</th>
-                    <th style="width: 100px;">Serial No.s</th>
+                    <th style="width: 100px;">Serial Nos</th>
                     <th>Accuracy</th>
                     <th>WMS</th>
                     <th>Status</th>
@@ -20,7 +20,7 @@
             <tbody>
                 {% for row in trans %}
                 <tr>
-                    <td style="display: none;"> {{row.id}} </td>
+                    <td style="display: none;"> {{row.serialno}} </td>
                     <td style="width: 270;">
                         <div class="btn-group">
                             <a href="meter_test_report/{{ row.id }}" target="_blank" class="btn btn-info btn-xs text-sm"
@@ -32,7 +32,7 @@
                     </td>
                     <td style="width: fit-content;"><a href="edit/{{ row.id }}"> {{row.testdate}} </a></td>
                     <td>
-                        {% if row.isdamage == 1%}
+                        <!-- {% if row.isdamage == 1%}
                         Damage
                         {% else %}
                         {% if row.gen_average >= 98 %}
@@ -40,7 +40,7 @@
                         {% else %}
                         Failed
                         {% endif %}
-                        {% endif %}
+                        {% endif %} -->
                     </td>
                     <td> {{row.gen_average}} </td>
                     <td> {{row.remarks}} </td>
@@ -72,6 +72,7 @@
             { "targets": [4], "className": "text-right" },
             { "targets": [1], "visible": false },
         ],
+        "dom": '<"top"i>rt<"bottom"flp><"clear">'
 
     });
 
@@ -81,7 +82,7 @@
         if (ok == true)
         {
             $.ajax({
-                url: "{% url 'calibrate_delete' 0 %}".replace('0', id),
+                url: "",
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',

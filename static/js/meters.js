@@ -81,6 +81,7 @@ window.onload = function ()
                 { "data": "units" },
 
             ],
+            "dom": '<"top"i>rt<"bottom"flp><"clear">',
             "fnInitComplete": function (oSettings, json)
             {
                 $('#table_meters tbody tr:eq(0)').click();
