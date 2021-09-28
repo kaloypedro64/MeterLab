@@ -3,10 +3,10 @@ from . import views
 from .views import *
 
 urlpatterns = [
-    #     path('', views.meterList, name='meterList'),
+    # path('', views.meterList, name='meterList'),
     # meters
     path('', meterList.as_view(), name='meterList'),
-    path('mselected/', views.meter_selected, name='mselected'),
+    path('details/', views.meters_detail, name='mdetails'),
 
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),

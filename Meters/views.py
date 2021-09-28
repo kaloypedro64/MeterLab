@@ -93,7 +93,6 @@ class meterList(ListView):
             list_data = []
             for index, item in enumerate(self.get_queryset().filter(acquisitionid__area=transaction_area.area)[start:start+limit], start):
                 list_data.append(item)
-            print('data', self.get_queryset().query)
             data = {
                 'length': self.get_queryset().count(),
                 'objects': list_data,
@@ -168,37 +167,24 @@ class meterList(ListView):
 #         return render(request, html_mEdit, context)
 
 
-# def meters_detail(request, id):
-#     if request.is_ajax():
-#         start = int(request.GET.get('start'))
-#         limit = int(request.GET.get('limit'))
-#         filter = request.GET.get('filter')
-#         order_by = request.GET.get('order_by')
-#         query = meterdetails.objects.select_related('meters').filter(idmeters=id,
-#                                                                      serialno__icontains=filter,).values('id', 'idmeters', 'serialno',
-#                                                                                                          'accuracy', 'wms_status', 'status', 'active', 'userid', 'idmeters__brand').order_by(order_by)
-#         list_data = []
-#         for index, item in enumerate(query[start:start+limit], start):
-#             list_data.append(item)
-#         data = {
-#             'length': query.count(),
-#             'objects': list_data,
-#         }
-#         return HttpResponse(json.dumps(data, default=default), 'application/json')
-#     else:
-#         mBrand = meters.objects.filter(id=id).values('brand').first()
-#         context = {'idmeters': id, 'header': 'Meter Details', 'mBrand': mBrand}
-#         return render(request, 'meters/meterdetails.html', context)
-
-
-def meter_selected(request):
+def meters_detail(request):
     if request.is_ajax():
-        id = request.GET.get('id')
-        queryset = meterdetails.objects.filter(
-            meterid=id).order_by('serialno')
-        context = {'trans': queryset, 'id': id}
-        print('query', queryset)
-        return render(request, html_meterdetails_data, context)
+        id = str(request.GET.get('id'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        query = meterdetails.objects.select_related('meters').filter(meterid=id,
+                                                                     serialno__icontains=filter,).values('id', 'serialno',
+                                                                                                         'accuracy', 'wms_status', 'status', 'active').order_by(order_by)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 # # SET FOREIGN_KEY_CHECKS=0;
 # # SET GLOBAL FOREIGN_KEY_CHECKS=0;
