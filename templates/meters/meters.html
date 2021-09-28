@@ -42,17 +42,18 @@
                     <div class="card">
                         <div class="card-body">
                             <!-- style="max-width: 500px !important; width: 500px !important" -->
-                            <table id="table_meterdetails" class="table table-nowrap table-striped dtr-inline">
+                            <table id="table_meters" class="table table-nowrap table-striped dtr-inline">
                                 <thead>
                                     <tr>
                                         <th data-sort-class="leftmost" style="width: 20px;"><input type="checkbox"
                                                 id="select_all" onchange="select_all()"><label
                                                 for="select_all"><span></span></label></th>
                                         <th>Actions</th>
-                                        <th>Status</th>
-                                        <!-- <th style="width: 220px;">Brand</th> -->
-                                        <th style="width: 120px;"> Serial No.</th>
-                                        <th>Accuracy</th>
+                                        <th>Date Aquired</th>
+                                        <th>Brand</th>
+                                        <th>Ampheres</th>
+                                        <th>Type</th>
+                                        <th>Units</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -60,7 +61,7 @@
                     </div>
                 </section>
                 <section class="col-lg-6 connectedSortable">
-                    <div id="meter-history"></div>
+                    <div id="meter-details"></div>
                 </section>
             </div>
         </section>
@@ -70,10 +71,10 @@
 
 <script type="text/javascript">
     let table
-    let mDetailUrl = "";
-    let mSelectedUrl = "";
+    let meterlUrl = "{% url 'meterList' %}";
+    let mSelectedUrl = "{% url 'mselected' %}";
 </script>
-<script src="{% static "js/meters.js" %}" type="text/javascript"></script>
+<script src="{% static "js/meters.js" %}"></script>
 {% block javascripts %}{% endblock javascripts %}
 
 

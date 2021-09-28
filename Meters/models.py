@@ -12,6 +12,7 @@ class suppliers(models.Model):
     id = models.AutoField(primary_key=True)
     suppliername = models.CharField(max_length=145)
     address = models.CharField(max_length=145, null=True)
+
     class Meta:
         db_table = "suppliers"
 
@@ -19,6 +20,7 @@ class suppliers(models.Model):
 class brands(models.Model):
     id = models.AutoField(primary_key=True)
     brand = models.CharField(max_length=45, db_index=True)
+
     class Meta:
         db_table = "brands"
 
@@ -26,8 +28,10 @@ class brands(models.Model):
 class mtype(models.Model):
     id = models.AutoField(primary_key=True)
     metertype = models.CharField(max_length=45, db_index=True)
+
     class Meta:
         db_table = "metertype"
+
 
 class acquisition(models.Model):
     id = models.AutoField(primary_key=True)
@@ -37,12 +41,14 @@ class acquisition(models.Model):
         suppliers, db_column='supplierid', related_name='suppliers', on_delete=models.PROTECT, db_index=True)
     # units = models.IntegerField(default=0)
     area = models.PositiveSmallIntegerField(
-        default=0, null=False)
-    userid = models.CharField(max_length=45) # 0=dmo, 1=pas, 2=sas, 3=las          # meter count
+        default=0, null=False)  # 0=dmo, 1=pas, 2=sas, 3=las
+    userid = models.IntegerField(max_length=45)           # meter count
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         db_table = "acquisition"
+
 
 class meters(models.Model):
     id = models.AutoField(primary_key=True)
@@ -75,34 +81,34 @@ class meterdetails(models.Model):
         default=0, null=True)    # pending, passed, failed
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
+
     class Meta:
         db_table = "meterdetails"
 
 
-class calibration(models.Model):
+class metertest(models.Model):
     id = models.AutoField(primary_key=True)
     meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+        meterdetails, db_column='meterdetailsid', on_delete=models.CASCADE, db_index=True)
     testdate = models.DateField(("Date"), default=date.today)
     gen_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                       MinValueValidator(Decimal('0.00'))])
     fullload_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                            MinValueValidator(Decimal('0.00'))])
+    lightload_average = models.DecimalField(
+        max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     fl1 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
     fl2 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
     fl3 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
-    lightload_average = models.DecimalField(
-        max_digits=5, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
     ll1 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
     ll2 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
     ll3 = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                               MinValueValidator(Decimal('0.00'))])
-
     reading = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                   MinValueValidator(Decimal('0.00'))])
     type = models.PositiveSmallIntegerField(
@@ -112,16 +118,15 @@ class calibration(models.Model):
     kh = models.CharField(max_length=45)
     ta = models.CharField(max_length=45)
     remarks = models.CharField(max_length=245)
-
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
     isdamage = models.BooleanField(default=False)
-    userid = models.CharField(max_length=45)
+    userid = models.IntegerField(max_length=45)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "calibration"
+        db_table = "metertest"
         # abstract = True
 
 

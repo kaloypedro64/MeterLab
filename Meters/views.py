@@ -83,7 +83,7 @@ class meterList(ListView):
     html = 'meters/meters.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'brandid', 'brandid__brand',
+        return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'acquisitionid__transactiondate', 'brandid__brand',
                                                                                          'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
@@ -91,8 +91,9 @@ class meterList(ListView):
             start = int(request.GET.get('start'))
             limit = int(request.GET.get('limit'))
             list_data = []
-            for index, item in enumerate(self.get_queryset().filter(area=transaction_area.area)[start:start+limit], start):
+            for index, item in enumerate(self.get_queryset().filter(acquisitionid__area=transaction_area.area)[start:start+limit], start):
                 list_data.append(item)
+            print('data', self.get_queryset().query)
             data = {
                 'length': self.get_queryset().count(),
                 'objects': list_data,
@@ -141,146 +142,145 @@ class meterList(ListView):
 #         return render(request, html_mAdd, context)
 
 
-def meters_edit(request, id):
-    transaction_area = userarea.objects.get(userid=request.user.id)
-    if request.method == "POST":
-        queryset = meters(pk=id)
-        form = meterForm(request.POST, instance=queryset)
-        print(form.is_valid)
-        if form.is_valid():
-            created = request.POST.get('created_at')
-            rec = form.save(commit=False)
-            rec.created_at = datetoday
-            rec.save()
-            # form.save()
-        return redirect("/meters")
-    else:
-        queryset = meters.objects.get(pk=id)
-        mBrand = meters.objects.values('brand').order_by('brand').distinct()
-        mType = meters.objects.values(
-            'metertype').order_by('metertype').distinct()
-        mAmp = meters.objects.values(
-            'ampheres').order_by('ampheres').distinct()
-        mSupplier = get_supplier()
-        context = {'form': queryset, 'header': 'Edit Meter',
-                   'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}
-        return render(request, html_mEdit, context)
+# def meters_edit(request, id):
+#     transaction_area = userarea.objects.get(userid=request.user.id)
+#     if request.method == "POST":
+#         queryset = meters(pk=id)
+#         form = meterForm(request.POST, instance=queryset)
+#         print(form.is_valid)
+#         if form.is_valid():
+#             created = request.POST.get('created_at')
+#             rec = form.save(commit=False)
+#             rec.created_at = datetoday
+#             rec.save()
+#             # form.save()
+#         return redirect("/meters")
+#     else:
+#         queryset = meters.objects.get(pk=id)
+#         mBrand = meters.objects.values('brand').order_by('brand').distinct()
+#         mType = meters.objects.values(
+#             'metertype').order_by('metertype').distinct()
+#         mAmp = meters.objects.values(
+#             'ampheres').order_by('ampheres').distinct()
+#         mSupplier = get_supplier()
+#         context = {'form': queryset, 'header': 'Edit Meter',
+#                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}
+#         return render(request, html_mEdit, context)
 
 
-def meters_detail(request, id):
-    if request.is_ajax():
-        start = int(request.GET.get('start'))
-        limit = int(request.GET.get('limit'))
-        filter = request.GET.get('filter')
-        order_by = request.GET.get('order_by')
-        query = meterdetails.objects.select_related('meters').filter(idmeters=id,
-                                                                     serialno__icontains=filter,).values('id', 'idmeters', 'serialno',
-                                                                                                         'accuracy', 'wms_status', 'status', 'active', 'userid', 'idmeters__brand').order_by(order_by)
-        list_data = []
-        for index, item in enumerate(query[start:start+limit], start):
-            list_data.append(item)
-        data = {
-            'length': query.count(),
-            'objects': list_data,
-        }
-        return HttpResponse(json.dumps(data, default=default), 'application/json')
-    else:
-        mBrand = meters.objects.filter(id=id).values('brand').first()
-        context = {'idmeters': id, 'header': 'Meter Details', 'mBrand': mBrand}
-        return render(request, 'meters/meterdetails.html', context)
+# def meters_detail(request, id):
+#     if request.is_ajax():
+#         start = int(request.GET.get('start'))
+#         limit = int(request.GET.get('limit'))
+#         filter = request.GET.get('filter')
+#         order_by = request.GET.get('order_by')
+#         query = meterdetails.objects.select_related('meters').filter(idmeters=id,
+#                                                                      serialno__icontains=filter,).values('id', 'idmeters', 'serialno',
+#                                                                                                          'accuracy', 'wms_status', 'status', 'active', 'userid', 'idmeters__brand').order_by(order_by)
+#         list_data = []
+#         for index, item in enumerate(query[start:start+limit], start):
+#             list_data.append(item)
+#         data = {
+#             'length': query.count(),
+#             'objects': list_data,
+#         }
+#         return HttpResponse(json.dumps(data, default=default), 'application/json')
+#     else:
+#         mBrand = meters.objects.filter(id=id).values('brand').first()
+#         context = {'idmeters': id, 'header': 'Meter Details', 'mBrand': mBrand}
+#         return render(request, 'meters/meterdetails.html', context)
 
 
 def meter_selected(request):
     if request.is_ajax():
         id = request.GET.get('id')
-        idmeters = request.GET.get('idmeters')
-        queryset = calibration.objects.filter(
-            idmeterdetails=id).order_by('idmeterdetails')
-        context = {'trans': queryset, 'id': id, 'idmeters': idmeters}
+        queryset = meterdetails.objects.filter(
+            meterid=id).order_by('serialno')
+        context = {'trans': queryset, 'id': id}
         return render(request, html_meterdetails_data, context)
 
-# SET FOREIGN_KEY_CHECKS=0;
-# SET GLOBAL FOREIGN_KEY_CHECKS=0;
+# # SET FOREIGN_KEY_CHECKS=0;
+# # SET GLOBAL FOREIGN_KEY_CHECKS=0;
 
 
-def calibrate(request, id, idmeters):
-    if request.method == "POST":
-        form = metercalibrationForm(request.POST)
-        if form.is_valid():
-            # print('saved', form.data)
-            form.save()
-            idmeterdetails = request.POST['idmeterdetails']
-            average = request.POST['gen_average']
-            cursor = connection.cursor()
-            cursor.execute('update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(
-                average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(id) + '"')
-            cursor.fetchall()
-            return redirect("../../")
-        else:
-            data = {"err_msg": form.errors}
-            return JsonResponse(data)
-    else:
-        serials = meterdetails.objects.get(id=id)
-        form = metercalibrationForm(request.POST)
-        context = {'form': form, 'datetoday': datetoday,
-                   'serials': serials, 'idmeters': idmeters}
-        return render(request, html_calibration, context)
+# def calibrate(request, id, idmeters):
+#     if request.method == "POST":
+#         form = metercalibrationForm(request.POST)
+#         if form.is_valid():
+#             # print('saved', form.data)
+#             form.save()
+#             idmeterdetails = request.POST['idmeterdetails']
+#             average = request.POST['gen_average']
+#             cursor = connection.cursor()
+#             cursor.execute('update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(
+#                 average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(id) + '"')
+#             cursor.fetchall()
+#             return redirect("../../")
+#         else:
+#             data = {"err_msg": form.errors}
+#             return JsonResponse(data)
+#     else:
+#         serials = meterdetails.objects.get(id=id)
+#         form = metercalibrationForm(request.POST)
+#         context = {'form': form, 'datetoday': datetoday,
+#                    'serials': serials, 'idmeters': idmeters}
+#         return render(request, html_calibration, context)
 
 
-def get_supplier():
-    cursor = connection.cursor()
-    cursor.execute(
-        'select distinct idsupplier, suppliername, address from zanecoinvphp.tbl_supplier order by suppliername asc')
-    suppliers = cursor.fetchall()
-    return suppliers  # json.dumps(suppliers, default=default)
+# def get_supplier():
+#     cursor = connection.cursor()
+#     cursor.execute(
+#         'select distinct idsupplier, suppliername, address from zanecoinvphp.tbl_supplier order by suppliername asc')
+#     suppliers = cursor.fetchall()
+#     return suppliers  # json.dumps(suppliers, default=default)
 
-# multiple calibration
-
-
-def calibrate_multiple(request, id):
-    html = 'calibration/calibration_multiple.html'
-    serials = meterdetails.objects.filter(
-        idmeters=id).filter(wms_status__exact=0)
-    form = metercalibrationForm(request.POST)
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            idmeterdetails = request.POST['idmeterdetails']
-            average = request.POST['gen_average']
-            cursor = connection.cursor()
-            cursor.execute(
-                'update zanecometerpy.meter_serials set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(idmeterdetails) + '"')
-            cursor.fetchall()
-        context = {'form': form, 'datetoday': datetoday,
-                   'serials': serials, 'idmeters': id, 'save': 'save'}
-        return render(request, html, context)
-    else:
-        form = metercalibrationForm(request.POST)
-        # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
-        context = {'form': form, 'datetoday': datetoday,
-                   'serials': serials, 'idmeters': id}
-        return render(request, html, context)
+# # multiple calibration
 
 
-def calibrate_delete(request, id):
-    if request.is_ajax():
-        id = request.GET.get('id')
-        serialinfo = calibration.objects.get(pk=id)
-        serialinfo.delete()
-        json_response = {json.dumps('deleted')}
-    return HttpResponse(json_response, content_type='application/json')
+# def calibrate_multiple(request, id):
+#     html = 'calibration/calibration_multiple.html'
+#     serials = meterdetails.objects.filter(
+#         idmeters=id).filter(wms_status__exact=0)
+#     form = metercalibrationForm(request.POST)
+#     if request.method == "POST":
+#         if form.is_valid():
+#             form.save()
+#             idmeterdetails = request.POST['idmeterdetails']
+#             average = request.POST['gen_average']
+#             cursor = connection.cursor()
+#             cursor.execute(
+#                 'update zanecometerpy.meter_serials set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(idmeterdetails) + '"')
+#             cursor.fetchall()
+#         context = {'form': form, 'datetoday': datetoday,
+#                    'serials': serials, 'idmeters': id, 'save': 'save'}
+#         return render(request, html, context)
+#     else:
+#         form = metercalibrationForm(request.POST)
+#         # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
+#         context = {'form': form, 'datetoday': datetoday,
+#                    'serials': serials, 'idmeters': id}
+#         return render(request, html, context)
 
 
-def meter_test_report(request, id, idmeters):
-    if request.method == "GET":
-        cursor = connection.cursor()
-        cursor.execute('SELECT brand, serialno, ampheres, accuracy, msd.* FROM zanecometerpy.meter_serials_details msd ' +
-                       'left join meter_serials ms on ms.id = msd.idmeterdetails ' +
-                       'left join meters m on m.id=ms.idmeters ' +
-                       'where msd.id = "' + str(id) + '";')
-        form = cursor.fetchall()
-        context = {'form': form, 'datetoday': datetoday}
-    return render(request, html_metertestreport, context)
+# def calibrate_delete(request, id):
+#     if request.is_ajax():
+#         id = request.GET.get('id')
+#         serialinfo = calibration.objects.get(pk=id)
+#         serialinfo.delete()
+#         json_response = {json.dumps('deleted')}
+#     return HttpResponse(json_response, content_type='application/json')
+
+
+# def meter_test_report(request, id, idmeters):
+#     if request.method == "GET":
+#         cursor = connection.cursor()
+#         cursor.execute('SELECT brand, serialno, ampheres, accuracy, msd.* FROM zanecometerpy.meter_serials_details msd ' +
+#                        'left join meter_serials ms on ms.id = msd.idmeterdetails ' +
+#                        'left join meters m on m.id=ms.idmeters ' +
+#                        'where msd.id = "' + str(id) + '";')
+#         form = cursor.fetchall()
+#         context = {'form': form, 'datetoday': datetoday}
+#     return render(request, html_metertestreport, context)
 
 
 # def save_selectedTable(request):

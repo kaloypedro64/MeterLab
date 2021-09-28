@@ -6,13 +6,13 @@ urlpatterns = [
     #     path('', views.meterList, name='meterList'),
     # meters
     path('', meterList.as_view(), name='meterList'),
+    path('mselected/', views.meter_selected, name='mselected'),
 
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
 #     # meter details
 #     path('details/<int:id>/', views.meters_detail, name='metersdetail'),
-#     path('meter_selected/', views.meter_selected, name='meterselected'),
 
 #     path('details/<int:idmeters>/calibrate/<int:id>/',
 #          views.calibrate, name='calibrate'),

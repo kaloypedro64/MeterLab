@@ -1,20 +1,20 @@
 
 window.onload = function ()
 {
-    function load_meterdetails()
+    function loadMeters()
     {
-        table = $('#table_meterdetails').DataTable({
-            "scrollX": true,
+        table = $('#table_meters').DataTable({
             "searching": false,
             "info": false,
-            "lengthChange": true,
+            "paging": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+                { "targets": [1], "width": "14%" },
+                { "targets": [6], "className": "text-right" }
+            ],
             "keys": true,
             "keys": { "blurable": false },
-            "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": true }, // "className": "select-checkbox icheck-primary",
-                // { "targets": [1], "visible": false },
-                // { "targets": [6], "className": "text-left" }
-            ],
             "select": true,
             "select": {
                 "style": 'multi',
@@ -27,7 +27,7 @@ window.onload = function ()
                 var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
-                $.get(mDetailUrl, {
+                $.get(meterlUrl, {
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -49,79 +49,48 @@ window.onload = function ()
                     }
                 },
                 {
-                    "data": "wms_status", "render": function (data, type, row)
+                    "data": "id", "render": function (data, type, row)
                     {
-                        if (data == 2)
+                        if ('{{ request.user.is_superuser }}' == 'True')
                         {
-                            return '<span style="font-size: 12px;" title="Returned to warehouse"> Returned</span></a>'
-                        } else
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '</div>' +
+                                '</center>'
+                        }
+                        else
                         {
-                            if (row["status"] >= 1)
-                            {
-                                return '<a href="calibrate/' + row["id"] + '" class="btn btn-default btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrated</span ></a>'
-                            } else
-                            {
-                                return '<a href="calibrate/' + row["id"] + '" class="btn btn-info btn-xs text-xs" title="Calibrate"> <span style = "font-size: 12px;"> Calibrate</span ></a>'
-                            }
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="" class="btn btn-warning btn-xs text-sm" title="Edit"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '</div>' +
+                                '</center>'
                         }
                     }
                 },
                 {
-                    "data": "status", "render": function (data, type, row)
+                    "data": "acquisitionid__transactiondate", "render": function (data, type, row)
                     {
-                        if (data == 1)
-                        {
-                            return '<span style="color: rgb(79, 139, 18);"> Passed</span>'
-                        } else if (data == 2)
-                        {
-                            return '<span style="color: rgb(255, 0, 0);">Failed</span>'
-                        } else
-                        {
-                            return '<span>Pending</span>'
-                        }
+                        return '<td style="width: fit-content;"> <a href="">' + data + '</a></td>'
                     }
                 },
-                {
-                    "data": "serialno", "render": function (data, type, row)
-                    {
-                        return '<td style="width: fit-content;">' + data + '</td>'
-                    }
-                },
-                {
-                    "data": "accuracy", "render": function (data, type, row)
-                    {
-                        if (data == "None")
-                        {
-                        } else
-                        {
-                            return data
-                        }
-                    }
-                },
+                { "data": "brandid__brand" },
+                { "data": "ampheres" },
+                { "data": "mtypeid__metertype" },
+                { "data": "units" },
 
             ],
             "fnInitComplete": function (oSettings, json)
             {
-                $('#table_meterdetails tbody tr:eq(0)').click();
+                $('#table_meters tbody tr:eq(0)').click();
             },
-            // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
-            // {
-            //     if (aData[5] == 1)
-            //     {
-            //         $('td', nRow).css('color', 'green');
-            //     } else // if (aData[5] == 2)
-            //     {
-            //         $('td', nRow).css('color', 'red');
-            //     }
-            // },
         });
-        // table.column(0).visible(false);
-        // table.column(1).visible(false);
     }
-    load_meterdetails();
+    loadMeters();
     // table.columns.adjust().draw();
 
-    $('#table_meterdetails tbody').on('click', 'tr', function ()
+    $('#table_meters tbody').on('click', 'tr', function ()
     {
         if ($(this).hasClass('selected'))
         {
@@ -137,13 +106,13 @@ window.onload = function ()
         var id = data[0]['id'];
         var idmeters = data[0]['idmeters'];
         var serials = data[0]['serialno'];
-        change_table3_data(id, serials, idmeters);
+        selectedMeter(id, serials, idmeters);
     });
 
     $(window).bind('resize', function ()
     {
+        $('#table_meters').css('width', '100%');
         $('#table_meterdetails').css('width', '100%');
-        $('#table3').css('width', '100%');
     });
 
     $('#select_all').on('click', function ()
@@ -152,7 +121,7 @@ window.onload = function ()
         $('input[type="checkbox"]', rows).prop('checked', this.checked);
     });
 
-    function change_table3_data(id = 0, serials = 0, idmeters = 0)
+    function selectedMeter(id = 0, serials = 0, idmeters = 0)
     {
         $.ajax({
             url: mSelectedUrl,
@@ -165,7 +134,7 @@ window.onload = function ()
             },
             success: function (data)
             {
-                $("#meter-history").html(data);
+                $("#meter-details").html(data);
                 $('#id_serial').html(serials);
                 $('#idmeterserials').val(id);
             },
@@ -174,7 +143,7 @@ window.onload = function ()
                 alert('err: meterdetails.html-202');
             }
         });
-    } change_table3_data(id, 0);
+    } selectedMeter(id, 0);
 
 }
 
