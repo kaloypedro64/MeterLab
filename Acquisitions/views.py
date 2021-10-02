@@ -18,13 +18,16 @@ from Meters.models import *
 from Meters.forms import *
 from django.views.generic import CreateView, FormView, RedirectView, ListView
 from django.utils.dateparse import parse_datetime
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 datetoday = datetime.date.today()
 
 header = 'Dashboard'
-html_aAdd = "acquisitions/acquisition_add.html"
+html_aAdd = 'acquisitions/acquisition_add.html'
+html_msAdd = 'acquisitions/acquisition_add_mseal.html'
+login_url = 'login'
 
 # html_meterlist = 'meters/meter_list.html'
 # html_mAdd = "meters/meter_request_add.html"
@@ -70,11 +73,10 @@ class acquisitionList(ListView):
 #         return render(request, html_meters_data, context)
 
 
-
+@login_required(login_url=login_url)
 def acquisition_save(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
     if request.method == "GET":
-
         date = request.GET.get('transactiondate')
         rrno = request.GET.get('rrno')
         supplierid = request.GET.get('supplierid')
@@ -86,12 +88,13 @@ def acquisition_save(request):
         cursor.fetchall()
         id = cursor.lastrowid
         if True:
-            data = {"id":id, "msg": 'saved'}
+            data = {"id":id, "msg": 'saved', 'acqtype':acqtype}
         else:
             data = {"msg": 'Not saved'}
         print('data',data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+@login_required(login_url=login_url)
 def acquisition_add(request, id):
     transaction_area = userarea.objects.get(userid=request.user.id)
     acq = acquisition.objects.select_related('supplierid').values(

@@ -1,6 +1,5 @@
 window.onload = function ()
 {
-
     function loadAcquisition(params)
     {
         var tbl = "acqTable";
@@ -93,51 +92,16 @@ window.onload = function ()
     }
     loadAcquisition(0);
     loadAcquisition(1);
-
-    // $('#acqTable tbody').on('click', 'tr', function ()
-    // {
-    //     if ($(this).hasClass('selected'))
-    //     {
-    //         $(this).removeClass('selected');
-    //     }
-    //     else
-    //     {
-    //         acqTable.$('tr.selected').removeClass('selected');
-    //         $(this).addClass('selected');
-    //     }
-
-    //     var data = acqTable.rows(this).data();
-    //     var id = data[0]['id'];
-    //     show_details(id );
-    // });
-
-    // function show_details(id)
-    // {
-    //     $.ajax({
-    //         url: '',
-    //         method: 'GET',
-    //         type: 'GET',
-    //         data: { id: id,
-    //         },
-    //         success: function (data)
-    //         {
-    //             $("#metersdata").html(data);
-    //         },
-    //         error: function (e)
-    //         {
-    //             alert('err: meters.js - show_details');
-    //         }
-    //     });
-    // } change_table3_data(id, 0);
-
 };
 
 function modal_acquisition(params)
 {
     if (params != undefined) {
         $('#id_acqtype').val(1);
+        $('#modal-acquisition').find('.modal-title').text("Meter Seal Acquisition");
     } else {
         $('#id_acqtype').val(0);
+        $('#modal-acquisition').find('.modal-title').text("Meter Acquisition");
     }
     $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
     select_supplier(0);
@@ -182,7 +146,6 @@ function acquisition_save()
         data: { csrfmiddlewaretoken: csrf, transactiondate: transactiondate, rrno: rrno, supplierid: supplierid, acqtype: acqtype },
         success: function (data)
         {
-            alert(data.msg);
             if (data.msg == 'saved')
             {
                 $('#modal-acquisition').hide();
