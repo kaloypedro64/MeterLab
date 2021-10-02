@@ -8,7 +8,9 @@ urlpatterns = [
     path('acqadd/<int:id>', views.acquisition_add, name='acqadd'),
     path('acqsave', views.acquisition_save, name='acqsave'),
     # path('acqselected/', views.acquisition_selected, name='acqselected'),
+    path('edit/<int:id>/', views.acquisition_edit, name='acqedit'),
     path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
+
 
 
     path('brand', views.brand_ss, name='brandss'),

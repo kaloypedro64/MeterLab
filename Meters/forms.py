@@ -37,7 +37,7 @@ class acquisitionForm(forms.ModelForm):
     class Meta:
         model = acquisition
         fields = ['id', 'transactiondate', 'rrnumber',
-                  'supplierid', 'area', 'userid']
+                  'supplierid', 'area', 'userid', 'acqtype']
 
     def __init__(self, *args, **kwargs):
         super(acquisitionForm, self).__init__(*args, **kwargs)

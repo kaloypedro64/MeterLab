@@ -45,10 +45,11 @@ class acquisitionList(ListView):
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
         if request.is_ajax():
+            acqtype = int(request.GET.get('acqtype'))
             start = int(request.GET.get('start'))
             limit = int(request.GET.get('limit'))
             list_data = []
-            for index, item in enumerate(self.get_queryset().filter(area=transaction_area.area)[start:start+limit], start):
+            for index, item in enumerate(self.get_queryset().filter(area=transaction_area.area, acqtype=acqtype)[start:start+limit], start):
                 list_data.append(item)
             data = {
                 'length': self.get_queryset().count(),
@@ -77,9 +78,11 @@ def acquisition_save(request):
         date = request.GET.get('transactiondate')
         rrno = request.GET.get('rrno')
         supplierid = request.GET.get('supplierid')
+        acqtype = request.GET.get('acqtype')
         now = datetime.datetime.utcnow()
         cursor = connection.cursor()
-        cursor.execute('insert into zanecometerpy.acquisition (transactiondate, rrnumber, area, userid, supplierid, created_at, updated_at) values ("' + date + '","' + rrno + '","' + transaction_area.area + '","' + str(request.user.id) + '","' + str(supplierid) + '", "' + now.strftime('%Y-%m-%d %H:%M:%S') +'", "' + now.strftime('%Y-%m-%d %H:%M:%S') +'")')
+        cursor.execute('insert into zanecometerpy.acquisition (transactiondate, rrnumber, area, userid, supplierid, acqtype, created_at, updated_at) values ("' + date + '","' + rrno + '","' +
+                       transaction_area.area + '","' + str(request.user.id) + '","' + str(supplierid) + '", "' + str(acqtype) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '", "' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
         cursor.fetchall()
         id = cursor.lastrowid
         if True:
@@ -100,6 +103,19 @@ def acquisition_add(request, id):
     context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
                 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
     return render(request, html_aAdd, context)
+
+def acquisition_edit(request, id):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        acqinfo = acquisition.objects.get(pk=id)
+        # acqinfo.delete()
+
+        if True:
+            data = {"form": acqinfo }
+        else:
+            data = {"msg": 'Not found'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
 
 def acquisition_delete(request, id):
     if request.is_ajax():

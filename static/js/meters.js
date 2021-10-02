@@ -137,7 +137,6 @@ window.onload = function ()
             "columnDefs": [
                 { "targets": [0], "searchable": false, "orderable": false, "visible": false },
                 { "targets": [1], "width": "14%" },
-                // { "targets": [6], "className": "text-right" }
             ],
             "keys": true,
             "keys": { "blurable": false },

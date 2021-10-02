@@ -1,9 +1,11 @@
 window.onload = function ()
 {
 
-    function loadAcquisition()
+    function loadAcquisition(params)
     {
-        acqTable = $('#acqTable').DataTable({
+        var tbl = "acqTable";
+        if (params == 1) tbl = "acqTable_mSeal";
+        acqTable = $('#'+ tbl +'').DataTable({
             "searching": false,
             "processing": true,
             "stateSave": true,
@@ -31,6 +33,7 @@ window.onload = function ()
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
                 $.get(acqListUrl, {
+                    acqtype: params,
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -58,7 +61,7 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "modal_editacquisition(' + row["id"] + ')" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
                                 '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
@@ -67,7 +70,7 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="edit/' + row["id"] + '" class="btn btn-warning btn-xs text-sm" title="Edit"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "modal_editacquisition(' + row["id"] + ')" ><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
                                 '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
@@ -83,11 +86,13 @@ window.onload = function ()
                 { "data": "supplierid__suppliername" },
                 { "data": "supplierid__address" },
                 { "data": "rrnumber" },
-            ]
+            ],
+            "dom": '<"top"i>rt<"bottom"flp><"clear">',
         });
         acqTable.column(0).visible(false);
     }
-    loadAcquisition();
+    loadAcquisition(0);
+    loadAcquisition(1);
 
     // $('#acqTable tbody').on('click', 'tr', function ()
     // {
@@ -129,8 +134,36 @@ window.onload = function ()
 
 function modal_acquisition(params)
 {
+    if (params != undefined) {
+        $('#id_acqtype').val(1);
+    } else {
+        $('#id_acqtype').val(0);
+    }
     $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
     select_supplier(0);
+}
+
+function modal_editacquisition(params)
+{
+    $.ajax({
+        url: acqEdit.replace('0', params),
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: { id: params, },
+        success: function (data)
+        {
+            if (data.msg == 'found')
+            {
+                $('#modal-editacquisition').modal('show').draggable({ handle: ".modal-header" });
+            }
+        },
+        error: function (e)
+        {
+            alert('err: meter list 158');
+        }
+    });
 }
 
 function acquisition_save()
@@ -139,13 +172,14 @@ function acquisition_save()
     var rrno = $('#id_rrnumber').val();
     var supplierid = $('#id_supplierid').val();
     var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+    var acqtype = $('#id_acqtype').val();
     $.ajax({
         url: acqSave,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         contentType: false,
-        data: { csrfmiddlewaretoken: csrf, transactiondate: transactiondate, rrno: rrno, supplierid: supplierid },
+        data: { csrfmiddlewaretoken: csrf, transactiondate: transactiondate, rrno: rrno, supplierid: supplierid, acqtype: acqtype },
         success: function (data)
         {
             alert(data.msg);
@@ -153,7 +187,10 @@ function acquisition_save()
             {
                 $('#modal-acquisition').hide();
                 msgAlert('Save', 'Successfully saved!', 1);
-                window.open(acqAdd.replace('0',data.id), "_self");
+                if (acqtype == 0)
+                    window.open(acqAdd.replace('0',data.id), "_self");
+                else
+                    window.open(acqAdd.replace('0', data.id), "");
                 // window.location('acquisition/', '_black');
             }
         },

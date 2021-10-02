@@ -42,9 +42,10 @@ class acquisition(models.Model):
     # units = models.IntegerField(default=0)
     area = models.PositiveSmallIntegerField(
         default=0, null=False)  # 0=dmo, 1=pas, 2=sas, 3=las
-    userid = models.IntegerField(max_length=45)           # meter count
+    userid = models.IntegerField(default=0)           # meter count
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    acqtype = models.PositiveSmallIntegerField(default=0, null=False)  # 0=meter, 1=seal
 
     class Meta:
         db_table = "acquisition"
@@ -121,7 +122,7 @@ class metertest(models.Model):
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
     isdamage = models.BooleanField(default=False)
-    userid = models.IntegerField(max_length=45)
+    userid = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
