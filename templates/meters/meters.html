@@ -29,7 +29,7 @@
                     <button type="button" onclick="return_selectedTable()" class="btn btn-warning"><i
                             class="fas fa-clipboard-list-check mr-1"></i><span style="font-size: small">Return
                             Meters</span></button>
-                    <a href="calibrate_multiple" type="button" class="btn btn-info"><i class="fa fa-cog mr-1"></i><span
+                    <a href="#" type="button" class="btn btn-info" onclick="loadMultiple()"><i class="fa fa-cog mr-1"></i><span
                             style="font-size: small">Multiple Calibration</span></a>
                     <a href="/meters" type="button" class="btn btn-danger"><i class="fal fa-times mr-1"></i><span
                             style="font-size: small">Back</span></a>
@@ -87,6 +87,10 @@
     let table, tabledetails;
     let meterlUrl = "{% url 'meterList' %}";
     let mDetailsUrl = "{% url 'mdetails' %}";
+    let mMultiUrl = "{% url 'multiple' 0 %}";
+    let selectedmeterid;
+
+
 </script>
 <script src="{% static "js/meters.js" %}"></script>
 {% block javascripts %}{% endblock javascripts %}

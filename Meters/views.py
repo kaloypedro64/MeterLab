@@ -34,6 +34,7 @@ html_meters_data = 'meters/meters_data.html'
 html_metertestreport = 'meters/meter_test_report.html'
 
 html_calibration = 'calibration/calibrate.html'
+html_mcalibration = 'calibration/calibration_multiple.html'
 
 
 # transaction_area = ''
@@ -224,29 +225,29 @@ def meters_detail(request):
 # # multiple calibration
 
 
-# def calibrate_multiple(request, id):
-#     html = 'calibration/calibration_multiple.html'
-#     serials = meterdetails.objects.filter(
-#         idmeters=id).filter(wms_status__exact=0)
-#     form = metercalibrationForm(request.POST)
-#     if request.method == "POST":
-#         if form.is_valid():
-#             form.save()
-#             idmeterdetails = request.POST['idmeterdetails']
-#             average = request.POST['gen_average']
-#             cursor = connection.cursor()
-#             cursor.execute(
-#                 'update zanecometerpy.meter_serials set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(idmeterdetails) + '"')
-#             cursor.fetchall()
-#         context = {'form': form, 'datetoday': datetoday,
-#                    'serials': serials, 'idmeters': id, 'save': 'save'}
-#         return render(request, html, context)
-#     else:
-#         form = metercalibrationForm(request.POST)
-#         # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
-#         context = {'form': form, 'datetoday': datetoday,
-#                    'serials': serials, 'idmeters': id}
-#         return render(request, html, context)
+def calibrate_multiple(request, id):
+    html = 'calibration/calibration_multiple.html'
+    serials = meterdetails.objects.filter(
+        meterid=id).filter(wms_status__exact=0)
+    form = metertestForm(request.POST)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            meterid = request.POST['idmeterdetails']
+            average = request.POST['gen_average']
+            cursor = connection.cursor()
+            cursor.execute(
+                'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
+            cursor.fetchall()
+        context = {'form': form, 'datetoday': datetoday,
+                   'serials': serials, 'idmeters': id, 'save': 'save'}
+        return render(request, html, context)
+    else:
+        form = metertestForm(request.POST)
+        # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
+        context = {'form': form, 'datetoday': datetoday,
+                   'serials': serials, 'idmeters': id}
+        return render(request, html, context)
 
 
 # def calibrate_delete(request, id):

@@ -13,9 +13,9 @@
     }
 
     .info {
-         font-weight: bold;
-         color:darkslategray;
-         font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+        font-weight: bold;
+        color: darkslategray;
+        font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
 
     }
 
@@ -42,8 +42,8 @@
                 <div class="ml-auto">
                     <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
                                 tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button> -->
-                    <a type="button" href="/acquisitions" class="btn btn-info"><i class="fal fa-share-square mr-1"></i><span
-                            style="font-size: 12px;">Done</span></a>
+                    <a type="button" href="/acquisitions" class="btn btn-info"><i
+                            class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Done</span></a>
                 </div>
             </div>
         </div>
@@ -68,18 +68,26 @@
                                         value="0">
                                     <input type="hidden" name="area" maxlength="45" required="" id="id_area"
                                         value="{{ area }}">
-
-
-                                    <label class="col-sm-2 col-form-label col-form-label-sm ">Transaction Date:</label>
-                                    <span class="info">{{acq.transactiondate|date:'Y-m-d'}}</span>
-                                    <br>
-                                    <label class="col-sm-2 col-form-label">RR Number:</label>
-                                    <span class="info">{{acq.rrnumber}}</span>
                                     <input type="hidden" name="supplierid" id="id_supplierid">
-                                    <br>
-                                    <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                    <span class="info">{{acq.supplierid__suppliername}}, {{acq.supplierid__address}}</span>
 
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">Transaction Date :  </p>
+                                        <span class="ml-2">
+                                            {{acq.transactiondate|date:'Y-m-d'}}
+                                        </span><br>
+                                    </div>
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">RR Number :  </p>
+                                        <span class="ml-2">
+                                            {{acq.rrnumber}}
+                                        </span><br>
+                                    </div>
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">Supplier :  </p>
+                                        <span class="ml-2">
+                                            {{acq.supplierid__suppliername}}, {{acq.supplierid__address}}
+                                        </span><br>
+                                    </div>
 
                                 </div>
                             </div>
@@ -157,7 +165,8 @@
                                         <div class="ml-auto">
                                             <button type="button" onclick="meter_save()"
                                                 class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
-                                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save Meter Info
+                                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save
+                                                    Meter Info
                                                 </span></button>
                                         </div>
                                     </div>
@@ -280,7 +289,7 @@
 
 </script>
 
-<script src="{% static "js/acquisition_details.js" %}"></script>
-<script src="{% static "js/alert.js" %}"></script>
+<script src="{% static " js/acquisition_details.js" %}"></script>
+<script src="{% static " js/alert.js" %}"></script>
 
 {% endblock content %}

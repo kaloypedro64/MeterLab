@@ -8,6 +8,7 @@ urlpatterns = [
     path('', meterList.as_view(), name='meterList'),
     path('details/', views.meters_detail, name='mdetails'),
 
+    path('meters/multiple/<int:id>', views.calibrate_multiple, name='multiple'),
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 
@@ -20,8 +21,6 @@ urlpatterns = [
 #     # calibration
 #     path('calibrate_delete/<int:id>/',
 #          views.calibrate_delete, name='calibrate_delete'),
-#     path('details/<int:id>/calibrate_multiple/',
-#          views.calibrate_multiple, name='multiple'),
 
     # path('save_selectedTable',views.save_selectedTable, name='save_selectedTable'),
 

@@ -105,6 +105,7 @@ window.onload = function ()
 
         var data = table.rows(this).data();
         var id = data[0]['id'];
+        selectedmeterid = id;
         $("#table_meterdetails").dataTable().fnDestroy();
         loadDetails(id);
         // $('#table_meterdetails').DataTable().ajax.reload(null, false);
@@ -197,6 +198,12 @@ window.onload = function ()
             },
         });
     }
+
+}
+function loadMultiple(params)
+{
+    alert(selectedmeterid);
+    window.open(mMultiUrl.replace('0', selectedmeterid), "_self");
 }
 
 
