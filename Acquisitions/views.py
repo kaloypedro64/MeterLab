@@ -135,18 +135,6 @@ def acquisition_delete(request, id):
             data = {"msg": 'Not deleted'}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
-# seal
-@login_required(login_url=login_url)
-def acquisition_adds(request, id):
-    transaction_area = userarea.objects.get(userid=request.user.id)
-    acq = acquisition.objects.select_related('supplierid').values(
-        'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
-    mBrand = brands.objects.order_by('brand').distinct()
-    mSupplier = suppliers.objects.order_by('suppliername').distinct()
-    context = {'header': 'Seal Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
-                'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mSupplier': mSupplier}
-    return render(request, html_msAdd, context)
-
 
 def meter_ss(request):
     if request.is_ajax():
@@ -306,6 +294,88 @@ def mtypes_delete(request):
             data = {"msg": 'Not deleted'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 # end meter type
+
+# seal
+
+
+@login_required(login_url=login_url)
+def acquisition_adds(request, id):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    acq = acquisition.objects.select_related('supplierid').values(
+        'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
+    mBrand = brands.objects.order_by('brand').distinct()
+    mSupplier = suppliers.objects.order_by('suppliername').distinct()
+    context = {'header': 'Seal Acquisition', 'datetoday': datetoday, 'acq': acq, 'area': transaction_area.area,
+               'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mSupplier': mSupplier}
+    return render(request, html_msAdd, context)
+
+
+def seal_ss(request):
+    if request.is_ajax():
+        id = str(request.GET.get('id'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        query = seals.objects.select_related('brand').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
+                                                                                                'boxes', 'ppb', 'serialnos').order_by(order_by)
+        # print('query', query.query)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data,
+        }
+        print('query: ', query)
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def seal_save(request):
+    if request.is_ajax():
+        acquisitionid = str(request.GET.get('acquisitionid'))
+        brandid = str(request.GET.get('brandid'))
+        boxes = str(request.GET.get('boxes'))
+        ppb = str(request.GET.get('ppb'))
+        serialnos = str(request.GET.get('serialnos'))
+        units = str(request.GET.get('units'))
+
+        cursor = connection.cursor()
+        cursor.execute('insert into zanecometerpy.seals (acquisitionid, brandid, boxes, ppb, serialnos) values ("' +
+                       acquisitionid + '","' + brandid + '","' + boxes + '","' + ppb + '","' + serialnos + '")')
+        cursor.fetchall()
+        meterid = cursor.lastrowid
+
+        serials = serialnos.split('-')
+
+        num1 = int(serials[0])
+        zerofill = len(serials[0])
+
+        for index in range(1, int(units) + 1):
+            num = num1
+            num = str(num).zfill(zerofill)
+            # cursor.execute('insert into zanecometerpy.meterdetails (meterid,serialno,accuracy,wms_status,status,active) ' +
+            #                'values ("' + str(meterid) + '","' + num + '",0,0,0,0)')
+            cursor.fetchall()
+            num1 += 1
+
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def seal_delete(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        meterinfo = meters.objects.get(pk=id)
+        meterinfo.delete()
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
 
 def datetime_handler(x):

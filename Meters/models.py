@@ -68,21 +68,6 @@ class meters(models.Model):
     class Meta:
         db_table = "meters"
 
-
-class seals(models.Model):
-    id = models.AutoField(primary_key=True)
-    acquisitionid = models.ForeignKey(
-        acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
-    brandid = models.ForeignKey(
-        brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
-    boxes = models.IntegerField(default=0)
-    ppb = models.IntegerField(default=0)              # pcs per box
-    serialnos = models.CharField(max_length=45, null=True)
-
-    class Meta:
-        db_table = "seals"
-
-
 class meterdetails(models.Model):
     id = models.AutoField(primary_key=True)
     meterid = models.ForeignKey(
@@ -98,6 +83,38 @@ class meterdetails(models.Model):
 
     class Meta:
         db_table = "meterdetails"
+
+
+class seals(models.Model):
+    id = models.AutoField(primary_key=True)
+    acquisitionid = models.ForeignKey(
+        acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
+    brandid = models.ForeignKey(
+        brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
+    boxes = models.IntegerField(default=0)
+    ppb = models.IntegerField(default=0)              # pcs per box
+    serialnos = models.CharField(max_length=45, null=True)
+
+    class Meta:
+        db_table = "seals"
+
+
+class sealdetails(models.Model):
+    id = models.AutoField(primary_key=True)
+    sealid = models.ForeignKey(
+        seals, db_column='sealid', on_delete=models.CASCADE, db_index=True)
+    meterdetailsid = models.ForeignKey(
+        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+    serialno = models.CharField(max_length=45, null=False)
+    techcrew = models.CharField(max_length=45, null=True)
+
+    status = models.PositiveSmallIntegerField(
+        default=0, null=True)
+    active = models.PositiveSmallIntegerField(
+        default=0, null=True)        # active, deleted
+
+    class Meta:
+        db_table = "sealdetails"
 
 
 class metertest(models.Model):

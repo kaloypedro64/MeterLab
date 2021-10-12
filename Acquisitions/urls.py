@@ -11,9 +11,6 @@ urlpatterns = [
     path('edit/<int:id>/', views.acquisition_edit, name='acqedit'),
     path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
 
-    # seal
-    path('acqadds/<int:id>', views.acquisition_adds, name='acqadds'),
-
 
     path('brand', views.brand_ss, name='brandss'),
     path('brandsave', views.brand_save, name='brandsave'),
@@ -24,7 +21,16 @@ urlpatterns = [
     path('mtypessave', views.mtypes_save, name='mtypessave'),
     path('mtypesdelete', views.mtypes_delete, name='mtypesdelete'),
 
+    # meters
     path('meters', views.meter_ss, name='meterss'),
     path('meterssave', views.meter_save, name='meterssave'),
     path('metersdelete', views.meter_delete, name='metersdelete'),
+
+    # seals
+    path('acqadds/<int:id>', views.acquisition_adds, name='acqadds'),
+    path('seals', views.seal_ss, name='sealss'),
+    path('sealssave', views.seal_save, name='sealssave'),
+    path('sealsdelete', views.seal_delete, name='sealsdelete'),
+
 ]
+
