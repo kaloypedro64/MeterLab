@@ -11,6 +11,8 @@ urlpatterns = [
     path('edit/<int:id>/', views.acquisition_edit, name='acqedit'),
     path('delete/<int:id>/', views.acquisition_delete, name='acqdelete'),
 
+    # seal
+    path('acqadds/<int:id>', views.acquisition_adds, name='acqadds'),
 
 
     path('brand', views.brand_ss, name='brandss'),

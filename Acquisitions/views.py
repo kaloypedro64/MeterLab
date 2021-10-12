@@ -25,8 +25,8 @@ from django.contrib.auth.decorators import login_required
 datetoday = datetime.date.today()
 
 header = 'Dashboard'
-html_aAdd = 'acquisitions/acquisition_add.html'
-html_msAdd = 'acquisitions/acquisition_add_mseal.html'
+html_mAdd = 'acquisitions/acquisition_add_meter.html'
+html_msAdd = 'acquisitions/acquisition_add_meter_seal.html'
 login_url = 'login'
 
 # html_meterlist = 'meters/meter_list.html'
@@ -94,6 +94,7 @@ def acquisition_save(request):
         print('data',data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+# meters
 @login_required(login_url=login_url)
 def acquisition_add(request, id):
     transaction_area = userarea.objects.get(userid=request.user.id)
@@ -105,7 +106,7 @@ def acquisition_add(request, id):
     mSupplier = suppliers.objects.order_by('suppliername').distinct()
     context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
                 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
-    return render(request, html_aAdd, context)
+    return render(request, html_mAdd, context)
 
 def acquisition_edit(request, id):
     if request.is_ajax():
@@ -118,7 +119,6 @@ def acquisition_edit(request, id):
         else:
             data = {"msg": 'Not found'}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')
-
 
 def acquisition_delete(request, id):
     if request.is_ajax():
@@ -134,6 +134,18 @@ def acquisition_delete(request, id):
         else:
             data = {"msg": 'Not deleted'}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
+# seal
+@login_required(login_url=login_url)
+def acquisition_adds(request, id):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    acq = acquisition.objects.select_related('supplierid').values(
+        'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
+    mBrand = brands.objects.order_by('brand').distinct()
+    mSupplier = suppliers.objects.order_by('suppliername').distinct()
+    context = {'header': 'Seal Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
+                'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mSupplier': mSupplier}
+    return render(request, html_msAdd, context)
 
 
 def meter_ss(request):

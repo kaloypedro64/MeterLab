@@ -51,6 +51,17 @@ class meterForm(forms.ModelForm):
                   'mtypeid', 'ampheres', 'serialnos', 'units']
     def __init__(self, *args, **kwargs):
         super(meterForm, self).__init__(*args, **kwargs)
+        # self.fields['rrnumber'].required = Falseclass meterForm(forms.ModelForm):
+
+
+class sealForm(forms.ModelForm):
+    class Meta:
+        model = seals
+        fields = ['id', 'acquisitionid', 'brandid',
+                'boxes', 'ppb', 'serialnos']
+
+    def __init__(self, *args, **kwargs):
+        super(sealForm, self).__init__(*args, **kwargs)
         # self.fields['rrnumber'].required = False
 
 

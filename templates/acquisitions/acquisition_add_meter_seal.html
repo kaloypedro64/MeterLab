@@ -7,17 +7,27 @@
     label {
         text-align: right;
         color: darkslategray;
+        /* font-size-adjust: 0.45; */
+        /* font-weight: 500; */
+        /* font-size: small; */
     }
 
     .info {
-         font-weight: bold;
-         color:darkslategray;
-         font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
+        font-weight: bold;
+        color: darkslategray;
+        font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Bitstream Vera Sans", "Trebuchet MS", Verdana, "Verdana Ref", sans-serif;
 
     }
 
+    /* .form-control { */
+    /* text-transform: capitalize; */
+    /* color: blue; */
+    /* } */
+
     .col-form-label {
         font-size: 13px;
+        /* font-weight: 500; */
+        /* font-size-adjust: 0.45; */
     }
 </style>
 
@@ -32,8 +42,8 @@
                 <div class="ml-auto">
                     <!-- <button type="submit" class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
                                 tabindex="-1"></i> <span style="font-size: 12px;">Save</span></button> -->
-                    <a type="button" href="/acquisitions" class="btn btn-info"><i class="fal fa-share-square mr-1"></i><span
-                            style="font-size: 12px;">Done</span></a>
+                    <a type="button" href="/acquisitions" class="btn btn-info"><i
+                            class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Done</span></a>
                 </div>
             </div>
         </div>
@@ -46,7 +56,7 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <i class="fas fa-check-circle"></i>
-                                Acquisition Information <span style="font-size: 12px;"><i></i></span>
+                                Meter Acquisition Information <span style="font-size: 12px;"><i></i></span>
                             </h3>
                         </div>
                         <div class="row g-0">
@@ -58,18 +68,26 @@
                                         value="0">
                                     <input type="hidden" name="area" maxlength="45" required="" id="id_area"
                                         value="{{ area }}">
-
-
-                                    <label class="col-sm-2 col-form-label col-form-label-sm ">Transaction Date:</label>
-                                    <span class="info">{{acq.transactiondate|date:'Y-m-d'}}</span>
-                                    <br>
-                                    <label class="col-sm-2 col-form-label">RR Number:</label>
-                                    <span class="info">{{acq.rrnumber}}</span>
                                     <input type="hidden" name="supplierid" id="id_supplierid">
-                                    <br>
-                                    <label for="id_supplier" class="col-sm-2 col-form-label">Supplier:</label>
-                                    <span class="info">{{acq.supplierid__suppliername}}, {{acq.supplierid__address}}</span>
 
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">Transaction Date : </p>
+                                        <span class="ml-2">
+                                            {{acq.transactiondate|date:'Y-m-d'}}
+                                        </span><br>
+                                    </div>
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">RR Number : </p>
+                                        <span class="ml-2">
+                                            {{acq.rrnumber}}
+                                        </span><br>
+                                    </div>
+                                    <div class="row">
+                                        <p style="width: 150px; font-weight: bold;">Supplier : </p>
+                                        <span class="ml-2">
+                                            {{acq.supplierid__suppliername}}, {{acq.supplierid__address}}
+                                        </span><br>
+                                    </div>
 
                                 </div>
                             </div>
@@ -104,35 +122,27 @@
                                                         Brand</span></a></div>
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
-                                        <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
+                                        <label for="id_boxes" class="col-sm-3 col-form-label">Boxes:</label>
                                         <div class="col">
-                                            <select class="form-control form-control-sm select2" id="id_mtypeid"
-                                                name="mtypeid">
-                                                {% for row in mTypes %}
-                                                <option value="{{row.id}}">{{ row.metertype }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
-                                                    Meter Type</span></a>
+                                            <input type="number" class="form-control form-control-sm"
+                                                style="text-align: right;" id="id_boxes" name="boxes" placeholder="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="id_ppb" class="col-sm-3 col-form-label">Pcs/Box:</label>
+                                        <div class="col">
+                                            <input type="number" class="form-control form-control-sm"
+                                                style="text-align: right;" id="id_ppb" name="ppb" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                                        <label for="id_ttl" class="col-sm-3 col-form-label">Total Pcs:</label>
                                         <div class="col">
-                                            <select class="form-control form-control-sm " id="id_ampheres"
-                                                name="ampheres">
-                                                {% for row in mAmp %}
-                                                <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
-                                        <div class="col">
-                                            <input type="number" class="form-control form-control-sm" id="id_units"
-                                                name="units" placeholder="100">
+                                            <input type="number" class="form-control form-control-sm"
+                                                style="text-align: right;" id="id_ttl" name="ttl" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -147,7 +157,8 @@
                                         <div class="ml-auto">
                                             <button type="button" onclick="meter_save()"
                                                 class="btn btn-success mr-1 "><i class="fal fa-save mr-1"
-                                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save Meter Info
+                                                    tabindex="-1"></i> <span style="font-size: 12px;"> Save
+                                                    Meter Info
                                                 </span></button>
                                         </div>
                                     </div>
@@ -161,9 +172,9 @@
                                                 <th></th>
                                                 <th>Actions</th>
                                                 <th>Brand</th>
-                                                <th>Type</th>
-                                                <th>Ampheres</th>
-                                                <th>Units</th>
+                                                <th>Boxes</th>
+                                                <th>Pcs/Box</th>
+                                                <th>Total Pcs</th>
                                                 <th>Serial No.</th>
                                             </tr>
                                         </thead>
@@ -214,42 +225,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-types">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title">Meter Types</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col input-group input-group-sm">
-                        <input type="text" class="form-control form-control-sm" id="id_metertype" name="metertype"
-                            placeholder="Enter meter type" required>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-success mr-1" onclick="mtypes_save()"><span
-                                    style="font-size: 12px;"> Add
-                                </span></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <table id="table_types" class="table table-nowrap table-striped table-sm dtr-inline">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th style="width: 80;">Action</th>
-                                <th>Types</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
 
     let tablex, table_brand, table_types;
@@ -257,9 +232,6 @@
     let brandsaveUrl = "{% url 'brandsave' %}";
     let branddelUrl = "{% url 'branddelete' %}";
 
-    let mtypesssUrl = "{% url 'mtypesss' %}";
-    let mtypessaveUrl = "{% url 'mtypessave' %}";
-    let mtypesdelUrl = "{% url 'mtypesdelete' %}";
     let mListUrl = "{% url 'meterss' %}";
 
     var id = '{{ acq.id }}';
@@ -268,9 +240,139 @@
 
     $("#id_brandid").select2().val(1).trigger('change.select2');
 
+    function loadBrand()
+    {
+        table_brand = $('#table_brand').DataTable({
+            "searching": false,
+            "info": false,
+            "paging": true,
+            "autoWidth": false,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+                { "targets": [1], "className": 'dt-body-left', "width": "20%", "orderable": false, "visible": true },
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                "style": 'multi',
+                "selector": 'td:first-child',
+            },
+            "serverSide": true,
+            "processing": true,
+            "ajax": function (data, callback, settings)
+            {
+                var sort_column_namex = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                var direction = "";
+                if (data.order[0].dir == "desc") { direction = "-" };
+                $.get(brandssUrl, {
+                    limit: data.length,
+                    start: data.start,
+                    filter: data.search.value,
+                    order_by: direction + sort_column_namex
+                }, function (res)
+                {
+                    callback({
+                        recordsTotal: res.length,
+                        recordsFiltered: res.length,
+                        data: res.objects
+                    });
+                });
+            },
+            columns: [
+                { "data": "id" },
+                {
+                    "data": "id", "render": function (data, type, row)
+                    {
+                        if ('{{ request.user.is_superuser }}' == 'True')
+                        {
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="brand_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '</div>' +
+                                '</center>'
+                        }
+                        else
+                        {
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="brand_edit(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="brand_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                                '</div>' +
+                                '</center>'
+                        }
+                    }
+                },
+                { "data": "brand" },
+            ],
+            "dom": '<"top"i>rt<"bottom"flp><"clear">'
+        });
+        // table_brand.column(0).visible(false);
+    }
+    loadBrand();
+
+    function brand_modal(params)
+    {
+        $('#modal-brand').modal('show').draggable({ handle: ".modal-header" });
+    }
+
+    function brand_save(params)
+    {
+        var brand = $('#id_brand').val();
+        $.ajax({
+            url: brandsaveUrl,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { brand: brand, },
+            success: function (data)
+            {
+                if (data.msg == 'saved')
+                {
+                    msgAlert('Save', 'Successfully saved!', 1);
+                    $('#table_brand').DataTable().ajax.reload(null, false);
+                }
+            },
+            error: function (e)
+            {
+                alert('err: brand_save');
+            }
+        });
+    }
+
+    function brand_delete(params)
+    {
+        var ok = confirm('Are you sure to delete this record?');
+        if (ok == true)
+        {
+            $.ajax({
+                url: branddelUrl,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                contentType: false,
+                data: { id: params, },
+                success: function (data)
+                {
+                    if (data.msg == 'deleted')
+                    {
+                        msgAlert('Delete', 'Successfully deleted!', 3);
+                        $('#table_brand').DataTable().ajax.reload(null, false);
+                    }
+                },
+                error: function (e)
+                {
+                    alert('err: brand_save');
+                }
+            });
+        }
+    }
+
 </script>
 
-<script src="{% static "js/acquisition_details.js" %}"></script>
+<!-- <script src="{% static "js/acquisition_details.js" %}"></script> -->
 <script src="{% static "js/alert.js" %}"></script>
 
 {% endblock content %}

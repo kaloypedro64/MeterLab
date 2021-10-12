@@ -79,7 +79,10 @@ window.onload = function ()
                 {
                     "data": "transactiondate", "render": function (data, type, row)
                     {
-                        return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '">' + data + '</a></td>'
+                        if (params == 0)
+                            return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '">' + data + '</a></td>'
+                        else
+                            return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
                     }
                 },
                 { "data": "supplierid__suppliername" },

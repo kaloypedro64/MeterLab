@@ -53,7 +53,6 @@ class acquisition(models.Model):
 
 class meters(models.Model):
     id = models.AutoField(primary_key=True)
-
     acquisitionid = models.ForeignKey(
         acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
     brandid = models.ForeignKey(
@@ -68,6 +67,20 @@ class meters(models.Model):
 
     class Meta:
         db_table = "meters"
+
+
+class seals(models.Model):
+    id = models.AutoField(primary_key=True)
+    acquisitionid = models.ForeignKey(
+        acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
+    brandid = models.ForeignKey(
+        brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
+    boxes = models.IntegerField(default=0)
+    ppb = models.IntegerField(default=0)              # pcs per box
+    serialnos = models.CharField(max_length=45, null=True)
+
+    class Meta:
+        db_table = "seals"
 
 
 class meterdetails(models.Model):

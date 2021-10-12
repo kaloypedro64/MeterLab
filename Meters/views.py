@@ -24,7 +24,8 @@ from django.utils.dateparse import parse_datetime
 datetoday = datetime.date.today()
 
 header = 'Dashboard'
-html_aAdd = "meters/acquisition_add.html"
+# html_mAdd = "meters/acquisition_add_meter.html"
+# html_msAdd = "meters/acquisition_add_seal.html"
 
 html_meterlist = 'meters/meter_list.html'
 html_mAdd = "meters/meter_request_add.html"
