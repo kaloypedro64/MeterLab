@@ -115,7 +115,7 @@
                                     <div class="form-group row">
                                         <label for="id_boxes" class="col-sm-3 col-form-label">Boxes:</label>
                                         <div class="col">
-                                            <input type="number" class="form-control form-control-sm"
+                                            <input type="number" class="form-control form-control-sm" onkeyup="getTotal()"
                                                 style="text-align: right;" id="id_boxes" name="boxes" placeholder="0">
                                         </div>
                                     </div>
@@ -123,14 +123,14 @@
                                     <div class="form-group row">
                                         <label for="id_ppb" class="col-sm-3 col-form-label">Pcs/Box:</label>
                                         <div class="col">
-                                            <input type="number" class="form-control form-control-sm"
+                                            <input type="number" class="form-control form-control-sm" onkeyup="getTotal()"
                                                 style="text-align: right;" id="id_ppb" name="ppb" placeholder="0">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="id_ttl" class="col-sm-3 col-form-label">Total Pcs:</label>
                                         <div class="col">
-                                            <input type="number" class="form-control form-control-sm"
+                                            <input type="number" class="form-control form-control-sm" disabled="disabled"
                                                 style="text-align: right;" id="id_ttl" name="ttl" placeholder="0">
                                         </div>
                                     </div>
@@ -273,9 +273,9 @@
                     });
                 },
                 columns: [
-                    { "data": "id" },
+                    { "data": "0" },
                     {
-                        "data": "id", "render": function (data, type, row)
+                        "data": "0", "render": function (data, type, row)
                         {
                             if ('{{ request.user.is_superuser }}' == 'True')
                             {
@@ -297,11 +297,11 @@
                             }
                         }
                     },
-                    { "data": "brandid__brand" },
-                    { "data": "boxes" },
-                    { "data": "ppb" },
-                    { "data": "0" },
-                    { "data": "serialnos" },
+                    { "data": "1" },
+                    { "data": "2" },
+                    { "data": "3" },
+                    { "data": "4" },
+                    { "data": "5" },
                 ],
                 "dom": '<"top"i>rt<"bottom"flp><"clear">'
             });
@@ -386,6 +386,7 @@
     function brand_save(params)
     {
         var brand = $('#id_brand').val();
+        if (brand == null) return;
         $.ajax({
             url: brandsaveUrl,
             type: 'GET',
@@ -442,7 +443,12 @@
         var brandid = $('#id_brandid').val();
         var boxes = $('#id_boxes').val();
         var ppb = $('#id_ppb').val();
+        var total = $('#id_ttl').val();
         var serialnos = $('#id_serialnos').val();
+
+        if (!total.trim()) return;
+        if (!serialnos.trim()) return;
+
 
         var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
         $.ajax({
@@ -451,7 +457,7 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             contentType: false,
-            data: { acquisitionid: acquisitionid, brandid: brandid, boxes: boxes, ppg:ppb, serialnos: serialnos },
+            data: { acquisitionid: acquisitionid, brandid: brandid, boxes: boxes, ppb:ppb, serialnos: serialnos, total: total },
             beforeSend: function (xhr)
             {
                 xhr.setRequestHeader("X-CSRFToken", csrf);
@@ -470,6 +476,20 @@
             }
         });
     }
+
+    function getTotal()
+    {
+        var ppb = $("#id_ppb").val();
+        var boxes = $("#id_boxes").val();
+        var total = boxes * ppb;
+        $("#id_ttl").val(total);
+    };
+
+    $('#id_ppb').on('change keyup', function ()
+    { // on change
+        alert('asdf');
+        getTotal(); // trigger this
+    });
 
 </script>
 

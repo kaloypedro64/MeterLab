@@ -95,6 +95,11 @@ class seals(models.Model):
     ppb = models.IntegerField(default=0)              # pcs per box
     serialnos = models.CharField(max_length=45, null=True)
 
+    @property
+    def _get_total(self):
+        return self.boxes * self.ppb
+    total = property(_get_total)
+
     class Meta:
         db_table = "seals"
 

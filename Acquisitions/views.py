@@ -1,4 +1,5 @@
 import types
+from django.db.models import Sum
 from django.db.models import query
 from django.db.models.query_utils import Q
 from MeterLab.settings import AREA_CHOICES
@@ -317,17 +318,25 @@ def seal_ss(request):
         limit = int(request.GET.get('limit'))
         filter = request.GET.get('filter')
         order_by = request.GET.get('order_by')
-        query = seals.objects.select_related('brand').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
-                                                                                                'boxes', 'ppb', 'serialnos').order_by(order_by)
-        # print('query', query.query)
+        # query = seals.objects.select_related('brand').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
+        #                                                                               'boxes', 'ppb', 'serialnos').extra(select={'total': 'boxes * ppb'}).order_by(order_by)
+        # # print('query', query.query)
+
+        cursor = connection.cursor()
+        query = 'SELECT seals.id, brand, boxes, ppb, (boxes * ppb) as total, serialnos ' \
+                    'FROM seals ' \
+                    'LEFT JOIN brands ON (`seals`.`brandid` = `brands`.`id`) ' \
+                    'WHERE acquisitionid = '+ id +' ORDER BY id ASC'
+        cursor.execute(query)
+        msList = cursor.fetchall()
+        # print('query: ', query)
         list_data = []
-        for index, item in enumerate(query[start:start+limit], start):
+        for index, item in enumerate(msList[start:start+limit], start):
             list_data.append(item)
         data = {
-            'length': query.count(),
+            'length': len(msList),
             'objects': list_data,
         }
-        print('query: ', query)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 
@@ -338,24 +347,24 @@ def seal_save(request):
         boxes = str(request.GET.get('boxes'))
         ppb = str(request.GET.get('ppb'))
         serialnos = str(request.GET.get('serialnos'))
-        units = str(request.GET.get('units'))
+        total = str(request.GET.get('total'))
 
         cursor = connection.cursor()
         cursor.execute('insert into zanecometerpy.seals (acquisitionid, brandid, boxes, ppb, serialnos) values ("' +
                        acquisitionid + '","' + brandid + '","' + boxes + '","' + ppb + '","' + serialnos + '")')
         cursor.fetchall()
-        meterid = cursor.lastrowid
+        sealid = cursor.lastrowid
 
         serials = serialnos.split('-')
 
         num1 = int(serials[0])
         zerofill = len(serials[0])
 
-        for index in range(1, int(units) + 1):
+        for index in range(1, int(total) + 1):
             num = num1
             num = str(num).zfill(zerofill)
-            # cursor.execute('insert into zanecometerpy.meterdetails (meterid,serialno,accuracy,wms_status,status,active) ' +
-            #                'values ("' + str(meterid) + '","' + num + '",0,0,0,0)')
+            cursor.execute('insert into zanecometerpy.sealdetails (sealid,serialno,status,active) ' +
+                           'values ("' + str(sealid) + '","' + num + '",0,0)')
             cursor.fetchall()
             num1 += 1
 
