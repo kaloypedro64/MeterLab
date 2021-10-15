@@ -1,3 +1,10 @@
+function hide_modal(params)
+{
+    setTimeout(function ()
+    {
+        $('#modal-default').modal('hide');
+    }, 1000);
+}
 
 function msgAlert(header, remarks, ico)
 {

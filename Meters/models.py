@@ -109,7 +109,7 @@ class sealdetails(models.Model):
     sealid = models.ForeignKey(
         seals, db_column='sealid', on_delete=models.CASCADE, db_index=True)
     meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True, null=True)
     serialno = models.CharField(max_length=45, null=False)
     techcrew = models.CharField(max_length=45, null=True)
 

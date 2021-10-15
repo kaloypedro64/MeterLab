@@ -372,11 +372,13 @@ function meter_save(params)
             {
                 msgAlert('Save', 'Successfully saved!', 1);
                 $('#tablex').DataTable().ajax.reload(null, false);
+                hide_modal();
             }
         },
         error: function (e)
         {
             alert('err: brand_save');
+            hide_modal();
         }
     });
 }

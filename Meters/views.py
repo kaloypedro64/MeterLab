@@ -13,11 +13,15 @@ from django.db import connection
 from django.db.models.expressions import Window
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
+from django.http import *
 from .models import *
 from .forms import *
-from django.views.generic import CreateView, FormView, RedirectView, ListView
+from django.views.generic import *
 from django.utils.dateparse import parse_datetime
+
+from django.core.cache import cache
+from django.urls import reverse
+from django.utils.cache import get_cache_key
 
 # Create your views here.
 
@@ -301,6 +305,22 @@ def calibrate_multiple(request, id):
 #     else:
 #         return render(request, 'meters/meterdetails.html', {'idmeters': id, 'header': 'Meter Details'})
 
+def expire_page_cache(view, args=None):
+    """
+    Removes cache created by cache_page functionality.
+    Parameters are used as they are in reverse()
+    """
+
+    if args is None:
+        path = reverse(view)
+    else:
+        path = reverse(view, args=args)
+
+    request = HttpRequest()
+    request.path = path
+    key = get_cache_key(request)
+    if cache.has_key(key):
+        cache.delete(key)
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):

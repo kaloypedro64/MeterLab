@@ -360,13 +360,16 @@ def seal_save(request):
         num1 = int(serials[0])
         zerofill = len(serials[0])
 
+        sql = "insert into zanecometerpy.sealdetails (sealid,serialno,status,active) values "
         for index in range(1, int(total) + 1):
             num = num1
             num = str(num).zfill(zerofill)
-            cursor.execute('insert into zanecometerpy.sealdetails (sealid,serialno,status,active) ' +
-                           'values ("' + str(sealid) + '","' + num + '",0,0)')
-            cursor.fetchall()
+            sql += '("' + str(sealid) + '","' + num + '",0,0), '
             num1 += 1
+
+        sql = sql[:len(sql) -2]
+        cursor.execute(sql)
+        cursor.fetchall()
 
         if True:
             data = {"msg": 'saved'}
@@ -377,9 +380,14 @@ def seal_save(request):
 
 def seal_delete(request):
     if request.is_ajax():
-        id = request.GET.get('id')
-        meterinfo = meters.objects.get(pk=id)
-        meterinfo.delete()
+        id = int(request.GET.get('id'))
+        # id = int(request.GET.get('id'))
+        # cursor = connection.cursor()
+        # cursor.execute(
+        #     'delete from zanecometerpy.metertype where id = "' + str(id) + '"')
+        # cursor.fetchall()
+        sealinfo = seals.objects.get(id=id)
+        sealinfo.delete()
         if True:
             data = {"msg": 'deleted'}
         else:

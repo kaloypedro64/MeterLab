@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from cryptography.fernet import Fernet
+from django.contrib.auth.decorators import login_required
 
 MASTER_KEY = "Some-long-base-key-to-use-as-encryption-key"
-
+login_url = 'login'
 # Create your views here.
 
 
+@login_required(login_url=login_url)
 def dashboard(request):
     if request.user.is_authenticated:
         return render(request, 'dashboard.html')
