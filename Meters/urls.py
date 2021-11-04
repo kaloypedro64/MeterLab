@@ -8,7 +8,14 @@ urlpatterns = [
     path('', meterList.as_view(), name='meterList'),
     path('details/', views.meters_detail, name='mdetails'),
 
-    path('meters/multiple/<int:id>', views.calibrate_multiple, name='multiple'),
+    path('multiple/<int:id>', views.calibrate_multiple, name='multiple'),
+    path('single/<int:id>', views.calibrate, name='calibrate'),
+
+    # path('calibrations', views.calibration_history,
+    #      name='calibrations'),
+
+    path('consumer_list', views.consumer_list, name='consumer_list'),
+    path('consumer_search', views.consumer_search, name='consumer_search'),
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 

@@ -24,10 +24,9 @@
                 <div class="col">
                     <form action method="POST" autocomplete="off">
                         {% csrf_token %}
-
                         <input type="hidden" name="active" min="0" required="" id="id_active" value="0">
                         <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="0">
-                        <input type="hidden" name="idmeterdetails" id="id_idmeterdetails" required="" value="{{ serials.id }}" readonly>
+                        <input type="hidden" name="meterdetailsid" id="id_meterdetailsid" required="" value="{{ serials.id }}" readonly>
 
                         <div class="card ">
                             <div class="card-header card-info">
@@ -42,7 +41,6 @@
                                     </ol>
                                 </div>
                             </div>
-
 
                             <div class="row g-0">
                                 <div class="col-lg-4">
@@ -272,9 +270,11 @@
     $('[data-mask]').inputmask();
     $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' });
 
+
     $(".d").change(function () {
         this.value = parseFloat(this.value).toFixed(2);
     });
+
 
     function isNumber(evt) {
         evt = (evt) ? evt : window.event;

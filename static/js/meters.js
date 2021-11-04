@@ -1,4 +1,5 @@
 
+
 window.onload = function ()
 {
     function loadMeters()
@@ -123,13 +124,9 @@ window.onload = function ()
         $('input[type="checkbox"]', rows).prop('checked', this.checked);
     });
 
-    // function selectedMeter(id = 0)
-    // {
-
-    // } selectedMeter(id, 0);
-
     function loadDetails(id)
     {
+        let stats = [ 'For calibration', 'Pass', 'Failed' ];
         tabledetails = $('#table_meterdetails').DataTable({
             "searching": false,
             "info": false,
@@ -178,17 +175,32 @@ window.onload = function ()
                 {
                     "data": "id", "render": function (data, type, row)
                     {
-
+                        if (row["status"] > 0)
+                        {
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="#" class="btn btn-default btn-xs text-sm" title="Calibrated" onclick=""><span style="font-size: 12px;"> Calibrated</span></a>' +
+                                '</div>' +
+                                '</center>'
+                        }
+                        else
+                        {
                         return '<center>' +
                             '<div class="btn-group">' +
-                            '<a href="#" class="btn btn-info btn-xs text-sm" title="Calibrate"><span style="font-size: 12px;"> Calibrate</span></a>' +
+                            '<a href="single/' + row["id"] + '" class="btn btn-info btn-xs text-sm" title="Calibrate" onclick=""><span style="font-size: 12px;"> Calibrate</span></a>' +
                             '</div>' +
                             '</center>'
+                        }
                     }
                 },
                 { "data": "serialno" },
                 { "data": "accuracy" },
-                { "data": "status" },
+                {
+                    "data": "status", "render": function (data, type, row)
+                    {
+                        return '<span style="font-size: 12px;"> ' + stats[row["status"]] +'</span>'
+                    }
+                },
 
             ],
             "dom": '<"top"i>rt<"bottom"flp><"clear">',
@@ -199,11 +211,15 @@ window.onload = function ()
         });
     }
 
+
 }
 function loadMultiple(params)
 {
-    alert(selectedmeterid);
     window.open(mMultiUrl.replace('0', selectedmeterid), "_self");
+}
+function loadSelectedMeter(id)
+{
+    alert(id);
 }
 
 

@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from .views import dashboard
+from Meters.views import calibration_history
 
 urlpatterns = [
 
@@ -28,7 +29,10 @@ urlpatterns = [
     path('acquisitions/', include('Acquisitions.urls')),
     path('meters/', include('Meters.urls')),
     path('calibration/', include('Calibration.urls')),
+    path('calibrations', calibration_history, name='calibrations'),
+
     path('signatory/', include('Signatory.urls')),
+
     path('users/', include('Users.urls')),
     path('assign/', include('Assign.urls')),
 ]

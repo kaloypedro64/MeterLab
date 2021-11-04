@@ -196,28 +196,27 @@ def meters_detail(request):
 # # SET GLOBAL FOREIGN_KEY_CHECKS=0;
 
 
-# def calibrate(request, id, idmeters):
-#     if request.method == "POST":
-#         form = metercalibrationForm(request.POST)
-#         if form.is_valid():
-#             # print('saved', form.data)
-#             form.save()
-#             idmeterdetails = request.POST['idmeterdetails']
-#             average = request.POST['gen_average']
-#             cursor = connection.cursor()
-#             cursor.execute('update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(
-#                 average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(id) + '"')
-#             cursor.fetchall()
-#             return redirect("../../")
-#         else:
-#             data = {"err_msg": form.errors}
-#             return JsonResponse(data)
-#     else:
-#         serials = meterdetails.objects.get(id=id)
-#         form = metercalibrationForm(request.POST)
-#         context = {'form': form, 'datetoday': datetoday,
-#                    'serials': serials, 'idmeters': idmeters}
-#         return render(request, html_calibration, context)
+def calibrate(request, id):
+    if request.method == "POST":
+        form = metertestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            meterdetailsid = request.POST['meterdetailsid']
+            average = request.POST['gen_average']
+            cursor = connection.cursor()
+            cursor.execute('update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(
+                average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(id) + '"')
+            cursor.fetchall()
+            return redirect("../")
+        else:
+            data = {"err_msg": form.errors}
+            return JsonResponse(data)
+    else:
+        serials = meterdetails.objects.get(id=id)
+        form = metertestForm(request.POST)
+        context = {'form': form, 'datetoday': datetoday,
+                   'serials': serials, 'meterdetailsid': id}
+        return render(request, html_calibration, context)
 
 
 # def get_supplier():
@@ -248,12 +247,134 @@ def calibrate_multiple(request, id):
                    'serials': serials, 'idmeters': id, 'save': 'save'}
         return render(request, html, context)
     else:
-        form = metertestForm(request.POST)
         # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
         context = {'form': form, 'datetoday': datetoday,
                    'serials': serials, 'idmeters': id}
         return render(request, html, context)
 
+
+def calibration_history(request):
+    html = 'calibration/calibration_history.html'
+    if request.is_ajax():
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        # if (order_by)
+        # query = metertest.objects.select_related('brand', 'meters', 'meterdetails').filter(meterdetailsid__serialno__icontains=filter,
+        #                                                                                    ).values('id', 'meterdetailsid__serialno', 'meterdetailsid', 'testdate', 'gen_average',
+        #                                                                                             'brandid__brand', 'fl1', 'fl2', 'fl3',
+        #                                                                                                     'lightload_average', 'll1', 'll2', 'll3',
+        #                                                                                                     'reading', 'type', 'volts', 'phase', 'kh', 'ta', 'remarks',
+        #                                                                                                     'active', 'isdamage',).order_by(order_by)
+        # return self.model.objects.select_related('meters', 'meterseal', 'metercalibration').filter(serialno__icontains=self.request.GET.get('filter'),).values('id',
+        #                                                                                                                                                        'idmeters', 'serialno', 'ampheres', 'accuracy', 'wms_status', 'status', 'active', 'userid', 'idmeters__brand', 'idmeters__metertype',
+        #                                                                                                                                                        'meterseal__seal_a', 'meterseal__seal_b', 'metercalibration__testdate').order_by(self.request.GET.get('order_by'))
+
+        # list_data = []
+        # for index, item in enumerate(query[start:start+limit], start):
+        #     list_data.append(item)
+        # data = {
+        #     'length': query.count(),
+        #     'objects': list_data,
+        # }
+
+        cursor = connection.cursor()
+        query = 'select md.id, mt.testdate, md.serialno, ' + \
+                '    (select brand from brands where id=m.brandid) brand, ' + \
+                ' reading, md.status, accuracy, ' + \
+                '    (select serialno from sealdetails where meterdetailsid=md.id limit 1) seriala, ' + \
+                '    (select serialno from sealdetails where meterdetailsid=md.id order by id desc limit 1) serialb, ' + \
+                '    (select metertype from metertype where id=m.mtypeid) metertype, ' + \
+                ' ampheres ' + \
+                'from metertest mt ' + \
+                'left join meterdetails md on md.id = mt.meterdetailsid ' + \
+                'left join meters m on m.id = md.meterid ';
+        cursor.execute(query)
+        # col_names = [desc[0] for desc in cursor.description]
+        # col_name = col_names[abs(float(order_by))]
+
+        isfiltered = ''
+        if filter:
+            isfiltered = " and ( or md.serialno like '%" + \
+                filter + "%' or mt.testdate like '%" + filter + "%') "
+                # "having brand like '%" + filter + "%' "
+
+        query += 'where 1 = 1 ' + isfiltered;
+        # order by mt.' + order_by;
+
+        # print('query', query)
+        cursor.execute(query)
+        mList = cursor.fetchall()
+        list_data = []
+        for index, item in enumerate(mList[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': len(mList),
+            'objects': list_data,
+        }
+
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+    else:
+        test = metertest.objects.all()
+        context = {'datetoday': datetoday, 'test': test}
+        return render(request, html, context)
+
+# load data to select option
+def consumer_list(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        cursor = connection.cursor()
+        query = "SELECT idnewapply id, concat(name, ' - ', ornumber, ' - ', ordate) name, address, ordate, ornumber FROM zanecoisd.newapply "
+        if search:
+            query += "where name like '%" + search + "%'"
+        cursor.execute(query)
+        consumers = cursor.fetchall()
+        datas = []
+        list_data = []
+        for index, item in enumerate(consumers):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s][0],
+                'text': list_data[s][1],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
+
+
+def consumer_search(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        cursor = connection.cursor()
+        cursor.execute('SELECT idnewapply id, name, address, ordate, ornumber FROM zanecoisd.newapply ' +
+                       'where idnewapply = "' + str(id) + '";')
+        form = cursor.fetchall()
+    return HttpResponse(json.dumps(form, default=default), 'application/json')
+
+# def calibrate_single(request, id):
+#     html = 'calibration/calibration.html'
+#     serials = meterdetails.objects.filter(
+#         meterid=id).filter(wms_status__exact=0)
+#     form = metertestForm(request.POST)
+#     if request.method == "POST":
+#         if form.is_valid():
+#             form.save()
+#             meterid = request.POST['idmeterdetails']
+#             average = request.POST['gen_average']
+#             cursor = connection.cursor()
+#             cursor.execute(
+#                 'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
+#             cursor.fetchall()
+#         context = {'form': form, 'datetoday': datetoday,
+#                    'serials': serials, 'idmeters': id, 'save': 'save'}
+#         return render(request, html, context)
+#     else:
+#         form = metertestForm(request.POST)
+#         # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
+#         context = {'form': form, 'datetoday': datetoday,
+#                    'serials': serials, 'idmeters': id}
+#         return render(request, html, context)
 
 # def calibrate_delete(request, id):
 #     if request.is_ajax():

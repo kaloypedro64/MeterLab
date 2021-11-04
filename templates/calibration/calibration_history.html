@@ -1,0 +1,276 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "base/header.html" %}
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 mr-2">
+        </div>
+        <div class="ml-auto ">
+          <button onclick="modal_assign()" class="btn btn-info btn-sm mb-2">
+            <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign
+              Selected</span></button>
+        </div>
+      </div>
+    </div>
+    <section class="content">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <table id="table_meters" class="table table-nowrap table-hover table-striped dtr-inline">
+                <thead>
+                  <tr>
+                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox"
+                        id="select_all"><label for="select_all"><span></span></label></th>
+                    <th>Action</th>
+                    <th>Date</th>
+                    <th>Serial No.</th>
+                    <th>Brand</th>
+                    <th>Reading</th>
+                    <th>Condition</th>
+                    <th>Accuracy</th>
+                    <th>Seal 1</th>
+                    <th>Seal 2</th>
+                    <th>Type</th>
+                    <th>Amphere</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+    </section>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-assign">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary ">
+        <h5 class="modal-title">Assign Meter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+
+        <input type="text" name="userid" id="id_userid" value="{{ request.user.id }}">
+        <input type="text" name="area" id="id_area" value="{{ area }}">
+        <input type="text" name="id" id="id_id">
+        <div class="form-group row">
+          <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Date:</label>
+          <div class="col">
+            <input type="date" class="form-control form-control-sm" id="id_transactiondate" name="transactiondate"
+              data-mask datemask value="{{ datetoday|date:'Y-m-d' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_brand" class="col-sm-3 col-form-label mlabel">Serial No.:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_serialno" name="serialno" maxlength="145"
+              placeholder="Serial Number" readonly>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_supplier" class="col-sm-3 col-form-label mlabel">Consumer:</label>
+          <div class="col">
+            <select class="form-control form-control-sm dropdown-list-consumer" id="id_consumer" name="consumer"
+              onchange="selected_consumer()"></select>
+            <span class="col-form-label mr-2" id="lblAddress">..</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-left">
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="assign_save()"><i
+            class="fal fa-save mr-1"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  let table_meters
+  let condition = ['Pending', 'Pass', 'Failed'];
+
+  window.onload = function ()
+  {
+    function Load_serials_table()
+    {
+      table_meters = $('#table_meters').DataTable({
+        "searching": true,
+        "processing": true,
+        "stateSave": true,
+        "info": true,
+        "paging": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "responsive": true,
+        "columnDefs": [
+          { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+          { "targets": [7], "className": "text-right" }
+        ],
+        "keys": true,
+        "keys": { "blurable": false },
+        "select": true,
+        "select": {
+          'style': 'single',
+          'selector': 'td:first-child'
+        },
+        "serverSide": true,
+        "processing": true,
+        "ajax": function (data, callback, settings)
+        {
+          var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+          var direction = "";
+          if (data.order[0].dir == "desc") { direction = "-" };
+          $.get("{% url 'calibrations' %}", {
+            limit: data.length,
+            start: data.start,
+            filter: data.search.value,
+            order_by: direction + sort_column_name
+          }, function (res)
+          {
+            callback({
+              recordsTotal: res.length,
+              recordsFiltered: res.length,
+              data: res.objects
+            });
+          });
+        },
+        columns: [
+          {
+            "data": "0", "render": function (data, type, row)
+            {
+              return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
+            }
+          },
+          {
+            "data": "0", "render": function (data, type, row)
+            {
+              return '<center>' +
+                '<div class="btn-group">' +
+                '<a href="#" class="btn btn-info btn-xs text-sm" title="Assing Meter" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-hands-helping mr-1"></i><span style="font-size: 12px;">Assign</span></a>' +
+                '</div>' +
+                '</center>'
+            }
+          },
+          { "data": "1" },
+          { "data": "2" },
+          { "data": "3" },
+          { "data": "4" },
+          {
+            "data": "5", "render": function (data, type, row)
+            {
+              return '<span style=""> ' + condition[row["5"]] + '</span>'
+            }
+          },
+          { "data": "6" },
+          { "data": "7" },
+          { "data": "8" },
+          { "data": "9" },
+          { "data": "10" },
+        ]
+      });
+      table_meters.column(0).visible(false);
+    }
+    Load_serials_table();
+
+    $('#table_meters tbody').on('click', 'tr', function ()
+    {
+      if ($(this).hasClass('selected'))
+      {
+        $(this).removeClass('selected');
+      }
+      else
+      {
+        table_meters.$('tr.selected').removeClass('selected');
+        $(this).addClass('selected');
+      }
+    });
+
+    var areafrom = "";
+    $('.dropdown-list-consumer').select2({
+      placeholder: 'Select an item',
+      ajax: {
+        url: "{% url 'consumer_list' %}",
+        dataType: 'json',
+        delay: 250,
+        data: function (data)
+        {
+          return {
+            searchTerm: data.term
+          };
+        },
+        processResults: function (response)
+        {
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
+    });
+
+  };
+
+  function modal_assign(params)
+  {
+
+    var data = table_meters.rows('.selected').data();
+    var id = data[0][0];
+    var meterserial = data[0][2];
+
+    $('#id_id').val(id);
+    $('#id_serialno').val(meterserial);
+    $('#modal-assign').find('.modal-title').text("Assign Meter");
+    $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
+
+
+
+  }
+
+
+  function selected_consumer()
+  {
+    var id = $('#id_consumer').val();
+    alert(id);
+    $.ajax({
+      url: "{% url 'consumer_search' %}",
+      type: 'GET',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      contentType: false,
+      data: { id: id, },
+      success: function (data)
+      {
+        $('#lblAddress').html(data[0][2]);
+      },
+      error: function (e)
+      {
+        alert('err: selected_consumer');
+      }
+    });
+  }
+
+  function meters_assign()
+  {
+    var id = table_meters.rows('.selected').data()[0][0];
+    var name = table_meters.rows('.selected').data()[0][1];
+    var address = table_meters.rows('.selected').data()[0][2];
+    var context = '{"name": "' + name + '", "address":"' + address + '"}';
+    var encrypted = window.btoa(context)
+    window.open("add/" + encrypted, '_self');
+
+    // var encodedString = window.btoa(baseString); // returns "bXktbmFtZS0x"
+    // var decodedString = window.atob(encodedString);  // returns "my-name-1"
+  }
+
+</script>
+
+
+{% endblock content %}
