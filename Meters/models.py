@@ -186,16 +186,13 @@ class metertest(models.Model):
 
 class meterassigned(models.Model):
     id = models.AutoField(primary_key=True)
-    assigneddate = models.DateField(("Date"), default=date.today)
-    datepaid = models.DateField(("Date"), default=date.today)
+    metertestid = models.ForeignKey(
+        metertest, db_column='metertestid', on_delete=models.PROTECT, db_index=True)
     meterdetailsid = models.ForeignKey(
         meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
-    accountno = models.CharField(max_length=145)
-    ornumber = models.CharField(max_length=145)
-    coname = models.CharField(max_length=145, null=True)
-    coaddress = models.CharField(max_length=145, null=True)
-    type = models.PositiveSmallIntegerField(
-        default=0, null=True)        # active, deleted
+    consumer = models.CharField(max_length=145, null=True)
+    address = models.CharField(max_length=145, null=True)
+    type = models.CharField(max_length=2, null=True)
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
     userid = models.CharField(max_length=45)

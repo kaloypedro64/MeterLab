@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('consumer_list', views.consumer_list, name='consumer_list'),
     path('consumer_search', views.consumer_search, name='consumer_search'),
+    path('consumer_save', views.consumer_save, name='consumer_save'),
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 

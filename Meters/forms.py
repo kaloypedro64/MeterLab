@@ -108,14 +108,13 @@ class metertestForm(forms.ModelForm):
 class meterassignedForm(forms.ModelForm):
     class Meta:
         model = meterassigned
-        fields = ['id', 'assigneddate', 'datepaid', 'meterdetailsid', 'accountno', 'ornumber',
-                  'coname', 'coaddress', 'type', 'active', 'userid']
+        fields = ['id', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid']
         # labels = {
         #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit', 'area': 'Area'
         # }
         widgets = {
-            'assigneddate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'assigneddate', 'placeholder': 'Select a date'}),
-            'datepaid': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'datepaid', 'placeholder': 'Select a date'}),
+            # 'assigneddate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'assigneddate', 'placeholder': 'Select a date'}),
+            # 'datepaid': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'datepaid', 'placeholder': 'Select a date'}),
         }
 
     def __init__(self, *args, **kwargs):

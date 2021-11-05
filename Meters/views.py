@@ -325,7 +325,7 @@ def consumer_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
         cursor = connection.cursor()
-        query = "SELECT idnewapply id, concat(name, ' - ', ornumber, ' - ', ordate) name, address, ordate, ornumber FROM zanecoisd.newapply "
+        query = "SELECT idnewapply id, concat(name, ' - ', ornumber) name, address, ordate, ornumber FROM zanecoisd.newapply "
         if search:
             query += "where name like '%" + search + "%'"
         cursor.execute(query)
@@ -351,6 +351,31 @@ def consumer_search(request):
                        'where idnewapply = "' + str(id) + '";')
         form = cursor.fetchall()
     return HttpResponse(json.dumps(form, default=default), 'application/json')
+
+
+def consumer_save(request):
+    if request.is_ajax():
+        meterdetailsid = str(request.GET.get('meterdetailsid'))
+        serial = str(request.GET.get('serialno'))
+        consumerid = str(request.GET.get('consumer'))
+
+        cursor = connection.cursor()
+        cursor.execute('SELECT idnewapply id, name, address, ordate, ornumber, ratecode FROM zanecoisd.newapply ' +
+                       'where idnewapply = "' + str(consumerid) + '";')
+        consumer = cursor.fetchall()
+
+        name = consumer[0][1]
+        address = consumer[0][2]
+        ratecode = consumer[0][5]
+        cursor.execute('insert into zanecometerpy.meterassigned (meterdetailsid, consumer, address, type, userid) ' +
+                       'values ("' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
+        cursor.fetchall()
+
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 # def calibrate_single(request, id):
 #     html = 'calibration/calibration.html'

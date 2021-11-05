@@ -58,9 +58,9 @@
       <div class="modal-body">
         {% csrf_token %}
 
-        <input type="text" name="userid" id="id_userid" value="{{ request.user.id }}">
-        <input type="text" name="area" id="id_area" value="{{ area }}">
-        <input type="text" name="id" id="id_id">
+        <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
+        <input type="hidden" name="area" id="id_area" value="{{ area }}">
+        <input type="hidden" name="id" id="id_id">
         <div class="form-group row">
           <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Date:</label>
           <div class="col">
@@ -79,14 +79,13 @@
           <label for="id_supplier" class="col-sm-3 col-form-label mlabel">Consumer:</label>
           <div class="col">
             <select class="form-control form-control-sm dropdown-list-consumer" id="id_consumer" name="consumer"
-              onchange="selected_consumer()"></select>
-            <span class="col-form-label mr-2" id="lblAddress">..</span>
+              onchange="consumer_selected()"></select>
+            <span class="col-form-label mr-2" id="lblAddress" style="font-size: 13px;">..</span>
           </div>
         </div>
       </div>
       <div class="modal-footer justify-content-left">
-        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="assign_save()"><i
-            class="fal fa-save mr-1"></i> Save</button>
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="consumer_save()"><i class="fal fa-save mr-1"></i> Save</button>
       </div>
     </div>
   </div>
@@ -195,7 +194,7 @@
 
     var areafrom = "";
     $('.dropdown-list-consumer').select2({
-      placeholder: 'Select an item',
+      placeholder: 'Enter consumer',
       ajax: {
         url: "{% url 'consumer_list' %}",
         dataType: 'json',
@@ -230,15 +229,11 @@
     $('#modal-assign').find('.modal-title').text("Assign Meter");
     $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
 
-
-
   }
 
-
-  function selected_consumer()
+  function consumer_selected()
   {
     var id = $('#id_consumer').val();
-    alert(id);
     $.ajax({
       url: "{% url 'consumer_search' %}",
       type: 'GET',
@@ -257,6 +252,35 @@
     });
   }
 
+  function consumer_save(params) {
+    // 'id', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid'
+    var meterdetailsid = $('#id_id').val();
+    // var serialno = $('#id_serialno').val();
+    var consumer = $('#id_consumer').val();
+
+    alert(meterdetailsid);
+    $.ajax({
+      url: "{% url 'consumer_save' %}",
+      type: 'GET',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      contentType: false,
+      data: {
+        meterdetailsid: meterdetailsid,
+        // serialno:serialno,
+        consumer:consumer
+      },
+      success: function (data)
+      {
+        if (data.msg == "saved")
+          $('#modal-assign').modal('hide');
+      },
+      error: function (e)
+      {
+        alert('err: selected_consumer');
+      }
+    });
+  }
   function meters_assign()
   {
     var id = table_meters.rows('.selected').data()[0][0];

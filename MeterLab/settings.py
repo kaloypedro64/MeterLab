@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.contrib.sessions.serializers.PickleSerializer'
 ]
 
 ROOT_URLCONF = 'MeterLab.urls'
@@ -162,3 +163,12 @@ AREA_CHOICES = (
     ('3', 'Liloy Area Services'),
 )
 
+
+# Logout after a period of inactivity
+INACTIVE_TIME = 3*60  # 3 minutes - or whatever period you think appropriate
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = INACTIVE_TIME   # change expired session
+SESSION_IDLE_TIMEOUT = INACTIVE_TIME  # logout
+
+# Auto logout delay in minutes
+# AUTO_LOGOUT_DELAY = 5  # equivalent to 5 minutes
