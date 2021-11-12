@@ -30,8 +30,12 @@
 
                         <div class="card ">
                             <div class="card-header card-info">
-                                <h3 class="card-title"><i class="fal fa-pencil-alt mr-1"
-                                        style="color: dimgray;"></i>Meter Calibration</h3>
+                                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                                <h3 class="card-title row">
+                                    <i class="fal fa-pencil-alt mr-1"
+                                        style="color: dimgray;"></i>
+                                        Meter Calibration
+                                </h3>
                                 <div class="col">
                                     <ol class="breadcrumb float-sm-right">
                                         <button type="submit" class="btn btn-success btn-sm mr-1"><i class="fal fa-save mr-1" tabindex="-1"></i>Save &
@@ -46,7 +50,7 @@
                                 <div class="col-lg-4">
                                     <div class="card-body">
                                         <div class="form-group row">
-                                            <label for="id_testdate" class="col-sm-3 col-form-label"><span>
+                                            <label for="id_testdate" class="col-sm-4 col-form-label"><span>
                                                     Date:</span></label>
                                             <div class="col">
                                                 <div class="input-group inputs-group-sm">
@@ -58,7 +62,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="id_serialno" class="col-sm-3 col-form-label">Serial
+                                            <label for="id_serialno" class="col-sm-4 col-form-label">Serial
                                                 No.:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_serialno"
@@ -67,7 +71,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="id_reading" class="col-sm-3 col-form-label">Reading:</label>
+                                            <label for="id_reading" class="col-sm-4 col-form-label">Init Reading:</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm d"
                                                     style="text-align: right;" id="id_reading" name="reading"
@@ -75,35 +79,35 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_type" class="col-sm-3 col-form-label">Type/Class:</label>
+                                            <label for="id_type" class="col-sm-4 col-form-label">Type/Class:</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm" id="id_type"
                                                     name="type" required >
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_volts" class="col-sm-3 col-form-label">Volts:</label>
+                                            <label for="id_volts" class="col-sm-4 col-form-label">Volts:</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm" id="id_volts"
                                                     name="volts" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_phase" class="col-sm-3 col-form-label">Phase: </label>
+                                            <label for="id_phase" class="col-sm-4 col-form-label">Phase: </label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm" id="id_phase"
                                                     name="phase" required >
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_kh" class="col-sm-3 col-form-label">Kh:</label>
+                                            <label for="id_kh" class="col-sm-4 col-form-label">Kh:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_kh"
                                                     name="kh" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_ta" class="col-sm-3 col-form-label">T.A.:</label>
+                                            <label for="id_ta" class="col-sm-4 col-form-label">T.A.:</label>
                                             <div class="col">
                                                 <input type="text" class="form-control form-control-sm" id="id_ta"
                                                     name="ta" required>
@@ -120,37 +124,37 @@
                                                     style="color: dimgray;"></i> Full Load Test (70%)
                                             </div>
                                             <div class="card-body">
-
                                                 <div class="form-group row">
-                                                    <label for="id_fl1" class="col-sm-3 col-form-label">Trial 1:
-                                                    </label>
+                                                    <label for="id_fl1" class="col-sm-4 col-form-label">Trial 1:</label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl1" name="fl1"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="id_fl2" class="col-sm-3 col-form-label">Trial 2:
-                                                    </label>
+                                                    <label for="id_fl2" class="col-sm-4 col-form-label">Trial 2:</label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl2" name="fl2"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="id_fl3" class="col-sm-3 col-form-label">Trial 3:
+                                                    <label for="id_fl3" class="col-sm-4 col-form-label">Trial 3:
                                                     </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl3" name="fl3"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
-                                                    <label for="id_fullload_average" class="col-sm-3 col-form-label"
+                                                    <label for="id_fullload_average" class="col-sm-4 col-form-label"
                                                         style="color: green;">Average: </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
@@ -169,35 +173,41 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group row">
-                                                    <label for="id_ll1" class="col-sm-3 col-form-label">Trial 1:
+                                                    <label for="id_ll1" class="col-sm-4 col-form-label">Trial 1:
                                                     </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll1" name="ll1"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
+                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="id_ll2" class="col-sm-3 col-form-label">Trial 2:
+                                                    <label for="id_ll2" class="col-sm-4 col-form-label">Trial 2:
                                                     </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll2" name="ll2"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
+                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="id_ll3" class="col-sm-3 col-form-label">Trial 3:
+                                                    <label for="id_ll3" class="col-sm-4 col-form-label">Trial 3:
                                                     </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll3" name="ll3"
                                                             step="0.01" value="0.00">
+                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
+                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="form-group row">
-                                                    <label for="id_lightload_average" class="col-sm-3 col-form-label"
+                                                    <label for="id_lightload_average" class="col-sm-4 col-form-label"
                                                         style="color: green;">Average: </label>
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"

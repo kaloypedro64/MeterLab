@@ -46,6 +46,29 @@ def AssignedList(request):
         if num1 <= 0:
             sortby = "asc"
         query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null '+ isfiltered +' order by ' + col_name + ' ' + sortby
+        query = 'select * from ' + \
+                '(  ' + \
+                '    (select idnewconnection as idtrans, ' + \
+                '        name, ' + \
+                '        address, ' + \
+                '        "New Connection" as description, ' + \
+                '        DatePaid, ' + \
+                '        ORNumber, ' + \
+                '        1 as transcode, ' + \
+                '        accountnumber ' + \
+                '            from zanecoisd.newconnection where accountnumber is not null and name is not null) ' + \
+                'union ' + \
+                '(select idrecon as idtrans, ' + \
+                '        name, ' + \
+                '        address, ' + \
+                '        "Reconnection" as description, ' + \
+                '        ORDate, ' + \
+                '        ORNumber, ' + \
+                '        2 as transcode, ' + \
+                '        accountnumber ' + \
+                '            from zanecoisd.recon where accountnumber is not null and name is not null) ' + \
+            ') ' + \
+                'trans order by name asc;'
         cursor.execute(query)
         coname = cursor.fetchall()
 

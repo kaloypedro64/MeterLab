@@ -4,6 +4,7 @@ from django.db.models.query_utils import Q
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
 from Users.forms import AreaForm
+from django.contrib.auth.decorators import login_required
 import math
 import datetime
 import time
@@ -84,6 +85,7 @@ html_mcalibration = 'calibration/calibration_multiple.html'
 #     else:
 #         return render(request, html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
 
+# @login_required(login_url='/')
 class meterList(ListView):
     model = meters
     html = 'meters/meters.html'
@@ -286,7 +288,7 @@ def calibration_history(request):
                 '    (select serialno from sealdetails where meterdetailsid=md.id limit 1) seriala, ' + \
                 '    (select serialno from sealdetails where meterdetailsid=md.id order by id desc limit 1) serialb, ' + \
                 '    (select metertype from metertype where id=m.mtypeid) metertype, ' + \
-                ' ampheres ' + \
+                ' ampheres, mt.id metertestid ' + \
                 'from metertest mt ' + \
                 'left join meterdetails md on md.id = mt.meterdetailsid ' + \
                 'left join meters m on m.id = md.meterid ';
@@ -356,7 +358,7 @@ def consumer_search(request):
 def consumer_save(request):
     if request.is_ajax():
         meterdetailsid = str(request.GET.get('meterdetailsid'))
-        serial = str(request.GET.get('serialno'))
+        metertestid = str(request.GET.get('metertestid'))
         consumerid = str(request.GET.get('consumer'))
 
         cursor = connection.cursor()
@@ -367,8 +369,8 @@ def consumer_save(request):
         name = consumer[0][1]
         address = consumer[0][2]
         ratecode = consumer[0][5]
-        cursor.execute('insert into zanecometerpy.meterassigned (meterdetailsid, consumer, address, type, userid) ' +
-                       'values ("' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
+        cursor.execute('insert into zanecometerpy.meterassigned (metertestid, meterdetailsid, consumer, address, type, userid) ' +
+                       'values ("' + str(metertestid) + '","' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
         cursor.fetchall()
 
         if True:

@@ -19,30 +19,87 @@
     </div>
     <section class="content">
       <div class="row">
-        <div class="col">
+        <section class="col-lg-7 connectedSortable">
           <div class="card">
             <div class="card-body">
-              <table id="table_meters" class="table table-nowrap table-hover table-striped dtr-inline">
+              <table id="tablez" class="table table-nowrap table-hover table-striped dtr-inline">
                 <thead>
                   <tr>
-                    <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox"
-                        id="select_all"><label for="select_all"><span></span></label></th>
-                    <th>Action</th>
+                    <th data-sort-column="" class="leftmost"><input type="checkbox" id="select_all"><label
+                        for="select_all"><span></span></label></th>
+                    <th style="width: 60px;">Action</th>
                     <th>Date</th>
                     <th>Serial No.</th>
                     <th>Brand</th>
                     <th>Reading</th>
                     <th>Condition</th>
-                    <th>Accuracy</th>
-                    <th>Seal 1</th>
-                    <th>Seal 2</th>
-                    <th>Type</th>
-                    <th>Amphere</th>
+                    <!-- <th>Accuracy</th> -->
+                    <!-- <th>Seal 1</th> -->
+                    <!-- <th>Seal 2</th> -->
+                    <!-- <th>Type</th> -->
+                    <!-- <th>Amphere</th> -->
+                    <th>metertestid</th>
                   </tr>
                 </thead>
               </table>
+        </section>
+        <section class="col-lg-5 connectedSortable">
+
+          <div class="card card-default card-tabs">
+            <div class="card-header p-0 pt-1">
+              <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                <!-- <li class="pt-2 px-3">
+                  <h3 class="card-title">Acquisition</h3>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home"
+                    role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"><i
+                      class="fal fad fa-books-medical mr-2"></i>Consumer</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile"
+                    role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false"><i
+                      class="fal fa-solid fa-lasso mr-2"></i>Meter sSeal</a>
+                </li>
+              </ul>
             </div>
+            <div class="card-body">
+              <div class="tab-content" id="custom-tabs-two-tabContent">
+                <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel"
+                  aria-labelledby="custom-tabs-two-home-tab">
+                  <table id="Table-Consumer" class="table table-nowrap table-striped dtr-inline">
+                    <thead>
+                      <tr>
+                        <th style="width: 60px;"></th>
+                        <th style="width: 120px;">Date</th>
+                        <th>Consumer</th>
+                        <th>Address</th>
+                        <th>OR No.</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
+                  aria-labelledby="custom-tabs-two-profile-tab">
+                  <table id="acqTable_mSeal" class="table table-nowrap table-striped dtr-inline">
+                    <thead>
+                      <tr>
+                        <th style="width: 60px;"></th>
+                        <th style="width: 120px;">Date</th>
+                        <th>Seal 1</th>
+                        <th>Seal 2</th>
+                        <!-- <th>RR Number</th> -->
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
           </div>
+
+        </section>
+      </div>
     </section>
   </div>
 </div>
@@ -61,6 +118,7 @@
         <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
         <input type="hidden" name="area" id="id_area" value="{{ area }}">
         <input type="hidden" name="id" id="id_id">
+        <input type="hidden" name="metertestid" id="id_metertestid">
         <div class="form-group row">
           <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Date:</label>
           <div class="col">
@@ -85,7 +143,8 @@
         </div>
       </div>
       <div class="modal-footer justify-content-left">
-        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="consumer_save()"><i class="fal fa-save mr-1"></i> Save</button>
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="consumer_save()"><i
+            class="fal fa-save mr-1"></i> Save</button>
       </div>
     </div>
   </div>
@@ -93,17 +152,18 @@
 
 <script type="text/javascript">
 
-  let table_meters
+  let tablez
   let condition = ['Pending', 'Pass', 'Failed'];
+  let urlCalibrationHistory = "{% url 'calibrations' %}";
 
   window.onload = function ()
   {
     function Load_serials_table()
     {
-      table_meters = $('#table_meters').DataTable({
+      tablez = $('#tablez').DataTable({
         "searching": true,
         "processing": true,
-        "stateSave": true,
+        // "stateSave": true,
         "info": true,
         "paging": true,
         "lengthChange": true,
@@ -111,7 +171,7 @@
         "responsive": true,
         "columnDefs": [
           { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
-          { "targets": [7], "className": "text-right" }
+          // { "targets": [7], "className": "text-right" }
         ],
         "keys": true,
         "keys": { "blurable": false },
@@ -127,7 +187,7 @@
           var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
           var direction = "";
           if (data.order[0].dir == "desc") { direction = "-" };
-          $.get("{% url 'calibrations' %}", {
+          $.get(urlCalibrationHistory, {
             limit: data.length,
             start: data.start,
             filter: data.search.value,
@@ -168,18 +228,15 @@
               return '<span style=""> ' + condition[row["5"]] + '</span>'
             }
           },
-          { "data": "6" },
-          { "data": "7" },
-          { "data": "8" },
-          { "data": "9" },
-          { "data": "10" },
+          { "data": "11" },
         ]
       });
-      table_meters.column(0).visible(false);
+      tablez.column(0).visible(false);
+      tablez.column(7).visible(false);
     }
     Load_serials_table();
 
-    $('#table_meters tbody').on('click', 'tr', function ()
+    $('#tablez tbody').on('click', 'tr', function ()
     {
       if ($(this).hasClass('selected'))
       {
@@ -187,10 +244,86 @@
       }
       else
       {
-        table_meters.$('tr.selected').removeClass('selected');
+        tablez.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');
       }
+
+      var data = tablez.rows(this).data();
+      var id = data[0][0];
+
+      $("#Table-Consumer").dataTable().fnDestroy();
+      loadDetails(id);
+
     });
+
+    let mDetailsUrl = "{% url 'mdetails' %}";
+    function loadDetails(id)
+    {
+      tabledetails = $('#Table-Consumer').DataTable({
+        "searching": false,
+        "info": false,
+        "paging": true,
+        "autoWidth": false,
+        "columnDefs": [
+          { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+          { "targets": [1], "width": "14%" },
+        ],
+        "keys": true,
+        "keys": { "blurable": false },
+        "select": true,
+        "select": {
+          "style": 'multi',
+          "selector": 'td:first-child',
+        },
+        "serverSide": true,
+        "processing": true,
+        "ajax": function (data, callback, settings)
+        {
+          var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+          var direction = "";
+          if (data.order[0].dir == "desc") { direction = "-" };
+          $.get(mDetailsUrl, {
+            id: id,
+            limit: data.length,
+            start: data.start,
+            filter: data.search.value,
+            order_by: direction + sort_column_name
+          }, function (res)
+          {
+            callback({
+              recordsTotal: res.length,
+              recordsFiltered: res.length,
+              data: res.objects
+            });
+          });
+        },
+        columns: [
+          {
+            "data": "id", "render": function (data, type, row)
+            {
+              return '<td class="selected"><input type="checkbox" id="item_20" value="20"><label for="item_20"><span></span></label></td>'
+            }
+          },
+          { "data": "id" },
+          { "data": "serialno" },
+          { "data": "accuracy" },
+          {
+            "data": "status", "render": function (data, type, row)
+            {
+              return '<span style="font-size: 12px;"> ' + stats[row["status"]] + '</span>'
+            }
+          },
+
+        ],
+        "dom": '<"top"i>rt<"bottom"flp><"clear">',
+        "fnInitComplete": function (oSettings, json)
+        {
+          $('#table_meterdetails tbody tr:eq(0)').click();
+        },
+      });
+    }
+
+
 
     var areafrom = "";
     $('.dropdown-list-consumer').select2({
@@ -219,12 +352,13 @@
 
   function modal_assign(params)
   {
-
-    var data = table_meters.rows('.selected').data();
+    var data = tablez.rows('.selected').data();
     var id = data[0][0];
     var meterserial = data[0][2];
+    var metertestid = data[0][11];
 
     $('#id_id').val(id);
+    $('#id_metertestid').val(metertestid);
     $('#id_serialno').val(meterserial);
     $('#modal-assign').find('.modal-title').text("Assign Meter");
     $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
@@ -252,10 +386,11 @@
     });
   }
 
-  function consumer_save(params) {
+  function consumer_save(params)
+  {
     // 'id', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid'
     var meterdetailsid = $('#id_id').val();
-    // var serialno = $('#id_serialno').val();
+    var metertestid = $('#id_metertestid').val();
     var consumer = $('#id_consumer').val();
 
     alert(meterdetailsid);
@@ -267,8 +402,8 @@
       contentType: false,
       data: {
         meterdetailsid: meterdetailsid,
-        // serialno:serialno,
-        consumer:consumer
+        metertestid: metertestid,
+        consumer: consumer
       },
       success: function (data)
       {
@@ -293,6 +428,9 @@
     // var encodedString = window.btoa(baseString); // returns "bXktbmFtZS0x"
     // var decodedString = window.atob(encodedString);  // returns "my-name-1"
   }
+
+  //
+
 
 </script>
 

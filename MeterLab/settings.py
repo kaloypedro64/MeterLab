@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sweetify',
     'Acquisitions',
     'Meters',
     'Signatory',
@@ -165,10 +166,10 @@ AREA_CHOICES = (
 
 
 # Logout after a period of inactivity
-INACTIVE_TIME = 3*60  # 3 minutes - or whatever period you think appropriate
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = INACTIVE_TIME   # change expired session
-SESSION_IDLE_TIMEOUT = INACTIVE_TIME  # logout
+# INACTIVE_TIME = 3*60  # 3 minutes - or whatever period you think appropriate
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = INACTIVE_TIME   # change expired session
+# SESSION_IDLE_TIMEOUT = INACTIVE_TIME  # logout
 
 # Auto logout delay in minutes
 # AUTO_LOGOUT_DELAY = 5  # equivalent to 5 minutes
