@@ -19,7 +19,7 @@
     </div>
     <section class="content">
       <div class="row">
-        <section class="col-lg-7 connectedSortable">
+        <section class="col-lg-6 connectedSortable">
           <div class="card">
             <div class="card-body">
               <table id="tablez" class="table table-nowrap table-hover table-striped dtr-inline">
@@ -31,20 +31,19 @@
                     <th>Date</th>
                     <th>Serial No.</th>
                     <th>Brand</th>
-                    <th>Reading</th>
-                    <th>Condition</th>
+                    <th>Type</th>
+                    <!-- <th>Amphere</th> -->
                     <!-- <th>Accuracy</th> -->
+                    <!-- <th>Status</th> -->
+                    <!-- <th>Condition</th> -->
                     <!-- <th>Seal 1</th> -->
                     <!-- <th>Seal 2</th> -->
-                    <!-- <th>Type</th> -->
-                    <!-- <th>Amphere</th> -->
-                    <th>metertestid</th>
+                    <th style="display: none;">metertestid</th>
                   </tr>
                 </thead>
               </table>
         </section>
-        <section class="col-lg-5 connectedSortable">
-
+        <section class="col-lg-6 connectedSortable">
           <div class="card card-default card-tabs">
             <div class="card-header p-0 pt-1">
               <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
@@ -59,7 +58,7 @@
                 <li class="nav-item">
                   <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile"
                     role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false"><i
-                      class="fal fa-solid fa-lasso mr-2"></i>Meter sSeal</a>
+                      class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
                 </li>
               </ul>
             </div>
@@ -71,24 +70,27 @@
                     <thead>
                       <tr>
                         <th style="width: 60px;"></th>
-                        <th style="width: 120px;">Date</th>
+                        <th>Date</th>
                         <th>Consumer</th>
                         <th>Address</th>
-                        <th>OR No.</th>
+                        <!-- <th>OR No.</th> -->
                       </tr>
                     </thead>
                   </table>
                 </div>
                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
                   aria-labelledby="custom-tabs-two-profile-tab">
-                  <table id="acqTable_mSeal" class="table table-nowrap table-striped dtr-inline">
+                  <table id="Table-mSeal" class="table table-nowrap table-striped dtr-inline">
                     <thead>
                       <tr>
                         <th style="width: 60px;"></th>
                         <th style="width: 120px;">Date</th>
                         <th>Seal 1</th>
                         <th>Seal 2</th>
-                        <!-- <th>RR Number</th> -->
+                        <th>Condition</th>
+                        <th>Accuracy</th>
+                        <th>Reading</th>
+                        <th>Remarks</th>
                       </tr>
                     </thead>
                   </table>
@@ -150,11 +152,92 @@
   </div>
 </div>
 
+<div class="modal fade" id="modal-calibration-update">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary ">
+        <h5 class="modal-title">Update</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+
+        <!-- <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
+        <input type="hidden" name="area" id="id_area" value="{{ area }}">
+        <input type="hidden" name="id" id="id_id">
+        <input type="hidden" name="metertestid" id="id_metertestid"> -->
+
+        <div class="form-group row">
+          <label for="id_transactiondate" class="col-sm-4 col-form-label col-form-label-sm mlabel">Date:</label>
+          <div class="col">
+            <input type="date" class="form-control form-control-sm" id="id_transactiondate" name="transactiondate"
+              data-mask datemask value="{{ datetoday|date:'Y-m-d' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_s1" class="col-sm-4 col-form-label mlabel">Calibration Seal 1:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_s1" name="s1" maxlength="145"
+              placeholder="Calibration Seal 1">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_s2" class="col-sm-4 col-form-label mlabel">Calibration Seal 2:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_s2" name="s2" maxlength="145"
+              placeholder="Calibration Seal 2">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-sm-4" >Meter Condition:</label>
+          <div class="col">
+            <select class="form-control form-control-sm select2" id="unit" name="unit">
+              <option value="0">Good</option>
+              <option value="1">Damage</option>
+              <option value="2">Substandard</option>
+              <option value="3">Rehab.</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_accuracy" class="col-sm-4 col-form-label mlabel">Accuracy:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_accuracy" name="accuracy" maxlength="145"
+              placeholder="Accuracy">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_reading" class="col-sm-4 col-form-label mlabel">Reading:</label>
+          <div class="col">
+            <input type="text" class="form-control form-control-sm" id="id_reading" name="reading" maxlength="145"
+              placeholder="Reading">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="id_remarks" class="col-sm-4 col-form-label mlabel">Remarks:</label>
+          <div class="col">
+            <textarea type="text" class="form-control form-control-sm" id="id_remarks" name="remarks" rows="2"
+              style="resize: none;" placeholder="Remarks"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-left">
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="calibration_update_save()"><i
+            class="fal fa-save mr-1"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 
   let tablez
-  let condition = ['Pending', 'Pass', 'Failed'];
+  let condition = ['Good', 'Damage', 'Substandard','Rehab'];
+
   let urlCalibrationHistory = "{% url 'calibrations' %}";
+  let urlConsumers = "{% url 'consumers' 0 %}";
+
 
   window.onload = function ()
   {
@@ -211,28 +294,34 @@
           {
             "data": "0", "render": function (data, type, row)
             {
-              return '<center>' +
-                '<div class="btn-group">' +
-                '<a href="#" class="btn btn-info btn-xs text-sm" title="Assing Meter" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-hands-helping mr-1"></i><span style="font-size: 12px;">Assign</span></a>' +
-                '</div>' +
-                '</center>'
+              return '<div class="input-group-prepend">' +
+                '  <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+                '    <div class="dropdown-menu">' +
+                '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')>Meter Calibration Update</a>' +
+                '      <div class="dropdown-divider"></div>' +
+                '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')">Assign this meter</a>' +
+                '    </div>' +
+                '  </div >'
             }
           },
           { "data": "1" },
           { "data": "2" },
           { "data": "3" },
           { "data": "4" },
-          {
-            "data": "5", "render": function (data, type, row)
-            {
-              return '<span style=""> ' + condition[row["5"]] + '</span>'
-            }
-          },
-          { "data": "11" },
+          // { "data": "5" },
+          // { "data": "6" },
+          // { "data": "7" },
+          // {
+          //   "data": "5", "render": function (data, type, row)
+          //   {
+          //     return '<span style=""> ' + condition[row["5"]] + '</span>'
+          //   }
+          // },
+          { "data": "9" },
         ]
       });
       tablez.column(0).visible(false);
-      tablez.column(7).visible(false);
+      tablez.column(6).visible(false);
     }
     Load_serials_table();
 
@@ -256,17 +345,17 @@
 
     });
 
-    let mDetailsUrl = "{% url 'mdetails' %}";
     function loadDetails(id)
     {
       tabledetails = $('#Table-Consumer').DataTable({
         "searching": false,
         "info": false,
         "paging": true,
+         "lengthChange": true,
         "autoWidth": false,
         "columnDefs": [
           { "targets": [0], "searchable": false, "orderable": false, "visible": false },
-          { "targets": [1], "width": "14%" },
+          // { "targets": [1], "width": "14%" },
         ],
         "keys": true,
         "keys": { "blurable": false },
@@ -282,7 +371,7 @@
           var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
           var direction = "";
           if (data.order[0].dir == "desc") { direction = "-" };
-          $.get(mDetailsUrl, {
+          $.get(urlConsumers.replace('0', id), {
             id: id,
             limit: data.length,
             start: data.start,
@@ -304,15 +393,10 @@
               return '<td class="selected"><input type="checkbox" id="item_20" value="20"><label for="item_20"><span></span></label></td>'
             }
           },
-          { "data": "id" },
-          { "data": "serialno" },
-          { "data": "accuracy" },
-          {
-            "data": "status", "render": function (data, type, row)
-            {
-              return '<span style="font-size: 12px;"> ' + stats[row["status"]] + '</span>'
-            }
-          },
+          { "data": "transactiondate" },
+          { "data": "consumer" },
+          { "data": "address" },
+
 
         ],
         "dom": '<"top"i>rt<"bottom"flp><"clear">',
@@ -364,6 +448,22 @@
     $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
 
   }
+
+  function modal_calibration_update(params)
+    {
+      var data = tablez.rows('.selected').data();
+      var id = data[0][0];
+      var meterserial = data[0][2];
+      var metertestid = data[0][11];
+
+      $('#id_id').val(id);
+      $('#id_metertestid').val(metertestid);
+      $('#id_serialno').val(meterserial);
+      $('#modal-calibration-update').find('.modal-title').text("Serial " + meterserial);
+      $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
+
+    }
+
 
   function consumer_selected()
   {

@@ -11,6 +11,7 @@
 
 
 <div class="content-wrapper">
+    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     <section class="content-header">
         <section class="content">
             {% if save == "save" %}
@@ -30,7 +31,6 @@
 
                         <div class="card ">
                             <div class="card-header card-info">
-                                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                                 <h3 class="card-title row">
                                     <i class="fal fa-pencil-alt mr-1"
                                         style="color: dimgray;"></i>
@@ -40,7 +40,7 @@
                                     <ol class="breadcrumb float-sm-right">
                                         <button type="submit" class="btn btn-success btn-sm mr-1"><i class="fal fa-save mr-1" tabindex="-1"></i>Save &
                                             Close</button>
-                                        <a href="../.." class="btn btn-danger btn-xs text-xs"><i class="fal fa-share-square"></i>
+                                        <a href=".." class="btn btn-danger btn-xs text-xs"><i class="fal fa-share-square"></i>
                                             <span style="font-size: 12px;"> Close</span></a>
                                     </ol>
                                 </div>
@@ -71,7 +71,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="id_reading" class="col-sm-4 col-form-label">Init Reading:</label>
+                                            <label for="id_reading" class="col-sm-4 col-form-label">Init. Reading:</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm d"
                                                     style="text-align: right;" id="id_reading" name="reading"
@@ -130,7 +130,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl1" name="fl1"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -139,7 +138,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl2" name="fl2"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -149,7 +147,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl3" name="fl3"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate" value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -179,8 +176,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll1" name="ll1"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
-                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -190,8 +185,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll2" name="ll2"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
-                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -201,8 +194,6 @@
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_ll3" name="ll3"
                                                             step="0.01" value="0.00">
-                                                        <input type="date" class="form-control form-control-sm" id="id_testdate" name="testdate"
-                                                            value="{{ datetoday|date:'Y-m-d' }}">
                                                     </div>
                                                 </div>
                                                 <hr>

@@ -255,6 +255,9 @@ def calibrate_multiple(request, id):
         return render(request, html, context)
 
 
+
+
+
 def calibration_history(request):
     html = 'calibration/calibration_history.html'
     if request.is_ajax():
@@ -281,14 +284,23 @@ def calibration_history(request):
         #     'objects': list_data,
         # }
 
+        # query = 'select md.id, mt.testdate, md.serialno, ' + \
+        #         '    (select brand from brands where id=m.brandid) brand, ' + \
+        #         '    (select metertype from metertype where id=m.mtypeid) metertype, ' + \
+        #         ' md.status, reading, accuracy, ' + \
+                # '    (select serialno from sealdetails where meterdetailsid=md.id limit 1) seriala, ' +
+                # '    (select serialno from sealdetails where meterdetailsid=md.id order by id desc limit 1) serialb, ' + \
+                # ' ampheres, mt.id metertestid ' + \
+                # 'from metertest mt ' + \
+                # 'left join meterdetails md on md.id = mt.meterdetailsid ' + \
+                # 'left join meters m on m.id = md.meterid ';
+
         cursor = connection.cursor()
         query = 'select md.id, mt.testdate, md.serialno, ' + \
                 '    (select brand from brands where id=m.brandid) brand, ' + \
-                ' reading, md.status, accuracy, ' + \
-                '    (select serialno from sealdetails where meterdetailsid=md.id limit 1) seriala, ' + \
-                '    (select serialno from sealdetails where meterdetailsid=md.id order by id desc limit 1) serialb, ' + \
                 '    (select metertype from metertype where id=m.mtypeid) metertype, ' + \
-                ' ampheres, mt.id metertestid ' + \
+                ' ampheres, accuracy, md.status, reading, ' + \
+                ' mt.id metertestid ' + \
                 'from metertest mt ' + \
                 'left join meterdetails md on md.id = mt.meterdetailsid ' + \
                 'left join meters m on m.id = md.meterid ';
@@ -322,7 +334,7 @@ def calibration_history(request):
         context = {'datetoday': datetoday, 'test': test}
         return render(request, html, context)
 
-# load data to select option
+# load data to select option - serverside dropdown
 def consumer_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
@@ -355,7 +367,7 @@ def consumer_search(request):
     return HttpResponse(json.dumps(form, default=default), 'application/json')
 
 
-def consumer_save(request):
+def consumer_save_assignedmeter(request):
     if request.is_ajax():
         meterdetailsid = str(request.GET.get('meterdetailsid'))
         metertestid = str(request.GET.get('metertestid'))
@@ -369,8 +381,8 @@ def consumer_save(request):
         name = consumer[0][1]
         address = consumer[0][2]
         ratecode = consumer[0][5]
-        cursor.execute('insert into zanecometerpy.meterassigned (metertestid, meterdetailsid, consumer, address, type, userid) ' +
-                       'values ("' + str(metertestid) + '","' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
+        cursor.execute('insert into zanecometerpy.assigned_meter (transactiondate, metertestid, meterdetailsid, consumer, address, type, userid) ' +
+                       'values ("' + str(metertestid) + '","' + str(metertestid) + '","' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
         cursor.fetchall()
 
         if True:
@@ -453,22 +465,39 @@ def consumer_save(request):
 #     else:
 #         return render(request, 'meters/meterdetails.html', {'idmeters': id, 'header': 'Meter Details'})
 
-def expire_page_cache(view, args=None):
-    """
-    Removes cache created by cache_page functionality.
-    Parameters are used as they are in reverse()
-    """
+def load_assigned_consumers(request, id):
+    if request.is_ajax():
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        query = assigned_meter.objects.filter(meterdetailsid=id, consumer__icontains=filter,).values(
+            'id', 'transactiondate', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid').order_by(order_by)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-    if args is None:
-        path = reverse(view)
-    else:
-        path = reverse(view, args=args)
+# def expire_page_cache(view, args=None):
+#     """
+#     Removes cache created by cache_page functionality.
+#     Parameters are used as they are in reverse()
+#     """
 
-    request = HttpRequest()
-    request.path = path
-    key = get_cache_key(request)
-    if cache.has_key(key):
-        cache.delete(key)
+#     if args is None:
+#         path = reverse(view)
+#     else:
+#         path = reverse(view, args=args)
+
+#     request = HttpRequest()
+#     request.path = path
+#     key = get_cache_key(request)
+#     if cache.has_key(key):
+#         cache.delete(key)
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):
@@ -478,12 +507,3 @@ def datetime_handler(x):
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):
         return o.isoformat()
-
-        # form = metercalibrationForm(request.POST, instance=queryset)
-
-        # cursor = connection.cursor()
-        # cursor.execute('select idmeterdetails ' +
-        #                '   from zanecometerpy.meter_serials_details ' +
-        #             #    '   where idmeterdetails like "' + str(id) + '" ' +
-        #                '    ;')
-        # result = cursor.fetchall()

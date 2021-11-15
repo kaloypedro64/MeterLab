@@ -16,7 +16,10 @@ urlpatterns = [
 
     path('consumer_list', views.consumer_list, name='consumer_list'),
     path('consumer_search', views.consumer_search, name='consumer_search'),
-    path('consumer_save', views.consumer_save, name='consumer_save'),
+    path('consumer_save', views.consumer_save_assignedmeter, name='consumer_save'),
+
+    path('consumers/<int:id>', views.load_assigned_consumers, name='consumers'),
+
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),
 

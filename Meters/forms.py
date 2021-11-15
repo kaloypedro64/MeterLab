@@ -105,10 +105,11 @@ class metertestForm(forms.ModelForm):
 #         super(metersealForm, self).__init__(*args, **kwargs)
 
 
-class meterassignedForm(forms.ModelForm):
+class assigned_meterForm(forms.ModelForm):
     class Meta:
-        model = meterassigned
-        fields = ['id', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid']
+        model = assigned_meter
+        fields = ['id', 'transactiondate', 'meterdetailsid',
+                  'consumer', 'address', 'type', 'active', 'userid']
         # labels = {
         #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit', 'area': 'Area'
         # }
@@ -118,5 +119,5 @@ class meterassignedForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(meterassignedForm, self).__init__(*args, **kwargs)
+        super(assigned_meterForm, self).__init__(*args, **kwargs)
         # self.fields['rrnumber'].required = False

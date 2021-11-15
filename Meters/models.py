@@ -166,26 +166,33 @@ class metertest(models.Model):
         # abstract = True
 
 
-# class meterseal(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     meterdetailsid = models.ForeignKey(
-#         meterdetails, db_column='meterdetailsid', on_delete=models.SET_DEFAULT, db_index=True)
-#     # idmeterdetails = models.ManyToManyField(
-#     #     meterdetails, db_column='idmeterdetails')
-#     sealdate = models.DateField(("Date"), default=date.today)
-#     seal_a = models.CharField(max_length=45, null=True)
-#     seal_b = models.CharField(max_length=45, null=True)
-
-#     active = models.PositiveSmallIntegerField(
-#         default=0, null=True)        # active, deleted
-#     userid = models.CharField(max_length=45)
-
-#     class Meta:
-#         db_table = "meterseal"
-
-
-class meterassigned(models.Model):
+class meterseal(models.Model):
     id = models.AutoField(primary_key=True)
+    meterdetailsid = models.ForeignKey(
+        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+    # idmeterdetails = models.ManyToManyField(
+    #     meterdetails, db_column='idmeterdetails')
+    sealdate = models.DateField(("Date"), default=date.today)
+    seal_a = models.CharField(max_length=45, null=True)
+    seal_b = models.CharField(max_length=45, null=True)
+    metercondition = models.PositiveSmallIntegerField(
+        default=0, null=True)        # good, damage, substandard, rehab
+    accuracy = models.IntegerField(default=0)
+    reading = models.IntegerField(default=0)
+    remarks = models.CharField(max_length=245)
+
+    active = models.PositiveSmallIntegerField(
+        default=0, null=True)        # active, deleted
+
+    userid = models.CharField(max_length=45)
+
+    class Meta:
+        db_table = "meterseal"
+
+
+class assigned_meter(models.Model):
+    id = models.AutoField(primary_key=True)
+    transactiondate = models.DateField(("Date"), default=date.today)
     metertestid = models.ForeignKey(
         metertest, db_column='metertestid', on_delete=models.PROTECT, db_index=True)
     meterdetailsid = models.ForeignKey(
@@ -198,4 +205,6 @@ class meterassigned(models.Model):
     userid = models.CharField(max_length=45)
 
     class Meta:
-        db_table = "meterassigned"
+        db_table = "assigned_meter"
+
+

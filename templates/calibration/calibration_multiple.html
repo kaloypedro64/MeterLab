@@ -26,7 +26,7 @@
                     <ol class="breadcrumb float-sm-right">
                         <button type="submit" class="btn btn-success btn-sm mr-1 "><i class="fal fa-save mr-1"
                                 tabindex="-1"></i>Save & Next</button>
-                        <a href="" class="btn btn-info btn-sm"><i
+                        <a href=".." class="btn btn-info btn-sm"><i
                                 class="fal fa-share-square"></i>
                             <span style="font-size: 12px;"> Done</span></a>
                     </ol>
@@ -56,7 +56,7 @@
                             <div class="col-lg-4">
                                 <div class="card-body">
                                     <div class="form-group row">
-                                        <label for="id_testdate" class="col-sm-3 col-form-label" styl><span>
+                                        <label for="id_testdate" class="col-sm-4 col-form-label" styl><span>
                                                 Date:</span></label>
                                         <div class="col">
                                             <div class="input-group inputs-group-sm">
@@ -68,9 +68,9 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="idmeterserials" class="col-sm-3 col-form-label">Serial
+                                        <label for="idmeterserials" class="col-sm-4 col-form-label">Serial
                                             No.:</label>
-                                        <div class="col-sm-9">
+                                        <div class="col">
                                             <select class="form-control select2" id="id_idmeterserials"
                                                 name="idmeterserials">
                                                 {% for row in serials %}
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="id_reading" class="col-sm-3 col-form-label">Reading:</label>
+                                        <label for="id_reading" class="col-sm-4 col-form-label">Reading:</label>
                                         <div class="col">
                                             <input type="number" class="form-control form-control-sm d"
                                                 style="text-align: right;" id="id_reading" name="reading" step="0.01"
@@ -91,35 +91,35 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_type" class="col-sm-3 col-form-label">Type/Class:</label>
+                                        <label for="id_type" class="col-sm-4 col-form-label">Type/Class:</label>
                                         <div class="col">
                                             <input type="number" class="form-control form-control-sm" id="id_type"
                                                 name="type" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_volts" class="col-sm-3 col-form-label">Volts:</label>
+                                        <label for="id_volts" class="col-sm-4 col-form-label">Volts:</label>
                                         <div class="col">
                                             <input type="number" class="form-control form-control-sm" id="id_volts"
                                                 name="volts" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_phase" class="col-sm-3 col-form-label">Phase: </label>
+                                        <label for="id_phase" class="col-sm-4 col-form-label">Phase: </label>
                                         <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="id_phase"
                                                 name="phase" required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_kh" class="col-sm-3 col-form-label">Kh:</label>
+                                        <label for="id_kh" class="col-sm-4 col-form-label">Kh:</label>
                                         <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="id_kh" name="kh"
                                                 required>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="id_ta" class="col-sm-3 col-form-label">T.A.:</label>
+                                        <label for="id_ta" class="col-sm-4 col-form-label">T.A.:</label>
                                         <div class="col">
                                             <input type="text" class="form-control form-control-sm" id="id_ta" name="ta"
                                                 required>
@@ -138,7 +138,7 @@
                                         <div class="card-body">
 
                                             <div class="form-group row">
-                                                <label for="id_fl1" class="col-sm-3 col-form-label">Trial 1:
+                                                <label for="id_fl1" class="col-sm-4 col-form-label">Trial 1:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -147,7 +147,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="id_fl2" class="col-sm-3 col-form-label">Trial 2:
+                                                <label for="id_fl2" class="col-sm-4 col-form-label">Trial 2:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -156,7 +156,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="id_fl3" class="col-sm-3 col-form-label">Trial 3:
+                                                <label for="id_fl3" class="col-sm-4 col-form-label">Trial 3:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -166,7 +166,7 @@
                                             </div>
                                             <hr>
                                             <div class="form-group row">
-                                                <label for="id_fullload_average" class="col-sm-3 col-form-label"
+                                                <label for="id_fullload_average" class="col-sm-4 col-form-label"
                                                     style="color: green;">Average: </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -185,7 +185,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="form-group row">
-                                                <label for="id_ll1" class="col-sm-3 col-form-label">Trial 1:
+                                                <label for="id_ll1" class="col-sm-4 col-form-label">Trial 1:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -194,7 +194,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="id_ll2" class="col-sm-3 col-form-label">Trial 2:
+                                                <label for="id_ll2" class="col-sm-4 col-form-label">Trial 2:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -203,7 +203,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="id_ll3" class="col-sm-3 col-form-label">Trial 3:
+                                                <label for="id_ll3" class="col-sm-4 col-form-label">Trial 3:
                                                 </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
@@ -213,7 +213,7 @@
                                             </div>
                                             <hr>
                                             <div class="form-group row">
-                                                <label for="id_lightload_average" class="col-sm-3 col-form-label"
+                                                <label for="id_lightload_average" class="col-sm-4 col-form-label"
                                                     style="color: green;">Average: </label>
                                                 <div class="col">
                                                     <input type="number" class="form-control form-control-sm"
