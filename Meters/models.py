@@ -172,7 +172,7 @@ class meterseal(models.Model):
         meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
     # idmeterdetails = models.ManyToManyField(
     #     meterdetails, db_column='idmeterdetails')
-    sealdate = models.DateField(("Date"), default=date.today)
+    transactiondate = models.DateField(("Date"), default=date.today)
     seal_a = models.CharField(max_length=45, null=True)
     seal_b = models.CharField(max_length=45, null=True)
     metercondition = models.PositiveSmallIntegerField(

@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: inv
+Version: 0.1.0
+Summary: PyInv - A modular python inventory and asset management system
+Home-page: UNKNOWN
+License: UNKNOWN
+Author: Dan Trickey
+Author-email: dan@trickey.io
+Requires-Python: >=3.4,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7

@@ -1,0 +1,91 @@
+{% extends 'adminlte2/base.html' %}
+
+{% load adminlte2_tags %}
+
+{% block title %}Log in{% endblock title %}
+
+{% block body_class %}hold-transition login-page{% endblock body_class %}
+
+{% block body %}
+<div class="login-box">
+
+    {% block login_logo %}
+        <div class="login-logo">
+            <a href="{% block login_logo_href %}/{% endblock login_logo_href %}">
+                {% block login_logo_text %}
+                    <b>Admin</b>LTE
+                {% endblock login_logo_text %}
+            </a>
+        </div>
+    {% endblock login_logo %}
+
+    {% block login_content %}
+        <div class="login-box-body">
+
+            {% block messages_template %}
+                {% include 'adminlte2/components/messages.html' %}
+            {% endblock messages_template %}
+
+            {% block login_custom_messages %}
+            {% endblock login_custom_messages %}
+
+            <p class="login-box-msg">
+                {% block login_description %}
+                    Sign in to start your session
+                {% endblock login_description %}
+            </p>
+
+            {% block login_form %}
+                <form action="{% block login_form_action %}{% endblock login_form_action %}"
+                      id="{% block login_form_id %}login-id{% endblock login_form_id %}"
+                      method="{% block login_form_method %}POST{% endblock login_form_method %}">
+
+                    {% csrf_token %}
+
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
+
+                    {% block login_form_non_field_errors %}
+                        {% if form.non_field_errors %}
+                            <div class="text-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                    {% endblock login_form_non_field_errors %}
+
+                    {% block login_form_fields %}
+                        {% for field in form %}
+                            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                                {{ field.label_tag }}
+                                {% if field.errors %}
+                                    <div class="text-danger">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                                {{ field|add_class:'form-control' }}
+                                {% if field.help_text %}
+                                    <p class="help-block">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endblock login_form_fields %}
+
+                    {% block login_form_buttons %}
+                        <button class="btn btn-primary" type="submit">Log in</button>
+                        <button class="btn btn-default" type="reset">Clear</button>
+                    {% endblock login_form_buttons %}
+                </form>
+            {% endblock login_form %}
+
+            <div class="social-auth-links text-center">
+                {% block login_social_auth %}
+                {% endblock login_social_auth %}
+            </div>
+
+            {% block login_links %}
+            {% endblock login_links %}
+        </div>
+    {% endblock login_content %}
+</div>
+{% endblock body %}

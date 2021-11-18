@@ -14,9 +14,16 @@ urlpatterns = [
     # path('calibrations', views.calibration_history,
     #      name='calibrations'),
 
+    # for dropdown list
     path('consumer_list', views.consumer_list, name='consumer_list'),
+    path('seal_list', views.seal_list, name='seal_list'),
+
+
     path('consumer_search', views.consumer_search, name='consumer_search'),
     path('consumer_save', views.consumer_save_assignedmeter, name='consumer_save'),
+    path('update_seal',
+         views.calibration_update_save, name='update_seal'),
+
 
     path('consumers/<int:id>', views.load_assigned_consumers, name='consumers'),
 

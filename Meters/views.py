@@ -334,7 +334,7 @@ def calibration_history(request):
         context = {'datetoday': datetoday, 'test': test}
         return render(request, html, context)
 
-# load data to select option - serverside dropdown
+# start load data to select2 option - serverside dropdown
 def consumer_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
@@ -356,6 +356,25 @@ def consumer_list(request):
             datas.append(data)
     return HttpResponse(json.dumps(datas, default=default), 'application/json')
 
+def seal_list(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        query = sealdetails.objects.filter(serialno__icontains=search,).values('id', 'sealid', 'meterdetailsid',
+                                                                               'serialno', 'techcrew', 'status', 'active').order_by('serialno')
+        list_data = []
+        datas = []
+        list_data = []
+        for index, item in enumerate(query):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s]['id'],
+                'text': list_data[s]['serialno'],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
+# end load data to select2 option - serverside dropdown
+
 
 def consumer_search(request):
     if request.is_ajax():
@@ -367,6 +386,7 @@ def consumer_search(request):
     return HttpResponse(json.dumps(form, default=default), 'application/json')
 
 
+# assigning meter to consumner
 def consumer_save_assignedmeter(request):
     if request.is_ajax():
         meterdetailsid = str(request.GET.get('meterdetailsid'))
@@ -383,6 +403,36 @@ def consumer_save_assignedmeter(request):
         ratecode = consumer[0][5]
         cursor.execute('insert into zanecometerpy.assigned_meter (transactiondate, metertestid, meterdetailsid, consumer, address, type, userid) ' +
                        'values ("' + str(metertestid) + '","' + str(metertestid) + '","' + str(meterdetailsid) + '","' + name + '","' + address + '","' + ratecode + '","' + str(request.user.id) + '")')
+        cursor.fetchall()
+
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+# put seal on meter
+def calibration_update_save(request):
+    if request.is_ajax():
+        meterdetailsid = str(request.GET.get('meterdetailsid'))
+        transactiondate = str(request.GET.get('transactiondate'))
+        seal_a = str(request.GET.get('seal_a'))
+        seal_b = str(request.GET.get('seal_b'))
+        metercondition = str(request.GET.get('metercondition'))
+        accuracy = str(request.GET.get('accuracy'))
+        reading = str(request.GET.get('reading'))
+        remarks = str(request.GET.get('remarks'))
+
+        cursor = connection.cursor()
+        # cursor.execute('SELECT idnewapply id, name, address, ordate, ornumber, ratecode FROM zanecoisd.newapply ' +
+        #                'where idnewapply = "' + str(consumerid) + '";')
+        # consumer = cursor.fetchall()
+
+        # name = consumer[0][1]
+        # address = consumer[0][2]
+        # ratecode = consumer[0][5]
+        cursor.execute('insert into zanecometerpy.meterseal (transactiondate, seal_a, seal_b, metercondition, accuracy, reading, remarks, meterdetailsid, userid) ' +
+                       'values ("' + transactiondate + '","' + seal_a + '","' + seal_b + '","' + metercondition + '","' + accuracy + '","' + reading + '","' + remarks + '","' + meterdetailsid + '","' + str(request.user.id) + '")')
         cursor.fetchall()
 
         if True:

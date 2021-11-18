@@ -62,7 +62,16 @@ class sealForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(sealForm, self).__init__(*args, **kwargs)
-        # self.fields['rrnumber'].required = False
+
+
+class sealdetailsForm(forms.ModelForm):
+    class Meta:
+        model = sealdetails
+        fields = ['id', 'sealid', 'meterdetailsid',
+                  'serialno', 'techcrew', 'status', 'active']
+
+    def __init__(self, *args, **kwargs):
+        super(sealdetailsForm, self).__init__(*args, **kwargs)
 
 
 class meterdetailsForm(forms.ModelForm):
@@ -89,20 +98,20 @@ class metertestForm(forms.ModelForm):
         self.fields['meterdetailsid'].required = True
 
 
-# class metersealForm(forms.ModelForm):
-#     class Meta:
-#         model = meterseal
-#         fields = ['id', 'meterdetailsid', 'sealdate', 'seal_a',
-#                   'seal_a', 'active', 'userid']
-#         labels = {
-#             'seal_a': 'Seal 1', 'seal_b': 'Seal 2 ', 'sealdate': 'Transaction Date'
-#         }
-#         widgets = {
-#             'sealdate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'sealdate', 'placeholder': 'Select a date'}),
-#         }
+class metersealForm(forms.ModelForm):
+    class Meta:
+        model = meterseal
+        fields = ['id', 'transactiondate', 'seal_a',
+                  'seal_b', 'metercondition', 'accuracy', 'reading', 'remarks', 'active', 'userid', 'meterdetailsid']
+        labels = {
+            'seal_a': 'Seal 1', 'seal_b': 'Seal 2 ', 'sealdate': 'Transaction Date'
+        }
+        widgets = {
+            'sealdate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'sealdate', 'placeholder': 'Select a date'}),
+        }
 
-#     def __init__(self, *args, **kwargs):
-#         super(metersealForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(metersealForm, self).__init__(*args, **kwargs)
 
 
 class assigned_meterForm(forms.ModelForm):

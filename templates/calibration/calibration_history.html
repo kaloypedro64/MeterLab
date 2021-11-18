@@ -51,14 +51,14 @@
                   <h3 class="card-title">Acquisition</h3>
                 </li> -->
                 <li class="nav-item">
-                  <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home"
-                    role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"><i
+                  <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill"
+                    href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"><i
                       class="fal fad fa-books-medical mr-2"></i>Consumer</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile"
-                    role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false"><i
-                      class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
+                  <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
+                    href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
+                    aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
                 </li>
               </ul>
             </div>
@@ -161,12 +161,12 @@
           <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        {% csrf_token %}
+        <!-- {% csrf_token %} -->
 
         <!-- <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
         <input type="hidden" name="area" id="id_area" value="{{ area }}">
-        <input type="hidden" name="id" id="id_id">
-        <input type="hidden" name="metertestid" id="id_metertestid"> -->
+        <input type="hidden" name="id" id="id_id">-->
+        <input type="hidden" id="id_meterdetailsid" name="meterdetailsid">
 
         <div class="form-group row">
           <label for="id_transactiondate" class="col-sm-4 col-form-label col-form-label-sm mlabel">Date:</label>
@@ -178,21 +178,19 @@
         <div class="form-group row">
           <label for="id_s1" class="col-sm-4 col-form-label mlabel">Calibration Seal 1:</label>
           <div class="col">
-            <input type="text" class="form-control form-control-sm" id="id_s1" name="s1" maxlength="145"
-              placeholder="Calibration Seal 1">
+            <select class="form-control form-control-sm dropdown-list-seal_a" id="id_seal_a" name="seal_a"></select>
           </div>
         </div>
         <div class="form-group row">
           <label for="id_s2" class="col-sm-4 col-form-label mlabel">Calibration Seal 2:</label>
           <div class="col">
-            <input type="text" class="form-control form-control-sm" id="id_s2" name="s2" maxlength="145"
-              placeholder="Calibration Seal 2">
+            <select class="form-control form-control-sm dropdown-list-seal_b" id="id_seal_b" name="seal_b"></select>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-form-label col-sm-4" >Meter Condition:</label>
+          <label class="col-form-label col-sm-4">Meter Condition:</label>
           <div class="col">
-            <select class="form-control form-control-sm select2" id="unit" name="unit">
+            <select class="form-control form-control-sm select2" id="id_metercondition" name="metercondition">
               <option value="0">Good</option>
               <option value="1">Damage</option>
               <option value="2">Substandard</option>
@@ -233,10 +231,16 @@
 <script type="text/javascript">
 
   let tablez
-  let condition = ['Good', 'Damage', 'Substandard','Rehab'];
+  let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
 
   let urlCalibrationHistory = "{% url 'calibrations' %}";
   let urlConsumers = "{% url 'consumers' 0 %}";
+  let urlUpdateSeal = "{% url 'update_seal' %}";
+
+  let urlConsumerList = "{% url 'consumer_list' %}";
+  let urlSealList = "{% url 'seal_list' %}";
+
+
 
 
   window.onload = function ()
@@ -351,7 +355,7 @@
         "searching": false,
         "info": false,
         "paging": true,
-         "lengthChange": true,
+        "lengthChange": true,
         "autoWidth": false,
         "columnDefs": [
           { "targets": [0], "searchable": false, "orderable": false, "visible": false },
@@ -407,30 +411,33 @@
       });
     }
 
-
-
-    var areafrom = "";
-    $('.dropdown-list-consumer').select2({
-      placeholder: 'Enter consumer',
-      ajax: {
-        url: "{% url 'consumer_list' %}",
-        dataType: 'json',
-        delay: 250,
-        data: function (data)
-        {
-          return {
-            searchTerm: data.term
-          };
-        },
-        processResults: function (response)
-        {
-          return {
-            results: response
-          };
-        },
-        cache: true
-      }
-    });
+    dropdownlist('Enter Consumer', '.dropdown-list-consumer', urlConsumerList);
+    dropdownlist('Enter Seal Number', '.dropdown-list-seal_a', urlSealList);
+    dropdownlist('Enter Seal Number', '.dropdown-list-seal_b', urlSealList);
+    function dropdownlist(placeholder, dropdown, url)
+    {
+      $(dropdown).select2({
+        placeholder: placeholder,
+        ajax: {
+          url: url,
+          dataType: 'json',
+          delay: 250,
+          data: function (data)
+          {
+            return {
+              searchTerm: data.term
+            };
+          },
+          processResults: function (response)
+          {
+            return {
+              results: response
+            };
+          },
+          cache: true
+        }
+      });
+    };
 
   };
 
@@ -450,19 +457,19 @@
   }
 
   function modal_calibration_update(params)
-    {
-      var data = tablez.rows('.selected').data();
-      var id = data[0][0];
-      var meterserial = data[0][2];
-      var metertestid = data[0][11];
+  {
+    var data = tablez.rows('.selected').data();
+    var id = data[0][0];
+    var meterserial = data[0][2];
+    var metertestid = data[0][11];
 
-      $('#id_id').val(id);
-      $('#id_metertestid').val(metertestid);
-      $('#id_serialno').val(meterserial);
-      $('#modal-calibration-update').find('.modal-title').text("Serial " + meterserial);
-      $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
+    $('#id_id').val(id);
+    $('#id_metertestid').val(metertestid);
+    $('#id_serialno').val(meterserial);
+    $('#modal-calibration-update').find('.modal-title').text("Serial " + meterserial);
+    $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
 
-    }
+  }
 
 
   function consumer_selected()
@@ -493,7 +500,6 @@
     var metertestid = $('#id_metertestid').val();
     var consumer = $('#id_consumer').val();
 
-    alert(meterdetailsid);
     $.ajax({
       url: "{% url 'consumer_save' %}",
       type: 'GET',
@@ -516,21 +522,62 @@
       }
     });
   }
-  function meters_assign()
-  {
-    var id = table_meters.rows('.selected').data()[0][0];
-    var name = table_meters.rows('.selected').data()[0][1];
-    var address = table_meters.rows('.selected').data()[0][2];
-    var context = '{"name": "' + name + '", "address":"' + address + '"}';
-    var encrypted = window.btoa(context)
-    window.open("add/" + encrypted, '_self');
 
-    // var encodedString = window.btoa(baseString); // returns "bXktbmFtZS0x"
-    // var decodedString = window.atob(encodedString);  // returns "my-name-1"
-  }
+  // function meters_assign()
+  // {
+  //   var id = table_meters.rows('.selected').data()[0][0];
+  //   var name = table_meters.rows('.selected').data()[0][1];
+  //   var address = table_meters.rows('.selected').data()[0][2];
+  //   var context = '{"name": "' + name + '", "address":"' + address + '"}';
+  //   var encrypted = window.btoa(context)
+  //   window.open("add/" + encrypted, '_self');
+
+  //   // var encodedString = window.btoa(baseString); // returns "bXktbmFtZS0x"
+  //   // var decodedString = window.atob(encodedString);  // returns "my-name-1"
+  // }
 
   //
 
+  function calibration_update_save(params)
+  {
+    // 'id', 'transactiondate', 'seal_a', 'seal_b', 'metercondition', 'accuracy', 'reading', 'remarks', 'active', 'userid', 'meterdetailsid'
+    var meterdetailsid = $('#id_meterdetailsid').val();
+    var transactiondate = $('#id_transactiondate').val();
+
+    var seal_a = $('#id_seal_a').val();
+    var seal_b = $('#id_seal_b').val();
+    var metercondition = $('#id_metercondition').val();
+    var accuracy = $('#id_accuracy').val();
+    var reading = $('#id_reading').val();
+    var remarks = $('#id_remarks').val();
+
+    $.ajax({
+      url: urlUpdateSeal,
+      type: 'GET',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      contentType: false,
+      data: {
+        meterdetailsid: meterdetailsid,
+        transactiondate: transactiondate,
+        seal_a: seal_a,
+        seal_b: seal_b,
+        metercondition: metercondition,
+        accuracy: accuracy,
+        reading: reading,
+        remarks: remarks,
+      },
+      success: function (data)
+      {
+        if (data.msg == "saved")
+          $('#modal-calibration-update').modal('hide');
+      },
+      error: function (e)
+      {
+        alert('err: ' + e);
+      }
+    });
+  }
 
 </script>
 
