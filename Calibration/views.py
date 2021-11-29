@@ -95,7 +95,7 @@ def calibration(request):
             isfiltered = " and ( md.serialno like '%" + filter + "%' ) "
         if status == '':
             status = 0
-        print('status', status)
+        # print('status', status)
         cursor = connection.cursor()
         query += "where status = "+ str(status) +" "+ isfiltered
         # query += 'where status = 0 ' + isfiltered
@@ -113,8 +113,8 @@ def calibration(request):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
     else:
-        context = {'datetoday': datetoday, 'header': 'Calibration',
-                   'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
+        # serials = meterdetails.objects.all()
+        context = {'datetoday': datetoday, 'header': 'Calibration', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
         return render(request, html_calibration_history, context)
 
 def calibrate_edit(request, id):
@@ -184,6 +184,23 @@ def seal_list(request):
             }
             datas.append(data)
     return HttpResponse(json.dumps(datas, default=default), 'application/json')
+
+def meters_list(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        query = meterdetails.objects.filter(serialno__icontains=search, active__icontains=0, status=0).values('id', 'meterid', 'serialno', 'accuracy', 'wms_status', 'status', 'active').order_by('serialno')
+        list_data = []
+        datas = []
+        list_data = []
+        for index, item in enumerate(query):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s]['id'],
+                'text': list_data[s]['serialno'],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
 # end load data to select2 option - serverside dropdown
 
 # assigning meter to consumer
@@ -224,6 +241,7 @@ def consumer_save_assignedmeter(request):
 # put seal on meter
 def calibration_update_save(request):
     if request.is_ajax():
+        # ismulti = str(request.GET.get('ismulti'))
         meterdetailsid = str(request.GET.get('meterdetailsid'))
         transactiondate = str(request.GET.get('transactiondate'))
         seal_a = str(request.GET.get('seal_a'))
@@ -252,22 +270,22 @@ def calibration_update_save(request):
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-def load_assigned_consumers(request, id):
-    if request.is_ajax():
-        start = int(request.GET.get('start'))
-        limit = int(request.GET.get('limit'))
-        filter = request.GET.get('filter')
-        order_by = request.GET.get('order_by')
-        query = assigned_meter.objects.filter(meterdetailsid=id, consumer__icontains=filter,).values(
-            'id', 'transactiondate', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid').order_by(order_by)
-        list_data = []
-        for index, item in enumerate(query[start:start+limit], start):
-            list_data.append(item)
-        data = {
-            'length': query.count(),
-            'objects': list_data,
-        }
-        return HttpResponse(json.dumps(data, default=default), 'application/json')
+# def load_assigned_consumers(request, id):
+#     if request.is_ajax():
+#         start = int(request.GET.get('start'))
+#         limit = int(request.GET.get('limit'))
+#         filter = request.GET.get('filter')
+#         order_by = request.GET.get('order_by')
+#         query = assigned_meter.objects.filter(meterdetailsid=id, consumer__icontains=filter,).values(
+#             'id', 'transactiondate', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid').order_by(order_by)
+#         list_data = []
+#         for index, item in enumerate(query[start:start+limit], start):
+#             list_data.append(item)
+#         data = {
+#             'length': query.count(),
+#             'objects': list_data,
+#         }
+#         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def load_meterseal(request, id):
     if request.is_ajax():
