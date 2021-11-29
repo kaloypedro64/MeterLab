@@ -114,19 +114,19 @@ class metersealForm(forms.ModelForm):
         super(metersealForm, self).__init__(*args, **kwargs)
 
 
-class assigned_meterForm(forms.ModelForm):
-    class Meta:
-        model = assigned_meter
-        fields = ['id', 'transactiondate', 'meterdetailsid',
-                  'consumer', 'address', 'type', 'active', 'userid']
-        # labels = {
-        #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit', 'area': 'Area'
-        # }
-        widgets = {
-            # 'assigneddate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'assigneddate', 'placeholder': 'Select a date'}),
-            # 'datepaid': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'datepaid', 'placeholder': 'Select a date'}),
-        }
+# class assigned_meterForm(forms.ModelForm):
+#     class Meta:
+#         model = assigned_meter
+#         fields = ['id', 'transactiondate', 'meterdetailsid',
+#                   'consumer', 'address', 'type', 'active', 'userid']
+#         # labels = {
+#         #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit', 'area': 'Area'
+#         # }
+#         widgets = {
+#             # 'assigneddate': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'assigneddate', 'placeholder': 'Select a date'}),
+#             # 'datepaid': forms.DateInput(format=('%d-%m-%Y'), attrs={'class': 'datepaid', 'placeholder': 'Select a date'}),
+#         }
 
-    def __init__(self, *args, **kwargs):
-        super(assigned_meterForm, self).__init__(*args, **kwargs)
-        # self.fields['rrnumber'].required = False
+#     def __init__(self, *args, **kwargs):
+#         super(assigned_meterForm, self).__init__(*args, **kwargs)
+#         # self.fields['rrnumber'].required = False

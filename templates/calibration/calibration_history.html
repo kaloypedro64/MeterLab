@@ -9,100 +9,128 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-2 mr-2">
+          <div class="input-group-prepend" style="height: 40px;">
+            <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown" style="height: 31px">
+              For Calibration</button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
+              <a class="dropdown-item" href="#" onclick="selected_status(2)"> Calibrated</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" onclick="selected_status()"> All</a>
+            </div>
+          </div>
         </div>
         <div class="ml-auto ">
-          <button onclick="modal_assign()" class="btn btn-info btn-sm mb-2">
+          <!-- <button onclick="modal_assign()" class="btn btn-info btn-sm mb-2">
             <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign
-              Selected</span></button>
+              Selected</span></button> -->
         </div>
       </div>
     </div>
     <section class="content">
       <div class="row">
-        <section class="col-lg-6 connectedSortable">
+        <section class="col-lg-12 connectedSortable">
           <div class="card">
             <div class="card-body">
-              <table id="tablez" class="table table-nowrap table-hover table-striped dtr-inline">
+              <table id="tablez" class="table table-nowrap table-hover">
                 <thead>
                   <tr>
                     <th data-sort-column="" class="leftmost"><input type="checkbox" id="select_all"><label
                         for="select_all"><span></span></label></th>
                     <th style="width: 60px;">Action</th>
-                    <th>Date</th>
                     <th>Serial No.</th>
                     <th>Brand</th>
                     <th>Type</th>
-                    <!-- <th>Amphere</th> -->
-                    <!-- <th>Accuracy</th> -->
-                    <!-- <th>Status</th> -->
+                    <th>Amphere</th>
+                    <th>Accuracy</th>
+                    <th>Status</th>
+                    <!-- <th>metertestid</th> -->
+                    <!-- <th style="display: none;">metertestid</th> -->
                     <!-- <th>Condition</th> -->
                     <!-- <th>Seal 1</th> -->
                     <!-- <th>Seal 2</th> -->
-                    <th style="display: none;">metertestid</th>
                   </tr>
                 </thead>
               </table>
         </section>
-        <section class="col-lg-6 connectedSortable">
-          <div class="card card-default card-tabs">
-            <div class="card-header p-0 pt-1">
-              <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-                <!-- <li class="pt-2 px-3">
-                  <h3 class="card-title">Acquisition</h3>
-                </li> -->
-                <li class="nav-item">
-                  <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill"
-                    href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"><i
-                      class="fal fad fa-books-medical mr-2"></i>Consumer</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
-                    href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
-                    aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body">
-              <div class="tab-content" id="custom-tabs-two-tabContent">
-                <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel"
-                  aria-labelledby="custom-tabs-two-home-tab">
-                  <table id="Table-Consumer" class="table table-nowrap table-striped dtr-inline">
-                    <thead>
-                      <tr>
-                        <th style="width: 60px;"></th>
-                        <th>Date</th>
-                        <th>Consumer</th>
-                        <th>Address</th>
-                        <!-- <th>OR No.</th> -->
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
-                  aria-labelledby="custom-tabs-two-profile-tab">
-                  <table id="Table-mSeal" class="table table-nowrap table-striped dtr-inline">
-                    <thead>
-                      <tr>
-                        <th style="width: 60px;"></th>
-                        <th style="width: 120px;">Date</th>
-                        <th>Seal 1</th>
-                        <th>Seal 2</th>
-                        <th>Condition</th>
-                        <th>Accuracy</th>
-                        <th>Reading</th>
-                        <th>Remarks</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <!-- /.card -->
-          </div>
-
-        </section>
+        <!-- <section class="col-lg-7 connectedSortable">
+          something here
+        </section> -->
       </div>
     </section>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-details">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-default ">
+        <h5 class="modal-title">Assign Meter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="card card-default card-tabs">
+          <div class="card-header p-0 pt-1">
+            <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+              <!-- <li class="pt-2 px-3">
+                          <h3 class="card-title">Acquisition</h3>
+                        </li> -->
+              <li class="nav-item">
+                <a class="nav-link " id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home"
+                  role="tab" aria-controls="custom-tabs-two-home" aria-selected="true"><i
+                    class="fal fad fa-books-medical mr-2"></i>Consumer</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link active" id="custom-tabs-two-profile-tab" data-toggle="pill"
+                  href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
+                  aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="tab-content" id="custom-tabs-two-tabContent">
+              <div class="tab-pane fade " id="custom-tabs-two-home" role="tabpanel"
+                aria-labelledby="custom-tabs-two-home-tab">
+                <table id="Table-Consumer" class="table table-nowrap table-striped dtr-inline">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;"></th>
+                      <th>Date</th>
+                      <th>Consumer</th>
+                      <th>Address</th>
+                      <!-- <th>OR No.</th> -->
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="tab-pane fade show active" id="custom-tabs-two-profile" role="tabpanel"
+                aria-labelledby="custom-tabs-two-profile-tab">
+                <table id="Table-MeterSeal" class="table table-sm table-nowrap dtr-inline table-hover">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;"></th>
+                      <th>Date</th>
+                      <th>Seal 1</th>
+                      <th>Seal 2</th>
+                      <th>Condition</th>
+                      <th>Accuracy</th>
+                      <th>Reading</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- <div class="modal-footer justify-content-left">
+        <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="consumer_save()"><i
+            class="fal fa-save mr-1"></i> Save</button>
+      </div> -->
+      </div>
+    </div>
   </div>
 </div>
 
@@ -166,7 +194,7 @@
         <!-- <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
         <input type="hidden" name="area" id="id_area" value="{{ area }}">
         <input type="hidden" name="id" id="id_id">-->
-        <input type="hidden" id="id_meterdetailsid" name="meterdetailsid">
+        <input type="hidden" name="meterdetailsid" id="id_meterdetailsid">
 
         <div class="form-group row">
           <label for="id_transactiondate" class="col-sm-4 col-form-label col-form-label-sm mlabel">Date:</label>
@@ -215,8 +243,8 @@
         <div class="form-group row">
           <label for="id_remarks" class="col-sm-4 col-form-label mlabel">Remarks:</label>
           <div class="col">
-            <textarea type="text" class="form-control form-control-sm" id="id_remarks" name="remarks" rows="2"
-              style="resize: none;" placeholder="Remarks"></textarea>
+            <textarea type="text" class="form-control form-control-sm" id="id_remarks" name="remarks" rows="2" rows="5"
+              placeholder="Remarks"></textarea>
           </div>
         </div>
       </div>
@@ -228,106 +256,144 @@
   </div>
 </div>
 
+<script src="{% static "js/alert.js" %}"></script>
 <script type="text/javascript">
 
-  let tablez
+  let tablez;
+  let lbl_status = ['For Calibration', 'Calibrated', 'All'];
   let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
+  let meterstatus = [' Initial Testing', 'Transfer', 'Available', 'Installed', 'Damage/Salvage', 'Removed Meter', 'Calibration/Repair', 'for Verification'];
+  let urlCalibrated = "{% url 'calibrated' %}";
 
-  let urlCalibrationHistory = "{% url 'calibrations' %}";
+
+  // datatables
   let urlConsumers = "{% url 'consumers' 0 %}";
+  let urlMeterSeal = "{% url 'meterseal' 0 %}";
+
   let urlUpdateSeal = "{% url 'update_seal' %}";
 
+  // serverside dropdown
   let urlConsumerList = "{% url 'consumer_list' %}";
   let urlSealList = "{% url 'seal_list' %}";
 
+  let status;
 
 
+
+
+
+  function selected_status(params)
+  {
+    $('.lbl_status').html(lbl_status[params]);
+
+     $("#tablez").dataTable().fnDestroy();
+    Load_serials_table(params);
+  }
+
+
+  function Load_serials_table(params)
+  {
+    tablez = $('#tablez').DataTable({
+      // "scrollX": true,
+      "searching": true,
+      // "stateSave": true,
+      "info": true,
+      "paging": true,
+      // "lengthChange": true,
+      "autoWidth": false,
+      "responsive": true,
+      "columnDefs": [
+        { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+        // { "targets": [7], "className": "text-right" }
+      ],
+      "keys": true,
+      "keys": { "blurable": false },
+      "select": true,
+      "select": {
+        'style': 'single',
+        'selector': 'td:first-child'
+      },
+      "processing": true,
+      "serverSide": true,
+      "ajax": function (data, callback, settings)
+      {
+        var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+        var direction = "";
+        if (data.order[0].dir == "desc") { direction = "-" };
+        $.get(urlCalibrated, {
+          status: params,
+          limit: data.length,
+          start: data.start,
+          filter: data.search.value,
+          order_by: direction + sort_column_name
+        }, function (res)
+        {
+          callback({
+            recordsTotal: res.length,
+            recordsFiltered: res.length,
+            data: res.objects
+          });
+        });
+      },
+      columns: [
+        {
+          "data": "0", "render": function (data, type, row)
+          {
+            return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
+          }
+        },
+        {
+          "data": "0", "render": function (data, type, row)
+          {
+            return '<div class="input-group-prepend">' +
+              '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+              '    <div class="dropdown-menu">' +
+              // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
+              // '      <div class="dropdown-divider"></div>' +
+              '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Meter Calibration Update</a>' +
+              '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
+              '      <div class="dropdown-divider"></div>' +
+              '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
+              '    </div>' +
+              '  </div >'
+          }
+        },
+        //
+        { "data": "1" },
+        {
+          "data": "2", "render": function (data, type, row)
+          {
+            return '<td style="width: fit-content;"> <a href="#" onclick="modal_details()" title="View Details">' + data + '</a></td>'
+          }
+        },
+        // { "data": "2" },
+        { "data": "3" },
+        { "data": "4" },
+        { "data": "5" },
+        {
+          "data": "6", "render": function (data, type, row)
+          {
+            return '<span style=""> ' + meterstatus[data] + '</span>'
+          }
+        },
+        // { "data": "7" },
+        // {
+        //   "data": "5", "render": function (data, type, row)
+        //   {
+        //     return '<span style=""> ' + condition[row["5"]] + '</span>'
+        //   }
+        // },
+        // { "data": "9" },
+      ]
+    });
+    tablez.column(0).visible(false);
+    tablez.column(6).visible(false);
+  }
 
   window.onload = function ()
   {
-    function Load_serials_table()
-    {
-      tablez = $('#tablez').DataTable({
-        "searching": true,
-        "processing": true,
-        // "stateSave": true,
-        "info": true,
-        "paging": true,
-        "lengthChange": true,
-        "autoWidth": false,
-        "responsive": true,
-        "columnDefs": [
-          { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
-          // { "targets": [7], "className": "text-right" }
-        ],
-        "keys": true,
-        "keys": { "blurable": false },
-        "select": true,
-        "select": {
-          'style': 'single',
-          'selector': 'td:first-child'
-        },
-        "serverSide": true,
-        "processing": true,
-        "ajax": function (data, callback, settings)
-        {
-          var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
-          var direction = "";
-          if (data.order[0].dir == "desc") { direction = "-" };
-          $.get(urlCalibrationHistory, {
-            limit: data.length,
-            start: data.start,
-            filter: data.search.value,
-            order_by: direction + sort_column_name
-          }, function (res)
-          {
-            callback({
-              recordsTotal: res.length,
-              recordsFiltered: res.length,
-              data: res.objects
-            });
-          });
-        },
-        columns: [
-          {
-            "data": "0", "render": function (data, type, row)
-            {
-              return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
-            }
-          },
-          {
-            "data": "0", "render": function (data, type, row)
-            {
-              return '<div class="input-group-prepend">' +
-                '  <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                '    <div class="dropdown-menu">' +
-                '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')>Meter Calibration Update</a>' +
-                '      <div class="dropdown-divider"></div>' +
-                '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')">Assign this meter</a>' +
-                '    </div>' +
-                '  </div >'
-            }
-          },
-          { "data": "1" },
-          { "data": "2" },
-          { "data": "3" },
-          { "data": "4" },
-          // { "data": "5" },
-          // { "data": "6" },
-          // { "data": "7" },
-          // {
-          //   "data": "5", "render": function (data, type, row)
-          //   {
-          //     return '<span style=""> ' + condition[row["5"]] + '</span>'
-          //   }
-          // },
-          { "data": "9" },
-        ]
-      });
-      tablez.column(0).visible(false);
-      tablez.column(6).visible(false);
-    }
-    Load_serials_table();
+
+    Load_serials_table(0);
 
     $('#tablez tbody').on('click', 'tr', function ()
     {
@@ -343,15 +409,20 @@
 
       var data = tablez.rows(this).data();
       var id = data[0][0];
-
+      var metertestid = data[0][9];
       $("#Table-Consumer").dataTable().fnDestroy();
-      loadDetails(id);
+      $("#Table-MeterSeal").dataTable().fnDestroy();
+
+      loadConsumerDetails(id);
+      loadMeterSealDetails(metertestid);
 
     });
 
-    function loadDetails(id)
+
+
+    function loadConsumerDetails(id)
     {
-      tabledetails = $('#Table-Consumer').DataTable({
+      $('#Table-Consumer').DataTable({
         "searching": false,
         "info": false,
         "paging": true,
@@ -391,24 +462,80 @@
           });
         },
         columns: [
-          {
-            "data": "id", "render": function (data, type, row)
-            {
-              return '<td class="selected"><input type="checkbox" id="item_20" value="20"><label for="item_20"><span></span></label></td>'
-            }
-          },
+          { "data": "id" },
           { "data": "transactiondate" },
           { "data": "consumer" },
           { "data": "address" },
-
-
         ],
+        // "dom": '<lf<t>ip>',
+
+        "dom": '<"pull-left" f><t>',
         "dom": '<"top"i>rt<"bottom"flp><"clear">',
-        "fnInitComplete": function (oSettings, json)
+        // "fnInitComplete": function (oSettings, json)
+        // {
+        //   $('#table_meterdetails tbody tr:eq(0)').click();
+        // },
+      });
+    }
+
+    function loadMeterSealDetails(id)
+    {
+      $('#Table-MeterSeal').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": function (data, callback, settings)
         {
-          $('#table_meterdetails tbody tr:eq(0)').click();
+          var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+          var direction = "";
+          if (data.order[0].dir == "desc") { direction = "-" };
+          $.get(urlMeterSeal.replace('0', id), {
+            id: id,
+            limit: data.length,
+            start: data.start,
+            filter: data.search.value,
+            order_by: direction + sort_column_name
+          }, function (res)
+          {
+            callback({
+              recordsTotal: res.length,
+              recordsFiltered: res.length,
+              data: res.objects
+            });
+          });
+        },
+        columns: [
+          { "data": "id" },
+          { "data": "transactiondate", "type": 'date-dd-mmm-yyyy' },
+          { "data": "seal_a" },
+          { "data": "seal_b" },
+          { "data": "metercondition" },
+          { "data": "accuracy" },
+          { "data": "reading" },
+          { "data": "remarks" },
+        ],
+
+        "searching": true,
+        "info": true,
+        "paging": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "scrollCollapse": true,
+        "responsive": true,
+        "fixedColumns": {
+          "leftColumns": 1
+        },
+        "columnDefs": [
+          { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+          { "targets": [1], "width": "15%", },
+        ],
+
+        "initComplete": function (settings, json)
+        {
+          $("#Table-MeterSeal").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+          // $('#Table-MeterSeal').DataTable().columns.adjust().draw();
         },
       });
+      // MeterSealtable.columns.adjust().draw();
     }
 
     dropdownlist('Enter Consumer', '.dropdown-list-consumer', urlConsumerList);
@@ -446,7 +573,7 @@
     var data = tablez.rows('.selected').data();
     var id = data[0][0];
     var meterserial = data[0][2];
-    var metertestid = data[0][11];
+    var metertestid = data[0][9];
 
     $('#id_id').val(id);
     $('#id_metertestid').val(metertestid);
@@ -458,14 +585,11 @@
 
   function modal_calibration_update(params)
   {
+
     var data = tablez.rows('.selected').data();
     var id = data[0][0];
-    var meterserial = data[0][2];
-    var metertestid = data[0][11];
-
-    $('#id_id').val(id);
-    $('#id_metertestid').val(metertestid);
-    $('#id_serialno').val(meterserial);
+    var meterserial = data[0][1];
+    $('#id_meterdetailsid').val(id);
     $('#modal-calibration-update').find('.modal-title').text("Serial " + meterserial);
     $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
 
@@ -496,6 +620,7 @@
   function consumer_save(params)
   {
     // 'id', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid'
+    var transactiondate = $('#id_transactiondate').val();
     var meterdetailsid = $('#id_id').val();
     var metertestid = $('#id_metertestid').val();
     var consumer = $('#id_consumer').val();
@@ -507,6 +632,7 @@
       contentType: 'application/json; charset=utf-8',
       contentType: false,
       data: {
+        transactiondate: transactiondate,
         meterdetailsid: meterdetailsid,
         metertestid: metertestid,
         consumer: consumer
@@ -544,8 +670,8 @@
     var meterdetailsid = $('#id_meterdetailsid').val();
     var transactiondate = $('#id_transactiondate').val();
 
-    var seal_a = $('#id_seal_a').val();
-    var seal_b = $('#id_seal_b').val();
+    var seal_a = $('#id_seal_a option:selected').html()
+    var seal_b = $('#id_seal_b option:selected').html()
     var metercondition = $('#id_metercondition').val();
     var accuracy = $('#id_accuracy').val();
     var reading = $('#id_reading').val();
@@ -571,6 +697,8 @@
       {
         if (data.msg == "saved")
           $('#modal-calibration-update').modal('hide');
+          msgAlert('Save', 'Successfully calibrated!', 1);
+          $('#tablez').DataTable().ajax.reload(null, false);
       },
       error: function (e)
       {
@@ -579,6 +707,16 @@
     });
   }
 
+  function modal_details(params)
+  {
+    var data = tablez.rows('.selected').data();
+    var id = data[0][0];
+    var meterserial = data[0][1];
+    // var metertestid = data[0][7];
+
+    $('#modal-details').find('.modal-title').text("Details of: " + meterserial);
+    $('#modal-details').modal('show').draggable({ handle: ".modal-header" });
+  }
 </script>
 
 

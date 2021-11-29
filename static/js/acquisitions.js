@@ -95,6 +95,8 @@ window.onload = function ()
     }
     loadAcquisition(0);
     loadAcquisition(1);
+
+
 };
 
 function modal_acquisition(params)
@@ -106,8 +108,10 @@ function modal_acquisition(params)
         $('#id_acqtype').val(0);
         $('#modal-acquisition').find('.modal-title').text("Meter Acquisition");
     }
+    dropdownlist('Search RRNumbers', '.dropdown-list-rrnumber', urlrrnumbers);
+    dropdownlist('Search Supplier', '.dropdown-list-suppliers', urlsuppliers);
     $('#modal-acquisition').modal('show').draggable({ handle: ".modal-header" });
-    select_supplier(0);
+    // select_supplier(0);
 }
 
 function modal_editacquisition(params)
@@ -136,7 +140,7 @@ function modal_editacquisition(params)
 function acquisition_save()
 {
     var transactiondate = $('#id_transactiondate').val();
-    var rrno = $('#id_rrnumber').val();
+    var rrno = $('#id_rrnumber option:selected').html();
     var supplierid = $('#id_supplierid').val();
     var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
     var acqtype = $('#id_acqtype').val();
@@ -156,7 +160,7 @@ function acquisition_save()
                 if (acqtype == 0)
                     window.open(acqAdd.replace('0',data.id), "_self");
                 else
-                    window.open(acqAdd.replace('0', data.id), "");
+                    window.open(acqAdds.replace('0', data.id), "_self");
                 // window.location('acquisition/', '_black');
             }
         },
@@ -167,16 +171,66 @@ function acquisition_save()
     });
 }
 
+function select_rrnumber(params)
+{
+    // $('#id_supplier').val(null).trigger('change');
+    var id = $('#id_rrnumber').val();
+    $.ajax({
+        url: urlsrrnumbers,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: { id: id, },
+        success: function (data)
+        {
+            var suppliers = $('#id_supplier');
+            var newOption = new Option(data.form[0][3], data.form[0][2], true, true);
+            suppliers.append(newOption).trigger('change');
+            $('#id_supplierid').val(data.form[0][2]);
+        },
+        error: function (e)
+        {
+            alert('err: selected_consumer');
+        }
+    });
+}
+
 function select_supplier(params)
 {
-    var e = document.getElementById("id_supplier");
-    if (params == null) params = e.selectedIndex
-    var option = e.options[params];
-    // var attrs = option.attributes;
-    var data = option.getAttribute("data-address");
-    $('#id_supplierid').val(option.value);
-    document.getElementById('lblAddress').innerHTML = data;
+    // var e = document.getElementById("id_supplier");
+    // if (params == null) params = e.selectedIndex
+    // var option = e.options[params];
+    // // var attrs = option.attributes;
+    // var data = option.getAttribute("data-address");
+    // $('#id_supplierid').val(option.value);
+    // document.getElementById('lblAddress').innerHTML = data;
+
+    var id = $('#id_supplier').val();
+    $.ajax({
+        url: urlssuppliers,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: { id: id, },
+        success: function (data)
+        {
+            // var lastoption = new Option(data.form[0][2], true, true);
+            // $('#id_supplier').append(lastoption);
+            // $('#id_supplier').trigger('change');
+
+            // id_supplier id_supplierid
+
+            $('#lblAddress').html(data.form[0][2]);
+        },
+        error: function (e)
+        {
+            alert('err: selected_consumer');
+        }
+    });
 }
+
 
 
 // function meter_save(id)

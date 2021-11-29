@@ -5,22 +5,6 @@ window.onload = function ()
     function loadMeters()
     {
         table = $('#table_meters').DataTable({
-            "searching": false,
-            "info": false,
-            "paging": true,
-            "autoWidth": false,
-            "columnDefs": [
-                { "targets": [0, 1], "searchable": false, "orderable": false, "visible": false },
-                { "targets": [1], "width": "14%" },
-                { "targets": [6], "className": "text-right" }
-            ],
-            "keys": true,
-            "keys": { "blurable": false },
-            "select": true,
-            "select": {
-                "style": 'multi',
-                "selector": 'td:first-child',
-            },
             "serverSide": true,
             "processing": true,
             "ajax": function (data, callback, settings)
@@ -83,9 +67,29 @@ window.onload = function ()
                 { "data": "units" },
 
             ],
+            // "scrollX": true,
+            "searching": false,
+            "info": false,
+            "paging": true,
+            "autoWidth": true,
+            "responsive": true,
+            "columnDefs": [
+                // { "targets": [0], "searchable": false, "orderable": false,},
+                { "targets": [0, 1], "searchable": false, "orderable": false, "visible": false, "width": "54%" },
+                { "targets": [6], "className": "text-right" }
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                "style": 'single',
+                "selector": 'td:first-child',
+            },
             "dom": '<"top"i>rt<"bottom"flp><"clear">',
             "fnInitComplete": function (oSettings, json)
             {
+                $('#table_meters').css('width', '100%');
+                $("#table_meters").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
                 $('#table_meters tbody tr:eq(0)').click();
             },
         });
@@ -114,9 +118,14 @@ window.onload = function ()
 
     $(window).bind('resize', function ()
     {
+        $("#table_meters").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+        $("#table_meterdetails").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
         $('#table_meters').css('width', '100%');
         $('#table_meterdetails').css('width', '100%');
     });
+
+    jQuery('.table_meters').wrap('<div class="dataTables_scroll" />');
+    jQuery('.table_meterdetails').wrap('<div class="dataTables_scroll" />');
 
     $('#select_all').on('click', function ()
     {
@@ -128,21 +137,6 @@ window.onload = function ()
     {
         let stats = [ 'For calibration', 'Pass', 'Failed' ];
         tabledetails = $('#table_meterdetails').DataTable({
-            "searching": false,
-            "info": false,
-            "paging": true,
-            "autoWidth": false,
-            "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
-                { "targets": [1], "width": "14%" },
-            ],
-            "keys": true,
-            "keys": { "blurable": false },
-            "select": true,
-            "select": {
-                "style": 'multi',
-                "selector": 'td:first-child',
-            },
             "serverSide": true,
             "processing": true,
             "ajax": function (data, callback, settings)
@@ -185,12 +179,12 @@ window.onload = function ()
                         }
                         else
                         {
-                        return '<center>' +
-                            '<div class="btn-group">' +
-                            '<a href="single/' + row["id"] + '" class="btn btn-info btn-xs text-sm" title="Calibrate" onclick=""><span style="font-size: 12px;"> Calibrate</span></a>' +
-                            '</div>' +
-                            '</center>'
-                        }
+                            return '<center>' +
+                                '<div class="btn-group">' +
+                                '<a href="single/' + row["id"] + '" class="btn btn-info btn-xs text-sm" title="Calibrate" onclick=""><span style="font-size: 12px;"> Calibrate</span></a>' +
+                                '</div>' +
+                                '</center>'
+                            }
                     }
                 },
                 { "data": "serialno" },
@@ -203,10 +197,30 @@ window.onload = function ()
                 },
 
             ],
+            // "scrollX": true,
+            "searching": false,
+            "info": false,
+            "paging": true,
+            "autoWidth": true,
+            "responsive": true,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+                // { "targets": [0], "searchable": false, "orderable": false,},
+                { "targets": [1], "width": "14%" },
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                "style": 'multi',
+                "selector": 'td:first-child',
+            },
             "dom": '<"top"i>rt<"bottom"flp><"clear">',
             "fnInitComplete": function (oSettings, json)
             {
-                $('#table_meterdetails tbody tr:eq(0)').click();
+                $('#table_meterdetails').css('width', '100%');
+                $("#table_meterdetails").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+            //     $('#table_meterdetails tbody tr:eq(0)').click();
             },
         });
     }

@@ -1,8 +1,8 @@
 window.onload = function ()
 {
 
-    select_brand(0);
-    select_mtypes(0);
+    // select_brand(0);
+    // select_mtypes(0);
 
     function loadMeters(params)
     {
@@ -12,7 +12,7 @@ window.onload = function ()
             "paging": true,
             "autoWidth": false,
             "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+                { "targets": [0, 1], "searchable": false, "orderable": false, "visible": false },
                 { "targets": [1, 5], "width": "14%", "orderable": false, "visible": true },
                 { "targets": [5], "className": 'text-right', },
             ],
@@ -78,12 +78,13 @@ window.onload = function ()
             ],
             "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
-        // tablex.column(0).visible(false);
+        tablex.column(0).visible(false);
     }
     loadMeters();
 
     function loadBrand()
     {
+
         table_brand = $('#table_brand').DataTable({
             "searching": false,
             "info": false,

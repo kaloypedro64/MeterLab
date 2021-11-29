@@ -31,10 +31,10 @@
           <h1>Meter Acquisition</h1>
         </div> -->
         <div class="ml-auto ">
-          <div class="btn-group">
-            <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2" title="Meter Acquisition"><span style="font-size: 12px;"><i class="fal fad fa-books-medical mr-2"></i>Meter</span></a>
-            <a href="#" type="button" onclick="modal_acquisition(1)" class="btn btn-info mb-2" title="Meter Seal Acquisition"><span style="font-size: 12px;"><i class="fal fa-solid fa-lasso mr-2"></i>Seal</span></a>
-          </div>
+          <!-- <div class="btn-group"> -->
+            <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2" title="Meter Acquisition"><span style="font-size: 12px;"><i class="fal fad fa-books-medical mr-2"></i>Meter Acquisition</span></a>
+            <a href="#" type="button" onclick="modal_acquisition(1)" class="btn btn-info mb-2" title="Meter Seal Acquisition"><span style="font-size: 12px;"><i class="fal fa-solid fa-lasso mr-2"></i>Seal Acquisition</span></a>
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
 </div>
 
 <div class="modal fade" id="modal-acquisition">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary ">
         <h5 class="modal-title">Acquisition Information</h5>
@@ -122,7 +122,7 @@
         <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
         <input type="hidden" name="area" maxlength="45" required="" id="id_area" value="{{ area }}">
         <div class="form-group row">
-          <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm mlabel">Transaction
+          <label for="id_transactiondate" class="col-sm-3 col-form-label col-form-label-sm">Transaction
             Date:</label>
           <div class="col">
             <input type="date" class="form-control form-control-sm" id="id_transactiondate" name="transactiondate"
@@ -130,29 +130,19 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="id_brand" class="col-sm-3 col-form-label mlabel">RR Number:</label>
+          <label for="id_brand" class="col-sm-3 col-form-label">RR Number:</label>
           <div class="col">
-            <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
-              placeholder="RR #" style="text-transform: uppercase;">
+              <select class="form-control form-control-sm dropdown-list-rrnumber" id="id_rrnumber" name="rrnumber"
+                onchange="select_rrnumber()"></select>
           </div>
         </div>
         <input type="hidden" name="supplierid" id="id_supplierid">
         <div class="form-group row">
-          <label for="id_supplier" class="col-sm-3 col-form-label mlabel">Supplier:</label>
+          <label for="id_supplier" class="col-sm-3 col-form-labe">Supplier:</label>
           <div class="col-sm-9">
-            <select class="form-control form-control-sm select2" id="id_supplier" name="supplier"
-              onchange="select_supplier()">
-              {% for row in mSupplier %}
-              {% if row == 0 %}
-              <option selected="selected" value="{{row.id}}" data-address="{{row.address}}">{{ row.suppliername }}
-              </option>
-              {% else %}
-              <option value="{{row.id}}" data-address="{{row.address}}">
-                {{row.suppliername}}</option>
-              {% endif %}
-              {% endfor %}
-            </select>
-            <span class="col-form-label mr-2" id="lblAddress"></span>
+            <select class="form-control form-control-sm dropdown-list-suppliers" id="id_supplier" name="supplier"
+              onchange="select_supplier()"></select>
+            <span class="col-form-label mr-2 ml-2" id="lblAddress"></span>
           </div>
         </div>
       </div>
@@ -184,8 +174,8 @@
         <div class="form-group row">
           <label for="id_brand" class="col-sm-3 col-form-label mlabel">RR Number:</label>
           <div class="col">
-            <input type="text" class="form-control form-control-sm" id="id_rrnumber" name="rrnumber" maxlength="145"
-              placeholder="RR #" style="text-transform: uppercase;">
+            <select class="form-control form-control-sm dropdown-list-rrnumbers" id="id_rrnumber" name="rrnumber"
+              onchange=""></select>
           </div>
         </div>
         <input type="hidden" name="supplierid" id="id_supplierid">
@@ -217,17 +207,26 @@
 </div>
 
 <script type="text/javascript">
-  let acqTable
+  let acqTable;
   let acqListUrl = "{% url 'acqList' %}";
   let acqAdd = "{% url 'acqadd' 0 %}";
   let acqSave = "{% url 'acqsave' %}";
   let acqEdit = "{% url 'acqedit' 0 %}";
   let acqDelete = "{% url 'acqdelete' 0 %}";
 
+  let urlrrnumbers = "{% url 'rrnumbers' %}";
+  let urlsrrnumbers = "{% url 'selected_rrnumber' %}";
+  let urlsuppliers = "{% url 'suppliers' %}";
+  let urlssuppliers = "{% url 'selected_supplier' %}";
+
+
   // seal
   let acqAdds = "{% url 'acqadds' 0 %}";
 
-
+  // window.onload = function ()
+  // {
+    // dropdownlist('Search Serial', '.dropdown-list-rrnumbers', urlrrnumbers);
+  // }
 </script>
 <script src="{% static "js/acquisitions.js" %}"></script>
 <script src="{% static "js/alert.js" %}"></script>

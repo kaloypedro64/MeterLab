@@ -1,0 +1,235 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "base/header.html" %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Invoice</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Invoice</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="callout callout-info">
+                        <h5><i class="fas fa-info"></i> Note:</h5>
+                        This page has been enhanced for printing. Click the print button at the bottom of the invoice to
+                        test.
+                    </div>
+
+                    <!-- Main content -->
+                    <div class="invoice p-3 mb-3">
+                        <!-- title row -->
+                        <div class="row header">
+                            <div class="col-sm-2 invoice-col">
+                                <img src="{% static "dist/img/logo2-1.2x1.2.png" %}" alt="ZANECO">
+                                <br>
+                                <br>
+                            </div>
+                            <div class="col-9 mt-2">
+                                <center>
+                                <b>
+                                    ZAMBOANGA DEL NORTE ELECTRIC COOPERATIVE, INC.<br>
+                                    TECHNICAL SERVICES DEPARTMENT (TSD)<br>
+                                    Power System and Special Equipment Division (PSSED)<br>
+
+                                </b>
+                                <address>
+                                    <strong></strong><br>
+                                    <b>METER TEST REPORT</b>
+                                </address>
+                                </center>
+                            </div>
+                        </div>
+
+                        <!-- Table row -->
+                        <hr>
+                        <div class="row font_twenty">
+                            <div class="col-sm-2" style="text-align: right;">
+                                <!-- Consumer: <br>
+                                            Address: -->
+                            </div>
+                            <div class="col-sm-3">
+                                <!-- Name No <br>
+                                            NPA -->
+                            </div>
+                            <div class="col-sm-4" style="text-align: right;">
+                                Date:
+                            </div>
+                            <div class="col">
+                                {{ datetoday }}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row font_twenty">
+                            <div class="col">
+                                <center>
+                                    <p style="background-color: grey; border: 1px solid rgba(77, 72, 72, 0.3);">DESCRIPTION OF METER</p>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="row font_twenty">
+                            <div class="col-sm-2" style="text-align: right;">
+                                Meter Name:<br>
+                                Serial No.:<br>
+                                Reading:<br>
+                                Type / Class:<br>
+                            </div>
+                            <div class="col-sm-3">
+                                {{ form.0.0 }}<br>
+                                {{ form.0.1 }}<br>
+                                {{ form.0.16 }}<br>
+                                {{ form.0.17 }}<br>
+                            </div>
+                            <div class="col-sm-4" style="text-align: right;">
+                                Volts:<br>
+                                Phase:<br>
+                                Kh:<br>
+                                T.A:<br>
+                            </div>
+                            <div class="col-sm-3">
+                                {{ form.0.18 }}<br>
+                                {{ form.0.19 }}<br>
+                                {{ form.0.20 }}<br>
+                                {{ form.0.21 }}<br>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row font_twenty">
+                            <div class="col">
+                                <center>
+                                    <p style="background-color: grey; border: 1px solid rgba(77, 72, 72, 0.3);">TEST CALIBRATION REPORT</p>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="row font_twenty">
+                            <div class="col-sm-3" style="text-align: right;">
+                                <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Full Load</b><br>
+                                Trial 1:<br>
+                                Trial 2:<br>
+                                Trial 3:<br>
+                                <b style="border-top: 1px solid rgb(0, 0, 0); ">70% Average:</b><br>
+                            </div>
+                            <div class="col-sm-3">
+                                <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Test Result</b><br>
+                                {{ form.0.9 }}%<br>
+                                {{ form.0.10 }}%<br>
+                                {{ form.0.11 }}%<br>
+                                <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.0.9 }}%</b><br>
+                            </div>
+                            <div class="col-sm-3" style="text-align: right;">
+                                <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Light Load</b><br>
+                                Trial 1:<br>
+                                Trial 2:<br>
+                                Trial 3:<br>
+                                <b style="border-top: 1px solid rgb(0, 0, 0); ">30% Average:</b><br>
+                            </div>
+                            <div class="col-sm-3">
+                                <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Test Result</b><br>
+                                {{ form.0.13 }}%<br>
+                                {{ form.0.14 }}%<br>
+                                {{ form.0.15 }}%<br>
+                                <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.0.12 }}%</b><br>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row font_twenty">
+                            <div class="col-sm-3" style="text-align: right;">
+                                <b>General Average</b><br>
+                            </div>
+                            <div class="col-sm-3">
+                                <b>{{ form.0.7 }}%</b><br>
+                            </div>
+                            <div class="col-sm-3" style="text-align: right;">
+                                <b>Findings</b><br>
+                            </div>
+                            <div class="col-sm-3">
+                                <b>
+                                    {% if form.0.7 >= 98 %}
+                                    Passed
+                                    {% else %}
+                                    Failed
+                                    {% endif %}
+                                </b><br>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row font_twenty">
+                            <div class="col-12">
+                                <center>
+                                    <p style="background-color: grey; border: 1px solid rgba(77, 72, 72, 0.3);">REMARKS</p>
+                                </center>
+                                <p style="margin-left: 22px;"> {{ form.0.22 }}.</p>
+                            </div>
+                        </div>
+
+
+                        <div class="row font_twenty">
+                            <div class="col-12" style=" width: 7in;">
+                                <p style="background-color: rgba(255, 255, 255, 0); border: 1px solid rgba(255, 255, 255, 0);"></p>
+                            </div>
+                            <div class="col-6 row">
+                                <div class="col-sm-4" style="text-align: right;">
+                                    Calibrated By:
+                                </div>
+                                <div class="col-sm-6" style="text-align: center;">
+                                    <br><br><br>
+                                    <p style="border-bottom: 1px solid rgb(0, 0, 0); ">JOSE DIONARD R. CUENCA</p>
+                                    Calibrator
+                                </div>
+                            </div>
+                            <div class="col-6 row">
+                                <div class="col-sm-4" style="text-align: right;">
+                                    Checked By:
+                                </div>
+                                <div class="col-sm-6" style="text-align: center;">
+                                    <br><br><br>
+                                    <p style="border-bottom: 1px solid rgb(0, 0, 0); ">ENGR. IBO R. ORONG</p>
+                                    NMD Chief
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <!-- /.row -->
+                        <hr>
+                        <!-- this row will not appear when printing -->
+                        <div class="row no-print">
+                            <div class="col-12">
+                                <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
+                                        class="fas fa-print"></i> Print</a>
+                                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                                    <i class="fas fa-download"></i> Generate PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.invoice -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock content %}

@@ -33,6 +33,18 @@ class mtype(models.Model):
         db_table = "metertype"
 
 
+class consumers(models.Model):
+    id = models.AutoField(primary_key=True)
+    consumer = models.CharField(max_length=145, null=True)
+    address = models.CharField(max_length=145, null=True)
+    type = models.CharField(max_length=2, null=True)
+    active = models.PositiveSmallIntegerField(
+        default=0, null=True)        # active, deleted
+
+    class Meta:
+        db_table = "consumers"
+
+
 class acquisition(models.Model):
     id = models.AutoField(primary_key=True)
     transactiondate = models.DateField(("Date"), default=date.today)
@@ -62,9 +74,6 @@ class meters(models.Model):
     ampheres = models.CharField(max_length=45, null=True)
     serialnos = models.CharField(max_length=145, null=True)
     units = models.IntegerField(default=0)              # meter count
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.DateTimeField(auto_now=True)
-
     class Meta:
         db_table = "meters"
 
@@ -77,7 +86,9 @@ class meterdetails(models.Model):
     wms_status = models.PositiveSmallIntegerField(
         default=0, null=True)    # 0=forwarded, 1=pending, 2=returned
     status = models.PositiveSmallIntegerField(
-        default=0, null=True)    # pending, passed, failed
+        default=0, null=True)    # Initial Testing, Transfer, Available, Installed, Damage/Salvage, Removed Meter, Calibration/Repair, for Verification
+    # status = models.PositiveSmallIntegerField(
+    #     default=0, null=True)    # pending, passed, failed
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
 
@@ -122,10 +133,13 @@ class sealdetails(models.Model):
         db_table = "sealdetails"
 
 
+
 class metertest(models.Model):
     id = models.AutoField(primary_key=True)
+    # consumersid = models.ForeignKey(
+    #     consumers, db_column='consumers', on_delete=models.CASCADE, db_index=True)
     meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='meterdetailsid', on_delete=models.CASCADE, db_index=True)
+        meterdetails, db_column='consumersid', on_delete=models.CASCADE, db_index=True)
     testdate = models.DateField(("Date"), default=date.today)
     gen_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                       MinValueValidator(Decimal('0.00'))])
@@ -158,8 +172,8 @@ class metertest(models.Model):
         default=0, null=True)        # active, deleted
     isdamage = models.BooleanField(default=False)
     userid = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "metertest"
@@ -170,8 +184,7 @@ class meterseal(models.Model):
     id = models.AutoField(primary_key=True)
     meterdetailsid = models.ForeignKey(
         meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
-    # idmeterdetails = models.ManyToManyField(
-    #     meterdetails, db_column='idmeterdetails')
+
     transactiondate = models.DateField(("Date"), default=date.today)
     seal_a = models.CharField(max_length=45, null=True)
     seal_b = models.CharField(max_length=45, null=True)
@@ -190,21 +203,24 @@ class meterseal(models.Model):
         db_table = "meterseal"
 
 
-class assigned_meter(models.Model):
-    id = models.AutoField(primary_key=True)
-    transactiondate = models.DateField(("Date"), default=date.today)
-    metertestid = models.ForeignKey(
-        metertest, db_column='metertestid', on_delete=models.PROTECT, db_index=True)
-    meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
-    consumer = models.CharField(max_length=145, null=True)
-    address = models.CharField(max_length=145, null=True)
-    type = models.CharField(max_length=2, null=True)
-    active = models.PositiveSmallIntegerField(
-        default=0, null=True)        # active, deleted
-    userid = models.CharField(max_length=45)
+# class assigned_meter(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     transactiondate = models.DateField(("Date"), default=date.today)
+#     metertestid = models.ForeignKey(
+#         metertest, db_column='metertestid', on_delete=models.PROTECT, db_index=True)
+#     meterdetailsid = models.ForeignKey(
+#         meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+#     consumer = models.CharField(max_length=145, null=True)
+#     address = models.CharField(max_length=145, null=True)
+#     type = models.CharField(max_length=2, null=True)
+#     active = models.PositiveSmallIntegerField(
+#         default=0, null=True)        # active, deleted
+#     userid = models.CharField(max_length=45)
 
-    class Meta:
-        db_table = "assigned_meter"
+#     class Meta:
+#         db_table = "assigned_meter"
+
+
+
 
 

@@ -130,30 +130,30 @@
         Load_serials_table();
     };
 
-    function meters_delete(id)
-    {
-        var ok = confirm('Are you sure to delete this entry?');
-        if (ok == true)
-        {
-            $.ajax({
-                url: "{% url 'meters_delete' 0 %}".replace('0', id),
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                contentType: false,
-                data: { id: id, },
-                success: function (data)
-                {
-                    if (data == 'deleted')
-                        table_meters.draw();
-                },
-                error: function (e)
-                {
-                    alert('err: meter list 158');
-                }
-            });
-        }
-    }
+    // function meters_delete(id)
+    // {
+    //     var ok = confirm('Are you sure to delete this entry?');
+    //     if (ok == true)
+    //     {
+    //         $.ajax({
+    //             url: "",
+    //             type: 'GET',
+    //             dataType: 'json',
+    //             contentType: 'application/json; charset=utf-8',
+    //             contentType: false,
+    //             data: { id: id, },
+    //             success: function (data)
+    //             {
+    //                 if (data == 'deleted')
+    //                     table_meters.draw();
+    //             },
+    //             error: function (e)
+    //             {
+    //                 alert('err: meter list 158');
+    //             }
+    //         });
+    //     }
+    // }
 
 </script>
 {% endblock content %}

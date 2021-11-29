@@ -1,3 +1,30 @@
+$('.select2').select2();
+
+function dropdownlist(placeholder, dropdown, url)
+{
+    $(dropdown).select2({
+        placeholder: placeholder,
+        ajax: {
+            url: url,
+            dataType: 'json',
+            delay: 250,
+            data: function (data)
+            {
+                return {
+                    searchTerm: data.term
+                };
+            },
+            processResults: function (response)
+            {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+};
+
 function hide_modal(params)
 {
     setTimeout(function ()

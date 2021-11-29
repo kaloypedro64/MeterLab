@@ -30,45 +30,56 @@ def AssignedList(request):
         order_by = request.GET.get('order_by')
 
         cursor = connection.cursor()
-        query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null'
-        cursor.execute(query)
-        col_names = [desc[0] for desc in cursor.description]
-        col_name = col_names[abs(int(order_by))]
+        # query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null'
+        # cursor.execute(query)
+        # col_names = [desc[0] for desc in cursor.description]
+        # col_name = col_names[abs(int(order_by))]
 
         isfiltered = ''
         if filter:
             isfiltered = " and ( name like '%" + filter + "%'  or address like '%" + \
-                filter + "%' or ordate like '%" + filter + "%')"
+                filter + "%' or datepaid like '%" + filter + "%')"
 
         #if sorted
         sortby = "desc"
         num1 = int(order_by)
         if num1 <= 0:
             sortby = "asc"
-        query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null '+ isfiltered +' order by ' + col_name + ' ' + sortby
+        # query = 'SELECT idnewapply id, name, address, ordate, "From I" as type, ornumber FROM zanecoisd.newapply where ornumber is not null '+ isfiltered +' order by ' + col_name + ' ' + sortby
         query = 'select * from ' + \
                 '(  ' + \
                 '    (select idnewconnection as idtrans, ' + \
                 '        name, ' + \
                 '        address, ' + \
                 '        "New Connection" as description, ' + \
-                '        DatePaid, ' + \
+                '        date_format(DatePaid, '"'%Y-%m-%d'"') DatePaid, ' + \
                 '        ORNumber, ' + \
                 '        1 as transcode, ' + \
                 '        accountnumber ' + \
-                '            from zanecoisd.newconnection where accountnumber is not null and name is not null) ' + \
-                'union ' + \
+                '            from zanecoisd.newconnection ' + \
+                '    where ifnull(trim(ornumber),'"''"') <> '"''"' and  ' + \
+                '                   ifnull(trim(serial),'"''"') = '"''"' and  ' + \
+                '                   ifnull(name,'"''"') <> '"''"' and  ' + \
+                '                   ifnull(Accomplished,'"''"') = 0 and  ' + \
+                '                   datepaid>'"'2013-12-31'"') ' + \
+                'union all ' + \
                 '(select idrecon as idtrans, ' + \
                 '        name, ' + \
                 '        address, ' + \
                 '        "Reconnection" as description, ' + \
-                '        ORDate, ' + \
+                '        date_format(ORDate, '"'%Y-%m-%d'"') ORDate, ' + \
                 '        ORNumber, ' + \
                 '        2 as transcode, ' + \
                 '        accountnumber ' + \
-                '            from zanecoisd.recon where accountnumber is not null and name is not null) ' + \
-            ') ' + \
-                'trans order by name asc;'
+                '            from zanecoisd.recon ' + \
+                '   where ifnull(trim(ornumber),'"''"') <> '"''"' and ' + \
+                '                 ifnull(trim(serial),'"''"') = '"''"' and ' + \
+                '                 ifnull(name,'"''"') <> '"''"' and ' + \
+                '                 ifnull(Accomplished,'"''"') = 0 and ' + \
+                '                 recondate>'"'2013-12-31'"') ' + \
+            ') trans where 1=1 '+ \
+            isfiltered + \
+            'order by datepaid desc;'
         cursor.execute(query)
         coname = cursor.fetchall()
 

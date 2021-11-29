@@ -11,21 +11,19 @@ urlpatterns = [
     path('multiple/<int:id>', views.calibrate_multiple, name='multiple'),
     path('single/<int:id>', views.calibrate, name='calibrate'),
 
+    path('meter-test/', views.meter_test, name='test'),
+
     # path('calibrations', views.calibration_history,
     #      name='calibrations'),
 
-    # for dropdown list
-    path('consumer_list', views.consumer_list, name='consumer_list'),
-    path('seal_list', views.seal_list, name='seal_list'),
+    path('serials', views.serial_list, name='serials'),
 
 
-    path('consumer_search', views.consumer_search, name='consumer_search'),
-    path('consumer_save', views.consumer_save_assignedmeter, name='consumer_save'),
-    path('update_seal',
-         views.calibration_update_save, name='update_seal'),
 
 
-    path('consumers/<int:id>', views.load_assigned_consumers, name='consumers'),
+
+
+
 
 
 #     path('edit/<int:id>/', views.meters_edit, name='meters_edit'),

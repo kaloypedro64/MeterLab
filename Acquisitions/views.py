@@ -73,6 +73,78 @@ class acquisitionList(ListView):
 #         context = {'trans': queryset, 'id': id}
 #         return render(request, html_meters_data, context)
 
+# get rrnumbers from warehouse - dropdown
+def rrnumber_list(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        cursor = connection.cursor()
+        query = "SELECT idreceipts id, rrnumber from zanecoinvphp.tbl_receipts "
+        if search:
+            query += "where rrnumber like '%" + search + "%' "
+        query += "order by idreceipts desc"
+        cursor.execute(query)
+        consumers = cursor.fetchall()
+        datas = []
+        list_data = []
+        for index, item in enumerate(consumers):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s][0],
+                'text': list_data[s][1],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
+
+def selected_rrnumber(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        cursor = connection.cursor()
+        query = "SELECT idreceipts id, rrnumber, r.idsupplier, suppliers, address " + \
+                "    from zanecoinvphp.tbl_receipts r " + \
+                "    left join zanecoinvphp.tbl_supplier s on s.suppliername = r.suppliers " + \
+                "    where idreceipts = '"+ id +"' "
+        cursor.execute(query)
+        rrnumber = cursor.fetchall()
+        if True:
+            data = {"form": rrnumber}
+        else:
+            data = {"msg": 'Not found'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
+def supplier_list(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        cursor = connection.cursor()
+        query = "SELECT id, suppliername, address from suppliers "
+        if search:
+            query += "where suppliername like '%" + search + "%' "
+        cursor.execute(query)
+        consumers = cursor.fetchall()
+        datas = []
+        list_data = []
+        for index, item in enumerate(consumers):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s][0],
+                'text': list_data[s][1],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
+
+def selected_supplier(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        cursor = connection.cursor()
+        query = "SELECT idsupplier id, suppliername, address from zanecoinvphp.tbl_supplier where idsupplier = '" + id + "' "
+        cursor.execute(query)
+        suppliers = cursor.fetchall()
+        if True:
+            data = {"form": suppliers}
+        else:
+            data = {"msg": 'Not found'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
 @login_required(login_url=login_url)
 def acquisition_save(request):
@@ -92,7 +164,6 @@ def acquisition_save(request):
             data = {"id":id, "msg": 'saved', 'acqtype':acqtype}
         else:
             data = {"msg": 'Not saved'}
-        print('data',data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 # meters
@@ -308,6 +379,7 @@ def acquisition_adds(request, id):
     mSupplier = suppliers.objects.order_by('suppliername').distinct()
     context = {'header': 'Seal Acquisition', 'datetoday': datetoday, 'acq': acq, 'area': transaction_area.area,
                'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mSupplier': mSupplier}
+
     return render(request, html_msAdd, context)
 
 
