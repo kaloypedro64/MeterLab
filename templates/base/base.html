@@ -47,6 +47,7 @@
     <!-- <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/editor.dataTables.min.css" %}">
     <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/datatables.min.css" %}"> -->
 
+
     <link rel="stylesheet" href="{% static "plugins/toastr/toastr.min.css" %}">
     <link rel="stylesheet" href="{% static "plugins/toast/toast.min.css" %}">
     <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css"" %}">
@@ -72,11 +73,18 @@
             {% endblock content %}
         </div>
 
+        {% load sweetify %}
+        {% sweetify %}
+
     </body>
 {% else %}
     {% include 'base/login.html' %}
 {% endif %}
 
+<!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<!-- https://sweetalert2.github.io/#download -->
+<script src="{% static "plugins/sweetalert2/sweetalert2.all.min.js" %}"></script>
+<!-- <script src="sweetalert2.all.min.js"></script> -->
 
 <script src="{% static "plugins/jquery/jquery.min.js" %}"></script>
 <script src="{% static "plugins/jquery-ui/jquery-ui.min.js" %}"></script>

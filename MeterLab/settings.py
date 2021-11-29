@@ -164,6 +164,7 @@ AREA_CHOICES = (
     ('3', 'Liloy Area Services'),
 )
 
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 # Logout after a period of inactivity
 # INACTIVE_TIME = 3*60  # 3 minutes - or whatever period you think appropriate
