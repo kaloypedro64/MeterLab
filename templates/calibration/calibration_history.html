@@ -288,12 +288,8 @@
     let meterstatus = [' Initial Testing', 'Transfer', 'Available', 'Installed', 'Damage/Salvage', 'Removed Meter', 'Calibration/Repair', 'for Verification'];
     let urlCalibrated = "{% url 'calibrated' %}";
 
-
     // datatables
-    let urlConsumers = "{% url 'consumers' 0 %}";
     let urlMeterSeal = "{% url 'meterseal' 0 %}";
-    
-    
 
     let urlUpdateSeal = "{% url 'update_seal' %}";
 
@@ -431,60 +427,7 @@
 
         });
 
-        function loadConsumerDetails(id) {
-            $('#Table-Consumer').DataTable({
-                "searching": false,
-                "info": false,
-                "paging": true,
-                "lengthChange": true,
-                "autoWidth": false,
-                "columnDefs": [
-                    { "targets": [0], "searchable": false, "orderable": false, "visible": false },
-                    // { "targets": [1], "width": "14%" },
-                ],
-                "keys": true,
-                "keys": { "blurable": false },
-                "select": true,
-                "select": {
-                    "style": 'multi',
-                    "selector": 'td:first-child',
-                },
-                "serverSide": true,
-                "processing": true,
-                "ajax": function (data, callback, settings) {
-                    var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
-                    var direction = "";
-                    if (data.order[0].dir == "desc") { direction = "-" };
-                    $.get(urlConsumers.replace('0', id), {
-                        id: id,
-                        limit: data.length,
-                        start: data.start,
-                        filter: data.search.value,
-                        order_by: direction + sort_column_name
-                    }, function (res) {
-                        callback({
-                            recordsTotal: res.length,
-                            recordsFiltered: res.length,
-                            data: res.objects
-                        });
-                    });
-                },
-                columns: [
-                    { "data": "id" },
-                    { "data": "transactiondate" },
-                    { "data": "consumer" },
-                    { "data": "address" },
-                ],
-                // "dom": '<lf<t>ip>',
 
-                "dom": '<"pull-left" f><t>',
-                "dom": '<"top"i>rt<"bottom"flp><"clear">',
-                // "fnInitComplete": function (oSettings, json)
-                // {
-                //   $('#table_meterdetails tbody tr:eq(0)').click();
-                // },
-            });
-        }
 
         function loadMeterSealDetails(id) {
             $('#Table-MeterSeal').DataTable({
@@ -572,7 +515,7 @@
 
     function ismulti_update() {
         var ismulti;
-        var multi = document.getElementById("multi");        
+        var multi = document.getElementById("multi");
         if (multi.style.display == "block") {
             ismulti = true;
         } else {
@@ -581,7 +524,7 @@
         return ismulti;
     }
 
-    function ismulti_update(params) {        
+    function ismulti_update(params) {
         var multi = document.getElementById("multi");
         multi.style.display = params;
     }
@@ -599,10 +542,9 @@
         $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
 
     }
-        
-    function modal_calibration_update(params) {        
+
+    function modal_calibration_update(params) {
         ismulti_update("none")
-        alert(get_ismulti_update());
         var data = tablez.rows('.selected').data();
         var id = data[0][0];
         var meterserial = data[0][1];
@@ -611,9 +553,8 @@
         $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
     }
 
-    function modal_calibration_update_multiple(params) {        
+    function modal_calibration_update_multiple(params) {
         ismulti_update("block");
-        alert(get_ismulti_update());
         $('#modal-calibration-update').find('.modal-title').text("Multi Calibration Update Multiple");
         $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
     }
@@ -702,7 +643,7 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             contentType: false,
-            data: {                
+            data: {
                 meterdetailsid: meterdetailsid,
                 transactiondate: transactiondate,
                 seal_a: seal_a,
@@ -716,7 +657,7 @@
                 if (data.msg == "saved")
                     if (multi.style.display = "none") {
                         $('#modal-calibration-update').modal('hide');
-                    }                        
+                    }
                 msgAlert('Save', 'Successfully calibrated!', 1);
                 tablez.ajax.reload(null, false);
 
@@ -728,7 +669,7 @@
             }
         });
     }
-        
+
     function modal_details(params) {
         var data = tablez.rows('.selected').data();
         var id = data[0][0];
