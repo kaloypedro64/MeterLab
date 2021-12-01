@@ -206,7 +206,7 @@
                 <!-- <input type="hidden" name="userid" id="id_userid" value="{{ request.user.id }}">
                 <input type="hidden" name="area" id="id_area" value="{{ area }}">
                 <input type="hidden" name="id" id="id_id">-->
-                <input type="text" name="meterdetailsid" id="id_meterdetailsid">
+                <input type="hidden" name="meterdetailsid" id="id_meterdetailsid">
 
                 <div class="form-group row">
                     <label for="id_transactiondate" class="col-sm-4 col-form-label col-form-label-sm mlabel">Date:</label>
@@ -513,7 +513,7 @@
 
     };
 
-    function ismulti_update() {
+    function get_ismulti_update() {
         var ismulti;
         var multi = document.getElementById("multi");
         if (multi.style.display == "block") {
@@ -623,13 +623,11 @@
     function calibration_update_save() {
         var meterdetailsid;
         var transactiondate = $('#id_transactiondate').val();
-        alert(ismulti_update());
-        if (ismulti_update() == false) {
+        if (get_ismulti_update() == false) {
             meterdetailsid = $('#id_meterdetailsid').val();
         } else {
             meterdetailsid = $('#id_meterdetailsid2').val();
         }
-        alert(meterdetailsid());
         var seal_a = $('#id_seal_a option:selected').html()
         var seal_b = $('#id_seal_b option:selected').html()
         var metercondition = $('#id_metercondition').val();
@@ -654,14 +652,25 @@
                 remarks: remarks,
             },
             success: function (data) {
+                alert(data.msg);
                 if (data.msg == "saved") {
-                    if (ismulti_update == false)
-                        $('#modal-calibration-update').modal('hide');
-                    msgAlert('Save', 'Successfully calibrated!', 0);
+                    alert('xxx');
+                    if (get_ismulti_update() == false)
+                    $('#modal-calibration-update').modal('hide');
                     tablez.ajax.reload(null, false);
+                    sweetAlert('Save', 'Successfully calibrated!', 0);                    
+                    //Swal.fire({
+                    //    title: 'Save',
+                    //    text: 'Successfully calibrated',
+                    //    icon: 'success',
+                    //    confirmButtonText: 'Cool',
+                    //    showConfirmButton: false,
+                    //     timer: 1500
+                    //});
                 }
                 else {
-                    msgAlert('Error', 'Calibration failed!', 1);
+                    alert('yyy');
+                    sweetAlert('Error', 'Calibration failed!', 1);
                 }
 
             },
@@ -679,6 +688,20 @@
 
         $('#modal-details').find('.modal-title').text("Details of: " + meterserial);
         $('#modal-details').modal('show').draggable({ handle: ".modal-header" });
+    }
+
+    let arr_icons = ['success', 'error', 'warning', 'info', 'question'];
+    function sweetAlert(header, remarks, ico)
+    { 
+
+        Swal.fire({
+            title: header,
+            text: remarks,
+            icon: arr_icons[ico],
+            confirmButtonText: 'Cool',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
 </script>
