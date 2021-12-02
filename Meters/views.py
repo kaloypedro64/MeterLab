@@ -246,17 +246,20 @@ def consumer_list(request):
 def serial_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
-        query = meterdetails.objects.filter(serialno__icontains=search, active__icontains=0).values('id', 'meterid', 'serialno',
-                                                                                                    'accuracy', 'wms_status', 'status', 'active').order_by('serialno')
-        list_data = []
+        cursor = connection.cursor()
+        query = "select * from zaneco.master "
+        if search:
+            query += "where serialno like '%" + search + "%'"
+        cursor.execute(query)
+        consumers = cursor.fetchall()
         datas = []
         list_data = []
-        for index, item in enumerate(query):
+        for index, item in enumerate(consumers):
             list_data.append(item)
         for s in range(len(list_data)):
             data = {
-                'id': list_data[s]['id'],
-                'text': list_data[s]['serialno'],
+                'id': list_data[s][0],
+                'text': list_data[s][1],
             }
             datas.append(data)
     return HttpResponse(json.dumps(datas, default=default), 'application/json')
