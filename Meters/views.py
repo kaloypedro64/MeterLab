@@ -247,9 +247,10 @@ def serial_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
         cursor = connection.cursor()
-        query = "select * from zaneco.master "
+        query = "select code id, serial from zaneco.master "
         if search:
-            query += "where serialno like '%" + search + "%'"
+            query += "where TRIM(COALESCE(serial, '')) <> '' and (serial like '" + \
+                search + "%')"
         cursor.execute(query)
         consumers = cursor.fetchall()
         datas = []

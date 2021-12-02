@@ -355,6 +355,28 @@
                 }
             });
         };
+
+        function serialno_selected(params) {
+            var id = $('#id_idmeterserials').val();
+            // alert(id);
+            Swal.fire(id, id, 'success');
+            // $.ajax({
+            //     url: "{% url 'consumer_search' %}",
+            //     type: 'GET',
+            //     dataType: 'json',
+            //     contentType: 'application/json; charset=utf-8',
+            //     contentType: false,
+            //     data: { id: id, },
+            //     success: function (data)
+            //     {
+            //         $('#lblAddress').html(data[0][2]);
+            //     },
+            //     error: function (e)
+            //     {
+            //         alert('err: selected_consumer');
+            //     }
+            // });
+        }
     };
 
 </script>
