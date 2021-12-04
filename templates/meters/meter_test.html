@@ -16,38 +16,38 @@
 
 
 <div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h1>Meter Test</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <button type="submit" class="btn btn-success btn-sm mr-1 "><i class="fal fa-save mr-1"
-                                tabindex="-1"></i>Save & Next</button>
-                        <a href=".." class="btn btn-info btn-sm"><i class="fal fa-share-square"></i>
-                            <span style="font-size: 12px;"> Done</span></a>
-                    </ol>
+    <!-- <form action method="POST" autocomplete="off"> -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>Meter Test</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <button type="button" class="btn btn-success btn-sm mr-1" onclick="save_meter_test()"><i class="fal fa-save mr-1"
+                                    tabindex="-1"></i>Save & Next</button>
+                            <a href=".." class="btn btn-info btn-sm"><i class="fal fa-share-square"></i>
+                                <span style="font-size: 12px;"> Done</span></a>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section class="content">
-        <div class="container-fluid">
-            {% if save == "save" %}
-            <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> Success: Meter
-                calibration saved!
-                <button type="button" class="close" data-dismiss="alert">×</button>
-            </div>
-            <!-- <div class='alert alert-success alert-dismissible row'>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                {% if save == "save" %}
+                <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> Success: Meter
+                    calibration saved!
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                </div>
+                <!-- <div class='alert alert-success alert-dismissible row'>
             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
             <h5><i class='icon fas fa-check'></i>Meter calibration saved!</h5>
         </div> -->
-            {% endif %}
-            <div class="row">
-                <div class="col-12">
-                    <form action method="POST" autocomplete="off">
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
                         {% csrf_token %}
                         <input type="hidden" name="active" min="0" required="" id="id_active" value="0">
                         <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="0">
@@ -69,23 +69,33 @@
                                             </div>
                                         </div>
 
+                                        <input type="hidden" class="form-control form-control-sm" id="id_idmeterserials"
+                                            name="idmeterserials" readonly required>
                                         <div class="form-group row">
-                                            <label for="idmeterserials" class="col-sm-4 col-form-label">Serial
-                                                No.:</label>
+                                            <a href="#" class="col-sm-4 col-form-label"
+                                                onclick="search_for_meter()"><span> Search Serial</span></a>
+                                            <!-- <label for="id_idmeterserials" class="col-sm-4 col-form-label">Serial No.:</label> -->
                                             <div class="col-sm-8">
-                                                <select class="form-control form-control-sm dropdown-list-serials"
-                                                    id="id_idmeterserials" name="idmeterserials" onchange=""></select>
-                                                </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="id_supplier" class="col-sm-4 col-form-label mlabel">Consumer:</label>
-                                            <div class="col">
-                                                <select class="form-control form-control-sm dropdown-list-consumer" id="id_consumer" name="consumer"
-                                                    onchange="consumer_selected()"></select>
-                                                <span class="col-form-label mr-2" id="lblAddress" style="font-size: 13px;">..</span>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="id_meterserialno" name="meterserialno" readonly required>
+                                                <!-- <select class="form-control form-control-sm dropdown-list-serials"
+                                                    id="id_idmeterserials" name="idmeterserials" onchange="serialno_selected()"></select>-->
+                                                <span class="col-form-label mr-2" id="lblName"
+                                                    style="font-size: 13px; font-weight:bold;">Consumer Name</span><br>
+                                                <span class="col-form-label mr-2" id="lblAddress"
+                                                    style="font-size: 12px; color:gray">Address</span>
                                             </div>
                                         </div>
+
+                                        <!-- <div class="form-group row">
+                                            <label for="id_supplier" class="col-sm-4 col-form-label mlabel">Consumer:</label>
+                                            <div class="col"> -->
+                                        <!-- <select class="form-control form-control-sm dropdown-list-consumer" id="id_consumer" name="consumer"
+                                                    onchange="consumer_selected()"></select> -->
+                                        <!-- <span class="col-form-label mr-2" id="lblName" style="font-size: 13px;">Albert Tan</span><br>
+                                                <span class="col-form-label mr-2" id="lblAddress" style="font-size: 13px;">Dapitan City</span>
+                                            </div>
+                                        </div> -->
 
                                         <div class="form-group row">
                                             <label for="id_reading" class="col-sm-4 col-form-label">Init.
@@ -284,12 +294,12 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+    <!-- </form> -->
 </div>
 
 <script>
@@ -297,6 +307,8 @@
     // serverside dropdown
     // let urlConsumerList = "{% url 'consumer_list' %}";
     let urlSerialList = "{% url 'serials' %}";
+    let urlSerialSearch = "{% url 'search_for_meter' %}";
+
 
 
     // $('[data-mask]').inputmask();
@@ -320,17 +332,8 @@
             return true;
         }
 
-        function generate_average()
-        {
-            var seventypercent = ((Number($('#id_fl1').val()) + Number($('#id_fl2').val()) + Number($('#id_fl3').val())) / 3) * .7;
-            var thirtypercent = ((Number($('#id_ll1').val()) + Number($('#id_ll2').val()) + Number($('#id_ll3').val())) / 3) * .3;
-            var gen_average = (seventypercent + thirtypercent);
-            $('#id_fullload_average').val(parseFloat(seventypercent).toFixed(2));
-            $('#id_lightload_average').val(parseFloat(thirtypercent).toFixed(2));
-            $('#id_gen_average').val(parseFloat(gen_average).toFixed(2));
-        }
 
-        dropdownlist('Search Serial', '.dropdown-list-serials', urlSerialList);
+        // dropdownlist('Search Serial', '.dropdown-list-serials', urlSerialList);
         function dropdownlist(placeholder, dropdown, url)
         {
             $(dropdown).select2({
@@ -356,28 +359,146 @@
             });
         };
 
-        function serialno_selected(params) {
-            var id = $('#id_idmeterserials').val();
-            // alert(id);
-            Swal.fire(id, id, 'success');
-            // $.ajax({
-            //     url: "{% url 'consumer_search' %}",
-            //     type: 'GET',
-            //     dataType: 'json',
-            //     contentType: 'application/json; charset=utf-8',
-            //     contentType: false,
-            //     data: { id: id, },
-            //     success: function (data)
-            //     {
-            //         $('#lblAddress').html(data[0][2]);
-            //     },
-            //     error: function (e)
-            //     {
-            //         alert('err: selected_consumer');
-            //     }
-            // });
-        }
     };
 
+    function generate_average()
+    {
+        var seventypercent = ((Number($('#id_fl1').val()) + Number($('#id_fl2').val()) + Number($('#id_fl3').val())) / 3) * .7;
+        var thirtypercent = ((Number($('#id_ll1').val()) + Number($('#id_ll2').val()) + Number($('#id_ll3').val())) / 3) * .3;
+        var gen_average = (seventypercent + thirtypercent);
+        $('#id_fullload_average').val(parseFloat(seventypercent).toFixed(2));
+        $('#id_lightload_average').val(parseFloat(thirtypercent).toFixed(2));
+        $('#id_gen_average').val(parseFloat(gen_average).toFixed(2));
+    }
+
+
+    function search_for_meter(params)
+    {
+        Swal.fire({
+            text: 'Search for Meter Serial',
+            content: "input",
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Look up',
+            showLoaderOnConfirm: true,
+            preConfirm: (serial) =>
+            {
+                $.ajax({
+                    url: urlSerialSearch, // get the route value
+                    type: 'GET',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    contentType: false,
+                    data: { serial: serial, },
+                    success: function (response)
+                    {
+                        if (response == '')
+                        {
+                            Swal.fire("Record not found!", response, "error");
+                        } else
+                        {
+                            $('#id_idmeterserials').val(response[0][0]);
+                            $('#id_meterserialno').val(response[0][3]);
+                            $('#lblName').html(response[0][1]);
+                            $('#lblAddress').html(response[0][2]);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Record found!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    },
+                    error: function (respose)
+                    {
+                        Swal.fire('Not Found.', response, 'error')
+                    }
+                });
+                // return fetch(urlSerialSearch.replace('0', serial))
+                //     .then(response =>
+                //     {
+                //         if (!response.ok)
+                //         {
+                //             throw new Error(response.statusText)
+                //         }
+                //         return response.json()
+                //     })
+                //     .catch(error =>
+                //     {
+                //         Swal.showValidationMessage(
+                //             `Request failed: ${ error }`
+                //         )
+                //     })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }
+
+    function serialno_selected(params)
+    {
+        // var id = $('#id_idmeterserials').val();
+        // Swal.fire(id, id, 'success');
+        // $.ajax({
+        //     url: "{% url 'consumer_search' %}",
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     contentType: 'application/json; charset=utf-8',
+        //     contentType: false,
+        //     data: { id: id, },
+        //     success: function (data)
+        //     {
+        //         $('#lblAddress').html(data[0][2]);
+        //     },
+        //     error: function (e)
+        //     {
+        //         alert('err: selected_consumer');
+        //     }
+        // });
+    }
+
+    function save_meter_test(params)
+    {
+        consumer_name = $('#lblName').html();
+        consumer_adress = $('#lblAddress').html();
+        meterdetailsid = $('#id_meterdetailsid').val();
+        testdate = $('#id_testdate').val();
+        gen_average = $('#id_gen_average').val();
+        fullload_average = $('#id_fullload_average').val();
+        lightload_average = $('#id_lightload_average').val();
+        fl1 = $('#id_fl1').val();
+        fl2 = $('#id_fl2').val();
+        fl3 = $('#id_fl3').val();
+        ll1 = $('#id_ll1').val();
+        ll2 = $('#id_ll2').val();
+        ll3 = $('#id_ll3').val();
+        reading = $('#id_reading').val();
+        type = $('#id_type').val();
+        phase = $('#id_phase').val();
+        kh = $('#id_kh').val();
+        ta = $('#id_ta').val();
+        remarks = $('#id_remarks').val();
+        isdamage = $('#id_isdamage').val();
+
+        alert(con)
+        $.ajax({
+            url: "{% url 'consumer_search' %}",
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: id, },
+            success: function (data)
+            {
+                $('#lblAddress').html(data[0][2]);
+            },
+            error: function (e)
+            {
+                alert('err: selected_consumer');
+            }
+        });
+    }
 </script>
 {% endblock content %}

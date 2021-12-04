@@ -17,6 +17,8 @@ urlpatterns = [
     #      name='calibrations'),
 
     path('serials', views.serial_list, name='serials'),
+    path('search_for_meter', views.search_for_meter, name='search_for_meter'),
+
 
 
 

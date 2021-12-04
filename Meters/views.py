@@ -38,7 +38,7 @@ html_mEdit = "meters/meter_request_edit.html"
 html_meterdetails_data = 'meters/meterdetails_data.html'
 html_meters_data = 'meters/meters_data.html'
 
-html_metertest = "meters/meter-test.html"
+html_metertest = "meters/meter_test.html"
 html_metertestreport = 'meters/meter_test_report.html'
 
 html_calibration = 'calibration/calibrate.html'
@@ -169,9 +169,7 @@ def meter_test(request):
                    'serials': serials, 'idmeters': id, 'save': 'save'}
         return render(request, html_metertest, context)
     else:
-        # serials = meterserials.objects.filter(idmeters=id).filter(wms_status__exact=0)
-        context = {'form': form, 'datetoday': datetoday,
-                   'serials': serials}
+        context = {'form': form, 'datetoday': datetoday, 'serials': serials}
         return render(request, html_metertest, context)
 
 def calibrate(request, id):
@@ -221,7 +219,6 @@ def calibrate_multiple(request, id):
 
 # start load data to select2 option - serverside dropdown
 
-
 def consumer_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
@@ -264,6 +261,16 @@ def serial_list(request):
             }
             datas.append(data)
     return HttpResponse(json.dumps(datas, default=default), 'application/json')
+
+def search_for_meter(request):
+    if request.is_ajax():
+        serial = request.GET.get('serial')
+        cursor = connection.cursor()
+        query = "select accountnumber, name, address, serial, billmonth, totalbill from zaneco.master where serial <> '' and serial like '" + \
+            str(serial) + "'"
+        cursor.execute(query)
+        data = cursor.fetchall()
+    return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def seal_list(request):
     if request.is_ajax():

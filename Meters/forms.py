@@ -87,7 +87,7 @@ class meterdetailsForm(forms.ModelForm):
 class metertestForm(forms.ModelForm):
     class Meta:
         model = metertest
-        fields = ['id', 'meterdetailsid', 'testdate', 'gen_average',
+        fields = ['id', 'testdate', 'consumersid', 'serialno', 'gen_average',
                   'fullload_average', 'fl1', 'fl2', 'fl3',
                   'lightload_average', 'll1', 'll2', 'll3',
                   'reading', 'type', 'volts', 'phase', 'kh', 'ta', 'remarks',

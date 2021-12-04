@@ -136,11 +136,10 @@ class sealdetails(models.Model):
 
 class metertest(models.Model):
     id = models.AutoField(primary_key=True)
-    # consumersid = models.ForeignKey(
-    #     consumers, db_column='consumers', on_delete=models.CASCADE, db_index=True)
-    meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='consumersid', on_delete=models.CASCADE, db_index=True)
     testdate = models.DateField(("Date"), default=date.today)
+    consumersid = models.ForeignKey(
+        consumers, db_column='consumers', on_delete=models.CASCADE, db_index=True)
+    serialno = models.CharField(max_length=15)
     gen_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                       MinValueValidator(Decimal('0.00'))])
     fullload_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
