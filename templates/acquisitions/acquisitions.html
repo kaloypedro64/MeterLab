@@ -136,12 +136,13 @@
                 onchange="select_rrnumber()"></select>
           </div>
         </div>
-        <input type="hidden" name="supplierid" id="id_supplierid">
+        <input hidden name="supplierid" id="id_supplierid">
         <div class="form-group row">
           <label for="id_supplier" class="col-sm-3 col-form-labe">Supplier:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm dropdown-list-suppliers" id="id_supplier" name="supplier"
               onchange="select_supplier()"></select>
+            <span hidden class="col-form-label mr-2 ml-2" id="lblSupplierName"></span>
             <span class="col-form-label mr-2 ml-2" id="lblAddress"></span>
           </div>
         </div>
@@ -230,3 +231,5 @@
 </script>
 <script src="{% static "js/acquisitions.js" %}"></script>
 <script src="{% static "js/alert.js" %}"></script>
+
+{% endblock content %}

@@ -153,10 +153,22 @@ def acquisition_save(request):
         date = request.GET.get('transactiondate')
         rrno = request.GET.get('rrno')
         supplierid = request.GET.get('supplierid')
+        suppliername = request.GET.get('suppliername')
+        address = request.GET.get('address')
         acqtype = request.GET.get('acqtype')
         now = datetime.datetime.utcnow()
         cursor = connection.cursor()
-        cursor.execute('insert into zanecometerpy.acquisition (transactiondate, rrnumber, area, userid, supplierid, acqtype, created_at, updated_at) values ("' + date + '","' + rrno + '","' +
+        cursor.execute('select suppliername from zanecometerpy.suppliers where suppliername like "' + str(suppliername) + '"')
+        locate_supplier = cursor.fetchone()
+        if locate_supplier == None:
+            cursor.execute('insert into zanecometerpy.suppliers (suppliername, address) values ("'+ str(suppliername) +'", "'+ str(address) +'")')
+            supplierid = cursor.lastrowid
+        else:
+            cursor.execute('select id from zanecometerpy.suppliers where suppliername like "'+ str(suppliername) +'" limit 1')
+            locate_supplier = cursor.fetchall()
+            supplierid = locate_supplier[0][0]
+        print(supplierid, supplierid)
+        cursor.execute('insert into zanecometerpy.acquisition (status, transactiondate, rrnumber, area, userid, supplierid, acqtype, created_at, updated_at) values (0,"' + date + '","' + rrno + '","' +
                        transaction_area.area + '","' + str(request.user.id) + '","' + str(supplierid) + '", "' + str(acqtype) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '", "' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
         cursor.fetchall()
         id = cursor.lastrowid

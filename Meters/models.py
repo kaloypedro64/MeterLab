@@ -49,12 +49,15 @@ class acquisition(models.Model):
     id = models.AutoField(primary_key=True)
     transactiondate = models.DateField(("Date"), default=date.today)
     rrnumber = models.CharField(max_length=145, db_index=True)
+    idmeters = models.CharField(max_length=10, db_index=True, null=True)
     supplierid = models.ForeignKey(
         suppliers, db_column='supplierid', related_name='suppliers', on_delete=models.PROTECT, db_index=True)
     # units = models.IntegerField(default=0)
+    status = models.PositiveSmallIntegerField(
+        default=0, null=False)  # 0=default, 1=forwarded, 2=accepted, 3=returned,3=
     area = models.PositiveSmallIntegerField(
         default=0, null=False)  # 0=dmo, 1=pas, 2=sas, 3=las
-    userid = models.IntegerField(default=0)           # meter count
+    userid = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     acqtype = models.PositiveSmallIntegerField(default=0, null=False)  # 0=meter, 1=seal
