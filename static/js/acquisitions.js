@@ -5,7 +5,7 @@ window.onload = function ()
         var tbl = "acqTable";
         if (params == 1) tbl = "acqTable_mSeal";
         acqTable = $('#'+ tbl +'').DataTable({
-            "searching": false,
+            "searching": true,
             "processing": true,
             "stateSave": true,
             "info": false,
@@ -97,7 +97,7 @@ window.onload = function ()
                         else
                         {
                             if (params == 0)
-                                return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '" style="color:black">' + data + '</a></td>'
+                                return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '" style="color:primary">' + data + '</a></td>'
                             else
                                 return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
                         }
@@ -107,7 +107,7 @@ window.onload = function ()
                 { "data": "supplierid__address" },
                 { "data": "rrnumber" },
             ],
-            "dom": '<"top"i>rt<"bottom"flp><"clear">',
+            // "dom": '<"top"i>rt<"bottom"flp><"clear">',
         });
         acqTable.column(0).visible(false);
     }

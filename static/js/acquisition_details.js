@@ -76,7 +76,7 @@ window.onload = function ()
                 { "data": "units" },
                 { "data": "serialnos" },
             ],
-            "dom": '<"top"i>rt<"bottom"flp><"clear">'
+            // "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
         // tablex.column(0).visible(false);
     }
@@ -429,7 +429,7 @@ function meter_update(params)
     var serialnos = $('#id_serialnos_b').val();
     var ampheres = $('#id_ampheres_b').val();
     $.ajax({
-        url: mSaveUrl,
+        url: mEditUrl,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',

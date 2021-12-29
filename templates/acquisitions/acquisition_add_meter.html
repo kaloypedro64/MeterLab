@@ -46,19 +46,19 @@
         </div>
     </section>
     <section class="content">
-        <div class="container-fluid">
+        <!-- <div class="container-fluid"> -->
             <div class="row">
                 <div class="col-md-4 connectedSortable">
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">
-                                <i class="fal fa-info mr-1"></i>
+                                <i class="fal fa-info mr-2"></i>
                                 Meter Acquisition Information <span style="font-size: 12px;"><i></i></span>
                             </h3>
                         </div>
                         <div class="row g-0">
                             <div class="col">
-                                <div class="card-body paper-cut">
+                                <div class="card-body">
                                     <input type="hidden" name="id" maxlength="45" required="" id="id_id"
                                         value="{{ acq.id }}">
                                     <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
@@ -81,7 +81,6 @@
                                     <p class="text-muted">
                                         {{acq.supplierid__suppliername}}, {{acq.supplierid__address}}
                                     </p>
-
                                 </div>
 
                             </div>
@@ -89,10 +88,10 @@
                     </div>
                 </div>
                 <div class="col-md-8 connectedSortable">
-                    <div class="card card-default">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">
-                                <i class="fal fa-info-square mr-1"></i>
+                                <i class="fal fa-info-square mr-2"></i>
                                 Meter Information <span style="font-size: 12px;"><i>(All fields are
                                         required)</i></span>
                             </h3>
@@ -115,7 +114,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
     </section>
 </div>
 
@@ -202,7 +201,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <input type="text" name="id" maxlength="45" required="" id="id_id_b">
+                    <input type="hidden" name="id" maxlength="45" required="" id="id_id_b">
                     <label for="id_brandid_b" class="col-sm-3 col-form-label">Brand:</label>
                     <div class="col">
                         <select class="form-control form-control-sm select2" id="id_brandid_b" name="brandid_b">

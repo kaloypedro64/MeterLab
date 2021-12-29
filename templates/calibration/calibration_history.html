@@ -37,9 +37,9 @@
         <section class="content">
             <div class="row">
                 <section class="col-lg-12 connectedSortable">
-                    <div class="card">
+                    <div class="card card-primary card-outline">
                         <div class="card-body">
-                            <table id="tablez" class="table table-nowrap table-hover">
+                            <table id="tablez" class="table table-nowrap table-hover table-striped table-sm">
                                 <thead>
                                     <tr>
                                         <th data-sort-column="" class="leftmost">
@@ -300,10 +300,6 @@
 
     let status;
 
-
-
-
-
     function selected_status(params) {
         $('.lbl_status').html(lbl_status[params]);
 
@@ -426,8 +422,6 @@
             loadMeterSealDetails(metertestid);
 
         });
-
-
 
         function loadMeterSealDetails(id) {
             $('#Table-MeterSeal').DataTable({

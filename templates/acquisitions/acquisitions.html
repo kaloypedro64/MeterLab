@@ -32,8 +32,8 @@
         </div> -->
         <div class="ml-auto ">
           <!-- <div class="btn-group"> -->
-            <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2" title="Meter Acquisition"><span style="font-size: 12px;"><i class="fal fad fa-books-medical mr-2"></i>Meter Acquisition</span></a>
-            <a href="#" type="button" onclick="modal_acquisition(1)" class="btn btn-info mb-2" title="Meter Seal Acquisition"><span style="font-size: 12px;"><i class="fal fa-solid fa-lasso mr-2"></i>Seal Acquisition</span></a>
+            <a href="#" type="button" onclick="modal_acquisition()" class="btn btn-info mb-2" title="Meter Acquisition"><span style="font-size: 12px;"><i class="fal fa-plus mr-2"></i>Meter Acquisition</span></a>
+            <a href="#" type="button" onclick="modal_acquisition(1)" class="btn btn-info mb-2" title="Meter Seal Acquisition"><span style="font-size: 12px;"><i class="fal fa-plus mr-2"></i>Seal Acquisition</span></a>
           <!-- </div> -->
         </div>
       </div>
@@ -42,27 +42,27 @@
       <div class="row">
         <section class="col-lg-12 connectedSortable">
 
-          <div class="card card-default card-tabs">
-            <div class="card-header p-0 pt-1">
-              <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+          <div class="card card-primary card-outline card-tabs">
+            <div class="card-header p-2 pt-1">
+              <ul class="nav nav-pills" id="custom-tabs-two-tab" role="tablist">
                 <!-- <li class="pt-2 px-3">
                   <h3 class="card-title">Acquisition</h3>
                 </li> -->
                 <li class="nav-item">
-                  <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill"
-                    href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home"
+                  <a class="nav-link active" data-toggle="tab"
+                    href="#meter" role="tab" aria-controls="custom-tabs-two-home"
                     aria-selected="true"><i class="fal fad fa-books-medical mr-2"></i>Meter</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
-                    href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile"
+                  <a class="nav-link" data-toggle="tab"
+                    href="#seal" role="tab" aria-controls="custom-tabs-two-profile"
                     aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Seal</a>
                 </li>
               </ul>
             </div>
             <div class="card-body">
               <div class="tab-content" id="custom-tabs-two-tabContent">
-                <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel"
+                <div class="tab-pane fade show active" id="meter" role="tabpanel"
                   aria-labelledby="custom-tabs-two-home-tab">
                   <table id="acqTable" class="table table-nowrap table-striped table-sm dtr-inline">
                     <thead>
@@ -78,7 +78,7 @@
                     </thead>
                   </table>
                 </div>
-                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel"
+                <div class="tab-pane fade" id="seal" role="tabpanel"
                   aria-labelledby="custom-tabs-two-profile-tab">
                 <table id="acqTable_mSeal" class="table table-nowrap table-striped dtr-inline">
                   <thead>
