@@ -30,6 +30,7 @@ urlpatterns = [
     # meters
     path('meters', views.meter_ss, name='meterss'),
     path('meterssave', views.meter_save, name='meterssave'),
+    path('meter_edit', views.meter_edit, name='meter_edit'),
     path('metersdelete', views.meter_delete, name='metersdelete'),
 
     # seals
@@ -37,6 +38,10 @@ urlpatterns = [
     path('seals', views.seal_ss, name='sealss'),
     path('sealssave', views.seal_save, name='sealssave'),
     path('sealsdelete', views.seal_delete, name='sealsdelete'),
+
+    # accept acquisition
+    path('accept_acquisition', views.accept_acquisition, name='accept_acquisition'),
+
 
 
 ]

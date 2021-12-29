@@ -56,45 +56,51 @@ window.onload = function ()
                 {
                     "data": "id", "render": function (data, type, row)
                     {
-                        if ('{{ request.user.is_superuser }}' == 'True')
-                        {
-                            return '<div class="input-group-prepend">' +
-                                '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                                '    <div class="dropdown-menu">' +
-                                '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Accept</a>' +
-                                '      <div class="dropdown-divider"></div>' +
-                                '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i> Edit</a>' +
-                                '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt"></i> Delete</a>' +
-                                '    </div>' +
-                                '  </div >'
-
-                            // return '<center>' +
-                            //     '<div class="btn-group">' +
-                            //     '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "modal_editacquisition(' + row["id"] + ')" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
-                            //     '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick = "meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
-                            //     '</div>' +
-                            //     '</center>'
-                        }
-                        else
-                        {
-                            return '<div class="input-group-prepend">' +
-                                '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                                '    <div class="dropdown-menu">' +
-                                '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-box-check mr-1"></i> Accept</a>' +
-                                '      <div class="dropdown-divider"></div>' +
-                                '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt mr-1"></i> Edit</a>' +
-                                '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt mr-1"></i> Delete</a>' +
-                                '    </div>' +
-                        }
+                        // if ('{{ request.user.is_superuser }}' == 'True')
+                        // {
+                            if (row["status"] == 1)
+                            {
+                                return '<a href="#" class="btn btn-warning btn-sm" title="Accept" onclick = "accept_aquisition(' + row["id"] + ')" ><i class="fas fa-box-check mr-1"></i><span style="font-size: 12px;"> Accept</span></a>'
+                            }
+                            else
+                            {
+                                return '<div class="input-group-prepend">' +
+                                    '  <button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+                                    '    <div class="dropdown-menu">' +
+                                    '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt mr-1"></i> Edit</a>' +
+                                    '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt mr-1"></i> Delete</a>' +
+                                    '    </div>' +
+                                    '  </div >'
+                            }
+                        // }
+                        // else
+                        // {
+                        //     return '<div class="input-group-prepend">' +
+                        //         '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+                        //         '    <div class="dropdown-menu">' +
+                        //         '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row["id"] + ')><i class="fal fa-box-check mr-1"></i> Accept</a>' +
+                        //         '      <div class="dropdown-divider"></div>' +
+                        //         '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt mr-1"></i> Edit</a>' +
+                        //         '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt mr-1"></i> Delete</a>' +
+                        //         '    </div>' +
+                        //         '  </div >'
+                        // }
                     }
                 },
                 {
                     "data": "transactiondate", "render": function (data, type, row)
                     {
-                        if (params == 0)
-                            return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '">' + data + '</a></td>'
+                        if (row["status"] == 1)
+                        {
+                            return '<td style="width: fit-content;"> ' + data + '</td>'
+                        }
                         else
-                            return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
+                        {
+                            if (params == 0)
+                                return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '" style="color:black">' + data + '</a></td>'
+                            else
+                                return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
+                        }
                     }
                 },
                 { "data": "supplierid__suppliername" },
@@ -291,15 +297,42 @@ function meter_delete(id)
                 if (data.msg == 'deleted')
                 {
                     Swal.fire('Delete!', ' Successfully deleted!', 'success');
-                    // acqTable.draw();
-                    // loadAcquisition(0);
                     $('#acqTable').DataTable.ajax.reload(null, false);
-                    // $('#acqTable').DataTable.draw();
                 }
             },
             error: function (e)
             {
                 alert('err: meter list 158');
+            }
+        });
+    }
+}
+
+function accept_aquisition(params)
+{
+
+    var ok = confirm('Are you sure to delete this entry?');
+    if (ok == true)
+    {
+        alert(params);
+        $.ajax({
+            url: urlsaccept,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params, },
+            success: function (data)
+            {
+                if (data.msg == 'saved')
+                {
+                    Swal.fire('Accepted!', ' Successfully accepted!', 'success');
+                    $('#acqTable').DataTable.ajax.reload(null, false);
+                }
+            },
+            error: function (e)
+            {
+                Swal.fire('Error!', e, 'danger');
             }
         });
     }

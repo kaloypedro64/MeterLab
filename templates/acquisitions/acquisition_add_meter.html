@@ -5,7 +5,7 @@
 {% include "base/header.html" %}
 <style type="text/css">
     label {
-        text-align: right;
+        /* text-align: right; */
         color: darkslategray;
         /* font-size-adjust: 0.45; */
         /* font-weight: 500; */
@@ -37,6 +37,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="ml-auto">
+                    <a type="button" href="#" onclick="add_meter_modal()" class="btn btn-info"><i
+                            class="fal fa-plus mr-1"></i><span style="font-size: 12px;">New Meter</span></a>
                     <a type="button" href="/acquisitions" class="btn btn-info"><i
                             class="fal fa-share-square mr-1"></i><span style="font-size: 12px;">Done</span></a>
                 </div>
@@ -44,148 +46,224 @@
         </div>
     </section>
     <section class="content">
-        <div class="row">
-            <section class="col-lg-12 connectedSortable">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-check-circle"></i>
-                            Meter Acquisition Information <span style="font-size: 12px;"><i></i></span>
-                        </h3>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="card-body">
-                                <input type="hidden" name="id" maxlength="45" required="" id="id_id"
-                                    value="{{ acq.id }}">
-                                <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="0">
-                                <input type="hidden" name="area" maxlength="45" required="" id="id_area"
-                                    value="{{ area }}">
-                                <input type="hidden" name="supplierid" id="id_supplierid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 connectedSortable">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fal fa-info mr-1"></i>
+                                Meter Acquisition Information <span style="font-size: 12px;"><i></i></span>
+                            </h3>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col">
+                                <div class="card-body paper-cut">
+                                    <input type="hidden" name="id" maxlength="45" required="" id="id_id"
+                                        value="{{ acq.id }}">
+                                    <input type="hidden" name="userid" maxlength="45" required="" id="id_userid"
+                                        value="0">
+                                    <input type="hidden" name="area" maxlength="45" required="" id="id_area"
+                                        value="{{ area }}">
+                                    <input type="hidden" name="supplierid" id="id_supplierid">
 
-                                <div class="row">
-                                    <p style="width: 150px; font-weight: bold;">Transaction Date : </p>
-                                    <span class="ml-2">
+                                    <strong><i class="far fa-calendar-alt mr-1"></i> Transaction Date</strong>
+                                    <p class="text-muted">
                                         {{acq.transactiondate|date:'Y-m-d'}}
-                                    </span><br>
-                                </div>
-                                <div class="row">
-                                    <p style="width: 150px; font-weight: bold;">RR Number : </p>
-                                    <span class="ml-2">
+                                    </p>
+                                    <hr>
+                                    <strong><i class="fas fa-book mr-1"></i> RR Number</strong>
+                                    <p class="text-muted">
                                         {{acq.rrnumber}}
-                                    </span><br>
-                                </div>
-                                <div class="row">
-                                    <p style="width: 150px; font-weight: bold;">Supplier : </p>
-                                    <span class="ml-2">
+                                    </p>
+                                    <hr>
+                                    <strong><i class="fal fa-file-check mr-1"></i> Supplier</strong>
+                                    <p class="text-muted">
                                         {{acq.supplierid__suppliername}}, {{acq.supplierid__address}}
-                                    </span><br>
+                                    </p>
+
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <section class="col-lg-12 connectedSortable">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Meter Information <span style="font-size: 12px;"><i>(All fields are
-                                    required)</i></span>
-                        </h3>
-                    </div>
-
-                    <div class="row g-0">
-                        <div class="col-md-5">
-                            {% csrf_token %}
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="id_brandid"
-                                        class="col-sm-3 col-form-label col-form-label-sm ">Brand:</label>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm select2" id="id_brandid"
-                                            name="brandid">
-                                            {% for row in mBrand %}
-                                            <option value="{{row.id}}">{{ row.brand }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;"> Add
-                                                    Brand</span></a></div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm select2" id="id_mtypeid"
-                                            name="mtypeid">
-                                            {% for row in mTypes %}
-                                            <option value="{{row.id}}">{{ row.metertype }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
-                                                Meter Type</span></a>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
-                                    <div class="col">
-                                        <select class="form-control form-control-sm " id="id_ampheres" name="ampheres">
-                                            {% for row in mAmp %}
-                                            <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
-                                    <div class="col">
-                                        <input type="number" class="form-control form-control-sm" id="id_units"
-                                            name="units" placeholder="100">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
-                                        Start:</label>
-                                    <div class="col">
-                                        <input type="number" class="form-control form-control-sm" id="id_serialnos"
-                                            name="serialnos" placeholder="0001">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="ml-auto">
-                                        <button type="button" onclick="meter_save()" class="btn btn-success mr-1 "><i
-                                                class="fal fa-save mr-1" tabindex="-1"></i> <span
-                                                style="font-size: 12px;"> Save
-                                                Meter Info
-                                            </span></button>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-md-8 connectedSortable">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fal fa-info-square mr-1"></i>
+                                Meter Information <span style="font-size: 12px;"><i>(All fields are
+                                        required)</i></span>
+                            </h3>
                         </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Actions</th>
-                                            <th>Brand</th>
-                                            <th>Type</th>
-                                            <th>Ampheres</th>
-                                            <th>Units</th>
-                                            <th>Serial No.</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                        <div class="card-body">
+                            <table id="tablex" class="table table-nowrap table-striped table-sm dtr-inline">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Actions</th>
+                                        <th>Brand</th>
+                                        <th>Type</th>
+                                        <th>Ampheres</th>
+                                        <th>Units</th>
+                                        <th>Serial No.</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </section>
+</div>
+
+<div class="modal fade" id="modal-add_meter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">Meter Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label for="id_brandid" class="col-sm-3 col-form-label">Brand:</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm select2" id="id_brandid" name="brandid">
+                            {% for row in mBrand %}
+                            <option value="{{row.id}}">{{ row.brand }}</option>
+                            {% endfor %}
+                        </select>
+                        <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;"> Add
+                                    Brand</span></a></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_mtypeid" class="col-sm-3 col-form-label">Meter Type</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm select2" id="id_mtypeid" name="mtypeid">
+                            {% for row in mTypes %}
+                            <option value="{{row.id}}">{{ row.metertype }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
+                                Meter Type</span></a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm " id="id_ampheres" name="ampheres">
+                            {% for row in mAmp %}
+                            <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
+                    <div class="col">
+                        <input type="number" class="form-control form-control-sm" id="id_units" name="units"
+                            placeholder="100">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
+                        Start:</label>
+                    <div class="col">
+                        <input type="number" class="form-control form-control-sm" id="id_serialnos" name="serialnos"
+                            placeholder="0001">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group row">
+                    <div class="ml-auto">
+                        <button type="button" onclick="meter_save()" class="btn btn-success mr-1 ">
+                            <i class="fal fa-save mr-1" tabindex="-1"></i>
+                            <span style="font-size: 12px;"> Save Meter Info </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-edit_meter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">Modify Meter Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <input type="text" name="id" maxlength="45" required="" id="id_id_b">
+                    <label for="id_brandid_b" class="col-sm-3 col-form-label">Brand:</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm select2" id="id_brandid_b" name="brandid_b">
+                            {% for row in mBrand %}
+                            <option value="{{row.id}}">{{ row.brand }}</option>
+                            {% endfor %}
+                        </select>
+                        <div><a href="#" onclick="brand_modal()"><span style="font-size: 12px;"> Add
+                                    Brand</span></a></div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_mtypeid_b" class="col-sm-3 col-form-label">Meter Type</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm select2" id="id_mtypeid_b" name="mtypeid_b">
+                            {% for row in mTypes %}
+                            <option value="{{row.id}}">{{ row.metertype }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="#" onclick="mtypes_modal()"><span style="font-size: 12px;"> Add
+                                Meter Type</span></a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                    <div class="col">
+                        <select class="form-control form-control-sm select2" id="id_ampheres_b" name="ampheres_b">
+                            {% for row in mAmp %}
+                            <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_units" class="col-sm-3 col-form-label">Unit (pcs):</label>
+                    <div class="col">
+                        <input type="number" class="form-control form-control-sm" id="id_units_b" name="units_b"
+                            placeholder="100">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
+                        Start:</label>
+                    <div class="col">
+                        <input type="number" class="form-control form-control-sm" id="id_serialnos_b" name="serialnos_b"
+                            placeholder="0001">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group row">
+                    <div class="ml-auto">
+                        <button type="button" onclick="meter_update()" class="btn btn-success mr-1 ">
+                            <i class="fal fa-save mr-1" tabindex="-1"></i>
+                            <span style="font-size: 12px;"> Update Meter Info </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="modal-brand">
@@ -276,6 +354,7 @@
 
     var id = '{{ acq.id }}';
     let mSaveUrl = "{% url 'meterssave' %}";
+    let mEditUrl = "{% url 'meter_edit' %}";
     let mDeleteUrl = "{% url 'metersdelete' %}";
 
     $("#id_brandid").select2().val(1).trigger('change.select2');

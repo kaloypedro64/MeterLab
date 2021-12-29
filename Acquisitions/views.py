@@ -44,7 +44,7 @@ class acquisitionList(ListView):
     html = 'acquisitions/acquisitions.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area').order_by(self.request.GET.get('order_by'))
+        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area', 'status').order_by(self.request.GET.get('order_by'))
 
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
@@ -167,7 +167,7 @@ def acquisition_save(request):
             cursor.execute('select id from zanecometerpy.suppliers where suppliername like "'+ str(suppliername) +'" limit 1')
             locate_supplier = cursor.fetchall()
             supplierid = locate_supplier[0][0]
-        print(supplierid, supplierid)
+        # print(supplierid, supplierid)
         cursor.execute('insert into zanecometerpy.acquisition (status, transactiondate, rrnumber, area, userid, supplierid, acqtype, created_at, updated_at) values (0,"' + date + '","' + rrno + '","' +
                        transaction_area.area + '","' + str(request.user.id) + '","' + str(supplierid) + '", "' + str(acqtype) + '","' + now.strftime('%Y-%m-%d %H:%M:%S') + '", "' + now.strftime('%Y-%m-%d %H:%M:%S') + '")')
         cursor.fetchall()
@@ -196,8 +196,6 @@ def acquisition_edit(request, id):
     if request.is_ajax():
         id = request.GET.get('id')
         acqinfo = acquisition.objects.get(pk=id)
-        # acqinfo.delete()
-
         if True:
             data = {"form": acqinfo }
         else:
@@ -249,7 +247,6 @@ def meter_save(request):
         serialnos = str(request.GET.get('serialnos'))
         units = str(request.GET.get('units'))
 
-
         cursor = connection.cursor()
         cursor.execute('insert into zanecometerpy.meters (acquisitionid, brandid, mtypeid, ampheres, serialnos, units) values ("' + acquisitionid + '","' + brandid + '","' + mtypeid + '","' + ampheres + '","' + serialnos + '","' + units + '")')
         cursor.fetchall()
@@ -274,6 +271,26 @@ def meter_save(request):
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+def meter_edit(request):
+    if request.is_ajax():
+        option = str(request.GET.get('option'))
+        if (option == "locate"):
+            id = str(request.GET.get('id'))
+            info = meters.objects.get(pk=id)
+            data = {"id": info.id, "brandid": info.brandid.id, "brand": info.brandid.brand,
+                    "mtypeid": info.mtypeid.id, "metertype": info.mtypeid.metertype, "ampheres": info.ampheres, "serialnos": info.serialnos, "units": info.units}
+        else:
+            id = str(request.GET.get('id'))
+            brandid = str(request.GET.get('brandid'))
+            mtypeid = str(request.GET.get('mtypeid'))
+            ampheres = str(request.GET.get('ampheres'))
+
+            cursor = connection.cursor()
+            cursor.execute("update zanecometerpy.meters set brandid = '{0}', mtypeid = '{1}', ampheres = '{2}' where id = {3}".format(
+                brandid, mtypeid, ampheres, id))
+            cursor.fetchall()
+            data = {"msg": "updated"}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
 def meter_delete(request):
     if request.is_ajax():
@@ -333,8 +350,6 @@ def brand_delete(request):
 #  end brand
 
 # start meter type
-
-
 def mtypes_ss(request):
     if request.is_ajax():
         start = int(request.GET.get('start'))
@@ -477,6 +492,20 @@ def seal_delete(request):
         else:
             data = {"msg": 'Not deleted'}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
+#
+def accept_acquisition(request):
+    if request.is_ajax():
+        acquisitionid = str(request.GET.get('id'))
+        cursor = connection.cursor()
+        cursor.execute('update zanecometerpy.acquisition set status = 2 where id = "'+ acquisitionid +'"')
+        cursor.fetchall()
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
 
 
 def datetime_handler(x):
