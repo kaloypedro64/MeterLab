@@ -95,7 +95,7 @@ class metertestForm(forms.ModelForm):
         readonly_fields = ['created_at', 'updated_at']
     def __init__(self, *args, **kwargs):
         super(metertestForm, self).__init__(*args, **kwargs)
-        self.fields['meterdetailsid'].required = True
+        # self.fields['meterdetailsid'].required = True
 
 
 class metersealForm(forms.ModelForm):

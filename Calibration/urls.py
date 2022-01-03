@@ -14,9 +14,11 @@ urlpatterns = [
 
     path('consumer_search', views.consumer_search, name='consumer_search'),
     path('consumer_save', views.consumer_save_assignedmeter, name='consumer_save'),
-    path('update_seal', views.calibration_update_save, name='update_seal'),
+    path('calibration_update_save', views.calibration_update_save,
+         name='calibration_update_save'),
 
-    path('meterseal/<int:id>', views.load_meterseal, name='meterseal'),
+    path('dt_meterseal_details/<int:id>', views.dt_meterseal_details,
+         name='dt_meterseal_details'),
 
     path('print_test/<int:id>', views.load_test_print, name='print_test'),
 ]

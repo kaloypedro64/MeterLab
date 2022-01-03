@@ -1,3 +1,4 @@
+from typing import cast
 from django.http.response import HttpResponse, JsonResponse
 from MeterLab.settings import AREA_CHOICES
 from Users.models import userarea
@@ -11,7 +12,7 @@ from Meters.models import *
 from Meters.forms import *
 
 from django.views.generic import CreateView, FormView, RedirectView, ListView
-from django.utils.dateparse import parse_datetime
+from django.utils.dateparse import parse_datetime, postgres_interval_re
 
 # Create your views here.
 header = 'Calibration'
@@ -89,6 +90,7 @@ def calibration(request):
                 '    (select metertype from metertype where id=m.mtypeid) metertype,' + \
                 ' ampheres, accuracy, md.status ' + \
                 'from meters m ' + \
+                'inner join acquisition a on a.id = m.acquisitionid ' + \
                 'left join meterdetails md on m.id = md.meterid '
 
         if filter:
@@ -97,13 +99,13 @@ def calibration(request):
             status = 0
         # print('status', status)
         cursor = connection.cursor()
-        query += "where status = "+ str(status) +" "+ isfiltered
+        query += "where md.status = " + str(status) + " " + isfiltered
         # query += 'where status = 0 ' + isfiltered
 
         cursor.execute(query)
         mList = cursor.fetchall()
 
-
+        # print("query", query)
         list_data = []
         for index, item in enumerate(mList[start:start+limit], start):
             list_data.append(item)
@@ -170,8 +172,8 @@ def consumer_list(request):
 def seal_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
-        query = sealdetails.objects.filter(serialno__icontains=search, active__icontains=0).values('id', 'sealid', 'meterdetailsid',
-                                                                               'serialno', 'techcrew', 'status', 'active').order_by('serialno')
+        query = sealdetails.objects.filter(serialno__icontains=search, active__icontains=0).extra(select={'serialnos': 'cast(serialno AS UNSIGNED INTEGER)'}).values('id', 'sealid', 'meterdetailsid',
+                                                                               'serialno', 'techcrew', 'status', 'active').order_by('serialnos')
         list_data = []
         datas = []
         list_data = []
@@ -287,15 +289,15 @@ def calibration_update_save(request):
 #         }
 #         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-def load_meterseal(request, id):
+def dt_meterseal_details(request, id):
     if request.is_ajax():
         start = int(request.GET.get('start'))
         limit = int(request.GET.get('limit'))
         filter = request.GET.get('filter')
         order_by = request.GET.get('order_by')
-        query = meterseal.objects.filter(metertestid=id, seal_a__icontains=filter, seal_b__icontains=filter, remarks__icontains=filter,).values(
+        query = meterseal.objects.filter(meterdetailsid=id, seal_a__icontains=filter, seal_b__icontains=filter, remarks__icontains=filter,).values(
             'id', 'transactiondate', 'seal_a',
-                  'seal_b', 'metercondition', 'accuracy', 'reading', 'remarks', 'active', 'userid', 'metertestid').order_by(order_by)
+                  'seal_b', 'metercondition', 'accuracy', 'reading', 'remarks', 'active', 'userid', 'meterdetailsid').order_by(order_by)
         list_data = []
         for index, item in enumerate(query[start:start+limit], start):
             list_data.append(item)
