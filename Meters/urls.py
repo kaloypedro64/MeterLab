@@ -11,7 +11,9 @@ urlpatterns = [
     path('multiple/<int:id>', views.calibrate_multiple, name='multiple'),
     path('single/<int:id>', views.calibrate, name='calibrate'),
 
+    path('meter-test-details/', views.meter_test_details, name='testdetails'),
     path('meter-test/', views.meter_test, name='test'),
+    path('meter-test-new/<str:serialno>', views.meter_test_new, name='new'),
 
     # path('calibrations', views.calibration_history,
     #      name='calibrations'),

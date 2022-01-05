@@ -1,3 +1,4 @@
+from decimal import Context
 import types
 from django.db.models import query
 from django.db.models.query_utils import Q
@@ -24,6 +25,7 @@ from django.core.cache import cache
 from django.urls import reverse
 from django.utils.cache import get_cache_key
 
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 datetoday = datetime.date.today()
@@ -38,6 +40,7 @@ html_mEdit = "meters/meter_request_edit.html"
 html_meterdetails_data = 'meters/meterdetails_data.html'
 html_meters_data = 'meters/meters_data.html'
 
+html_metertest_history = "meters/meter_test_history.html"
 html_metertest = "meters/meter_test.html"
 html_metertestreport = 'meters/meter_test_report.html'
 
@@ -153,23 +156,48 @@ def meters_detail(request):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+
+def meter_test_details(request):
+    if request.is_ajax():
+        id = str(request.GET.get('id'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        # SELECT id, '', gen_average, serialno, consumers FROM zanecometerpy.metertest
+        query = metertest.objects.select_related('consumers').filter(serialno__icontains=filter,).values(
+            'id', 'gen_average', 'serialno', 'consumersid__consumer').order_by(order_by)
+        list_data = []
+        for index, item in enumerate(query[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': query.count(),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
 def meter_test(request):
-    serials = meterdetails.objects.all().filter(wms_status__exact=0)
+    return render(request, html_metertest_history, {})
+
+
+@csrf_exempt
+def meter_test_new(request, serialno):
     form = metertestForm(request.POST)
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            meterid = request.POST['idmeterdetails']
-            average = request.POST['gen_average']
-            cursor = connection.cursor()
-            cursor.execute(
-                'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
-            cursor.fetchall()
-        context = {'form': form, 'datetoday': datetoday,
-                   'serials': serials, 'idmeters': id, 'save': 'save'}
-        return render(request, html_metertest, context)
+            # meterid = request.POST['idmeterdetails']
+            # average = request.POST['gen_average']
+            # cursor = connection.cursor()
+            # cursor.execute('INSERT INTO zanecometerpy.metertest (testdate,serialno,gen_average,fullload_average,lightload_average,fl1,fl2,fl3,ll1,ll2,ll3,reading,type,volts,phase,kh,ta,remarks,active,isdamage,userid,created_at,updated_at,consumers) VALUES')
+
+            # cursor.execute(
+            #     'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
+            # cursor.fetchall()
+        print('form', form.errors)
+        return render(request, html_metertest_history, {})
     else:
-        context = {'form': form, 'datetoday': datetoday, 'serials': serials}
+        context = {'form': form, 'datetoday': datetoday, 'serialno': serialno}
         return render(request, html_metertest, context)
 
 def calibrate(request, id):
@@ -266,10 +294,27 @@ def search_for_meter(request):
     if request.is_ajax():
         serial = request.GET.get('serial')
         cursor = connection.cursor()
-        query = "select accountnumber, name, address, serial, billmonth, totalbill from zaneco.master where serial <> '' and serial like '" + \
+        query = "select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" + \
             str(serial) + "'"
         cursor.execute(query)
         data = cursor.fetchall()
+
+        # insert name
+        name = data[0][1]
+        address = data[0][2]
+        brand = data[0][6]
+        cursor.execute("insert into zanecometerpy.consumers (consumer, address) select * from (select '" + name +
+                       "', '" + address + "') as tmp where not exists (select consumer from zanecometerpy.consumers where consumer like '" + name + "');")
+        # consumerid = cursor.lastrowid
+
+        # context = {'consumerid':consumerid}
+        query = "select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" + \
+            str(serial) + "'"
+        cursor.execute(query)
+        data = cursor.fetchall()
+
+
+        print('context', data.append(context))
     return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def seal_list(request):

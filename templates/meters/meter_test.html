@@ -16,7 +16,7 @@
 
 
 <div class="content-wrapper">
-    <!-- <form action method="POST" autocomplete="off"> -->
+    <form class="meter-test-form" action="" method="POST" autocomplete="off" >
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row">
@@ -25,7 +25,9 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <button type="button" class="btn btn-success btn-sm mr-1" onclick="save_meter_test()"><i class="fal fa-save mr-1"
+                            <!-- <button type="button" class="btn btn-success btn-sm mr-1" onclick="save_meter_test()"><i
+                                    class="fal fa-save mr-1" tabindex="-1"></i>Save & Next</button> -->
+                            <button type="submit" class="btn btn-success btn-sm mr-1"><i class="fal fa-save mr-1"
                                     tabindex="-1"></i>Save & Next</button>
                             <a href=".." class="btn btn-info btn-sm"><i class="fal fa-share-square"></i>
                                 <span style="font-size: 12px;"> Done</span></a>
@@ -49,6 +51,7 @@
                 <div class="row">
                     <div class="col-12">
                         {% csrf_token %}
+                        <!-- <input type="hidden" name="_token" value="'{% csrf_token %}'"> -->
                         <input type="hidden" name="active" min="0" required="" id="id_active" value="0">
                         <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="0">
                         <div class="card card-info card-outline">
@@ -56,6 +59,16 @@
                             <div class="row g-0">
                                 <div class="col-lg-4">
                                     <div class="card-body">
+
+                                        <div class="form-group">
+                                            <div class="text-center">
+                                                <img class="profile-user-img img-fluid img-circle" src="{% static "dist/img/user4-128x128.jpg" %}" alt="User profile picture">
+                                            </div>
+                                            <h3 class="profile-username text-center" id="lblName">...</h3>
+                                            <p class="text-muted text-center" id="lblAddress">...</p>
+                                        </div>
+
+                                        <hr>
 
                                         <div class="form-group row">
                                             <label for="id_testdate" class="col-sm-4 col-form-label"><span>
@@ -68,24 +81,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label for="id_brand" class="col-sm-4 col-form-label">Serial No.</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="id_serialno" name="serialno" readonly
+                                                    value="{{ serialno }}">
+                                            </div>
+                                        </div>
+
 
                                         <input type="hidden" class="form-control form-control-sm" id="id_idmeterserials"
                                             name="idmeterserials" readonly required>
-                                        <div class="form-group row">
-                                            <a href="#" class="col-sm-4 col-form-label"
-                                                onclick="search_for_meter()"><span> Search Serial</span></a>
-                                            <!-- <label for="id_idmeterserials" class="col-sm-4 col-form-label">Serial No.:</label> -->
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    id="id_meterserialno" name="meterserialno" readonly required>
-                                                <!-- <select class="form-control form-control-sm dropdown-list-serials"
-                                                    id="id_idmeterserials" name="idmeterserials" onchange="serialno_selected()"></select>-->
-                                                <span class="col-form-label mr-2" id="lblName"
-                                                    style="font-size: 13px; font-weight:bold;">Consumer Name</span><br>
-                                                <span class="col-form-label mr-2" id="lblAddress"
-                                                    style="font-size: 12px; color:gray">Address</span>
-                                            </div>
-                                        </div>
+
 
                                         <!-- <div class="form-group row">
                                             <label for="id_supplier" class="col-sm-4 col-form-label mlabel">Consumer:</label>
@@ -96,10 +104,15 @@
                                                 <span class="col-form-label mr-2" id="lblAddress" style="font-size: 13px;">Dapitan City</span>
                                             </div>
                                         </div> -->
-
                                         <div class="form-group row">
-                                            <label for="id_reading" class="col-sm-4 col-form-label">Init.
-                                                Reading:</label>
+                                            <label for="id_brand" class="col-sm-4 col-form-label">Meter</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control form-control-sm" id="id_brand"
+                                                    name="brand" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="id_reading" class="col-sm-4 col-form-label">Reading:</label>
                                             <div class="col">
                                                 <input type="number" class="form-control form-control-sm d"
                                                     style="text-align: right;" id="id_reading" name="reading"
@@ -243,14 +256,12 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col">
+                                        <button type="button" onClick="generate_average()"
+                                            class="btn btn-info btn-sm mb-2 "><i class="fad fa-abacus mr-1"></i>Generate
+                                            Average</button>
                                         <div class="card">
-                                            <div class="card-header">
-                                                <button type="button" onClick="generate_average()"
-                                                    class="btn btn-info btn-sm"><i
-                                                        class="fad fa-abacus mr-1"></i>Generate
-                                                    Average</button>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -299,7 +310,7 @@
             </div>
         </section>
 
-    <!-- </form> -->
+    </form>
 </div>
 
 <script>
@@ -308,6 +319,9 @@
     // let urlConsumerList = "{% url 'consumer_list' %}";
     let urlSerialList = "{% url 'serials' %}";
     let urlSerialSearch = "{% url 'search_for_meter' %}";
+    let urlSaveTest = "{% url 'new' 0 %}";
+    let SerialNo = "{{ serialno }}";
+
 
 
 
@@ -320,6 +334,8 @@
     // });
     window.onload = function ()
     {
+
+        locate_serialno_from_master(SerialNo);
 
         function isNumber(evt)
         {
@@ -358,8 +374,49 @@
                 }
             });
         };
-
     };
+
+    $(document).on('keypress', 'input,select', function (e)
+    {
+        if (e.which == 13)
+        {
+            e.preventDefault();
+            var $next = $('[tabIndex=' + (+this.tabIndex + 1) + ']');
+            console.log($next.length);
+            if (!$next.length)
+            {
+                $next = $('[tabIndex=1]');
+            }
+            $next.focus().click();
+        }
+    });
+
+    function locate_serialno_from_master(params)
+    {
+        $.ajax({
+            url: urlSerialSearch,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { serial: SerialNo, },
+            success: function (response)
+            {
+                // $('#id_idmeterserials').val(response[0][0]);
+                // $('#id_meterserialno').val(response[0][3]);
+                $('#lblName').html(response[0][1]);
+                $('#lblAddress').html(response[0][2]);
+                $('#id_brand').val(response[0][6]);
+                alert(response);
+
+            },
+            error: function (respose)
+            {
+                alert(response);
+                // Swal.fire('Not Found.', response, 'error')
+            }
+        });
+    }
 
     function generate_average()
     {
@@ -382,12 +439,12 @@
                 autocapitalize: 'off'
             },
             showCancelButton: true,
-            confirmButtonText: 'Look up',
+            confirmButtonText: 'Search',
             showLoaderOnConfirm: true,
             preConfirm: (serial) =>
             {
                 $.ajax({
-                    url: urlSerialSearch, // get the route value
+                    url: urlSerialSearch,
                     type: 'GET',
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',
@@ -404,6 +461,7 @@
                             $('#id_meterserialno').val(response[0][3]);
                             $('#lblName').html(response[0][1]);
                             $('#lblAddress').html(response[0][2]);
+                            $('#id_brand').val(response[0][6]);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Record found!',
@@ -461,44 +519,129 @@
 
     function save_meter_test(params)
     {
-        consumer_name = $('#lblName').html();
-        consumer_adress = $('#lblAddress').html();
-        meterdetailsid = $('#id_meterdetailsid').val();
-        testdate = $('#id_testdate').val();
-        gen_average = $('#id_gen_average').val();
-        fullload_average = $('#id_fullload_average').val();
-        lightload_average = $('#id_lightload_average').val();
-        fl1 = $('#id_fl1').val();
-        fl2 = $('#id_fl2').val();
-        fl3 = $('#id_fl3').val();
-        ll1 = $('#id_ll1').val();
-        ll2 = $('#id_ll2').val();
-        ll3 = $('#id_ll3').val();
-        reading = $('#id_reading').val();
-        type = $('#id_type').val();
-        phase = $('#id_phase').val();
-        kh = $('#id_kh').val();
-        ta = $('#id_ta').val();
-        remarks = $('#id_remarks').val();
-        isdamage = $('#id_isdamage').val();
 
-        alert(con)
+
+        // consumer_name = $('#lblName').html();
+        // consumer_adress = $('#lblAddress').html();
+        // meterdetailsid = $('#id_meterdetailsid').val();
+        // testdate = $('#id_testdate').val();
+        // gen_average = $('#id_gen_average').val();
+        // fullload_average = $('#id_fullload_average').val();
+        // lightload_average = $('#id_lightload_average').val();
+        // fl1 = $('#id_fl1').val();
+        // fl2 = $('#id_fl2').val();
+        // fl3 = $('#id_fl3').val();
+        // ll1 = $('#id_ll1').val();
+        // ll2 = $('#id_ll2').val();
+        // ll3 = $('#id_ll3').val();
+        // reading = $('#id_reading').val();
+        // type = $('#id_type').val();
+        // phase = $('#id_phase').val();
+        // kh = $('#id_kh').val();
+        // ta = $('#id_ta').val();
+        // remarks = $('#id_remarks').val();
+        // isdamage = $('#id_isdamage').is(':checked');
+
+        // $.ajax({
+        //     type: 'POST',
+        //     url: urlSaveTest,
+        //     data: {
+        //         consumer_name: consumer_name,
+        //         consumer_adress: consumer_adress,
+        //         meterdetailsid: meterdetailsid,
+        //         testdate: testdate,
+        //         gen_average: gen_average,
+        //         fullload_average: fullload_average,
+        //         lightload_average: lightload_average,
+        //         fl1: fl1,
+        //         fl2: fl2,
+        //         fl3: fl3,
+        //         ll1: ll1,
+        //         ll2: ll2,
+        //         ll3: ll3,
+        //         reading: reading,
+        //         type: type,
+        //         phase: phase,
+        //         kh: kh,
+        //         ta: ta,
+        //         remarks: remarks,
+        //         isdamage: isdamage
+        //     },
+        //     context: this,
+        //     success: function (data, status)
+        //     {
+        //         alert(data);
+        //         //$('#meter-test-form').html(data);
+        //     }
+        // });
+        // return false;
+
+        // $.ajax({
+        //     url: "{% url 'consumer_search' %}",
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     contentType: 'application/json; charset=utf-8',
+        //     contentType: false,
+        //     data: { id: id, },
+        //     success: function (data)
+        //     {
+        //         $('#lblAddress').html(data[0][2]);
+        //     },
+        //     error: function (e)
+        //     {
+        //         alert('err: selected_consumer');
+        //     }
+        // });
+
+        //  $.ajaxSetup({
+        //     headers: { "X-CSRFToken": '{% csrf_token %}' }
+        // });
+
+        var frm = $('.meter-test-form');
+        // var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+        // const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         $.ajax({
-            url: "{% url 'consumer_search' %}",
-            type: 'GET',
+            url:  urlSaveTest.replace('0', SerialNo),
+            type: 'POST',
             dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
+            // contentType: 'application/json; charset=utf-8',
             contentType: false,
-            data: { id: id, },
+            // beforeSend: function (request)
+            // {
+            //     request.setRequestHeader("X-CSRF-TOKEN", "${_csrf.token}");
+            // },
+            // beforeSend: function (jqXHR, settings)
+            // {
+            //     jqXHR.setRequestHeader("x-csrftoken", get_the_csrf_token_from_cookie());
+            // },
+            data: frm.serialize(),
             success: function (data)
             {
-                $('#lblAddress').html(data[0][2]);
+                alert('data - ' + data);
             },
             error: function (e)
             {
-                alert('err: selected_consumer');
+                alert('e - '+ e);
             }
         });
+
+
+    //     $.ajax({
+    //         url: urlSaveTest,
+    //         type: 'GET',
+    //         data: frm.serialize(),
+    //         // context: this,
+    //         success: function (data, status)
+    //         {
+    //             alert(data);
+    //         },
+    //         error: function (data)
+    //         {
+    //             alert(data);
+    //         }
+    //     });
+
     }
+
 </script>
 {% endblock content %}
