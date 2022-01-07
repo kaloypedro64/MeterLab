@@ -60,7 +60,12 @@ window.onload = function ()
                         // {
                             if (row["status"] == 1)
                             {
-                                return '<a href="#" class="btn btn-warning btn-sm" title="Accept" onclick = "accept_aquisition(' + row["id"] + ')" ><i class="fas fa-box-check mr-1"></i><span style="font-size: 12px;"> Accept</span></a>'
+                                return '<center>' +
+                                    '<div class="btn-group">' +
+                                    '<a href="#" class="btn btn-info btn-sm" title="Accept" onclick = "accept_aquisition(' + row["id"] + ')" ><i class="fal fa-check mr-1"></i><span style="font-size: 12px;"> Accept</span></a>' +
+                                    '<a href="#" class="btn btn-danger btn-sm" title="Cancel" onclick="" ><i class="fal fa-times"></i><span style="font-size: 12px;"></span></a>' +
+                                    '</div>' +
+                                    '</center>'
                             }
                             else
                             {
@@ -310,11 +315,9 @@ function meter_delete(id)
 
 function accept_aquisition(params)
 {
-
     var ok = confirm('Are you sure to delete this entry?');
     if (ok == true)
     {
-        alert(params);
         $.ajax({
             url: urlsaccept,
             type: 'GET',
@@ -330,6 +333,34 @@ function accept_aquisition(params)
                     $('#acqTable').DataTable.ajax.reload(null, false);
                 }
             },
+            error: function (e)
+            {
+                Swal.fire('Error!', e, 'danger');
+            }
+        });
+    }
+}
+
+function cancel_aquisition(params)
+{
+    var ok = confirm('Are you sure to cancel this transaction?');
+    if (ok == true)
+    {
+        $.ajax({
+            url: urlsaccept,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params, },
+            success: function (data)
+            {
+                if (data.msg == 'saved')
+                {
+                    Swal.fire('Accepted!', ' Successfully accepted!', 'success');
+                    $('#acqTable').DataTable.ajax.reload(null, false);
+                }
+            },G
             error: function (e)
             {
                 Swal.fire('Error!', e, 'danger');

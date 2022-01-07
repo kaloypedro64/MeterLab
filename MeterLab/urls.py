@@ -29,7 +29,7 @@ urlpatterns = [
     path('acquisitions/', include('Acquisitions.urls')),
     path('meters/', include('Meters.urls')),
     path('calibration/', include('Calibration.urls')),
-    path('meter-test/', meter_test, name='meter-test'),
+    path('metertest/', include('MeterTest.urls')),
 
     path('signatory/', include('Signatory.urls')),
 

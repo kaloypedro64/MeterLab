@@ -26,6 +26,7 @@ from django.urls import reverse
 from django.utils.cache import get_cache_key
 
 from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
 
 datetoday = datetime.date.today()
@@ -40,36 +41,38 @@ html_mEdit = "meters/meter_request_edit.html"
 html_meterdetails_data = 'meters/meterdetails_data.html'
 html_meters_data = 'meters/meters_data.html'
 
-html_metertest_history = "meters/meter_test_history.html"
-html_metertest = "meters/meter_test.html"
-html_metertestreport = 'meters/meter_test_report.html'
+html_metertest_history = "meter-test/meter_test_history.html"
+html_metertest = "meter-test/meter_test.html"
+html_metertestreport = 'meter-test/meter_test_report.html'
 
 html_calibration = 'calibration/calibrate.html'
 html_calibration_multi = 'calibration/calibration_multiple.html'
 
-# @login_required(login_url='/')
-class meterList(ListView):
-    model = meters
-    html = 'meters/meters.html'
 
-    def get_queryset(self):
-        return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'acquisitionid__transactiondate', 'brandid__brand',
-                                                                                         'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
-    def get(self, request, *args, **kwargs):
-        transaction_area = userarea.objects.get(userid=request.user.id)
-        if request.is_ajax():
-            start = int(request.GET.get('start'))
-            limit = int(request.GET.get('limit'))
-            list_data = []
-            for index, item in enumerate(self.get_queryset().filter(acquisitionid__area=transaction_area.area)[start:start+limit], start):
-                list_data.append(item)
-            data = {
-                'length': self.get_queryset().count(),
-                'objects': list_data,
-            }
-            return HttpResponse(json.dumps(data, default=default), 'application/json')
-        else:
-            return render(request, self.html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
+# @login_required(login_url='/')
+# class meterList(ListView):
+#     model = meters
+#     html = 'meters/meters.html'
+
+#     def get_queryset(self):
+#         return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'acquisitionid__transactiondate', 'brandid__brand',
+#                                                                                          'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
+#     def get(self, request, *args, **kwargs):
+#         transaction_area = userarea.objects.get(userid=request.user.id)
+#         if request.is_ajax():
+#             start = int(request.GET.get('start'))
+#             limit = int(request.GET.get('limit'))
+#             list_data = []
+#             for index, item in enumerate(self.get_queryset().filter(acquisitionid__area=transaction_area.area)[start:start+limit], start):
+#                 list_data.append(item)
+#             data = {
+#                 'length': self.get_queryset().count(),
+#                 'objects': list_data,
+#             }
+#             return HttpResponse(json.dumps(data, default=default), 'application/json')
+#         else:
+#             return render(request, self.html, {'header': 'Meters', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
+
 
 
 # def meters_add(request):
@@ -166,7 +169,8 @@ def meter_test_details(request):
         order_by = request.GET.get('order_by')
         # SELECT id, '', gen_average, serialno, consumers FROM zanecometerpy.metertest
         query = metertest.objects.select_related('consumers').filter(serialno__icontains=filter,).values(
-            'id', 'gen_average', 'serialno', 'consumersid__consumer').order_by(order_by)
+            'id', 'gen_average', 'serialno', 'consumersid__consumer', 'testdate').order_by(order_by)
+
         list_data = []
         for index, item in enumerate(query[start:start+limit], start):
             list_data.append(item)
@@ -174,7 +178,7 @@ def meter_test_details(request):
             'length': query.count(),
             'objects': list_data,
         }
-        return HttpResponse(json.dumps(data, default=default), 'application/json')
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), 'application/json')
 
 def meter_test(request):
     return render(request, html_metertest_history, {})
@@ -194,8 +198,8 @@ def meter_test_new(request, serialno):
             # cursor.execute(
             #     'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
             # cursor.fetchall()
-        print('form', form.errors)
-        return render(request, html_metertest_history, {})
+        return HttpResponseRedirect('..')
+        # return render(request, html_metertest_history, {})
     else:
         context = {'form': form, 'datetoday': datetoday, 'serialno': serialno}
         return render(request, html_metertest, context)
@@ -294,27 +298,24 @@ def search_for_meter(request):
     if request.is_ajax():
         serial = request.GET.get('serial')
         cursor = connection.cursor()
-        query = "select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" + \
-            str(serial) + "'"
-        cursor.execute(query)
+        cursor.execute("select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" +
+                       str(serial) + "'")
         data = cursor.fetchall()
-
-        # insert name
         name = data[0][1]
         address = data[0][2]
+        serial = data[0][3]
         brand = data[0][6]
         cursor.execute("insert into zanecometerpy.consumers (consumer, address) select * from (select '" + name +
                        "', '" + address + "') as tmp where not exists (select consumer from zanecometerpy.consumers where consumer like '" + name + "');")
+        # cursor.fetchall()
         # consumerid = cursor.lastrowid
 
         # context = {'consumerid':consumerid}
-        query = "select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" + \
-            str(serial) + "'"
+        query = "select id, consumer, address, '{2}' serial, '{3}' brand from zanecometerpy.consumers where consumer like '{0}' and address like '{1}' ".format(name, address, serial, brand)
         cursor.execute(query)
         data = cursor.fetchall()
 
-
-        print('context', data.append(context))
+        # print('context', data)
     return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def seal_list(request):

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'Calibration',
     'Users',
     'Assign',
+    'MeterTest'
 ]
 
 MIDDLEWARE = [

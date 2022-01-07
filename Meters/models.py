@@ -141,7 +141,9 @@ class metertest(models.Model):
     id = models.AutoField(primary_key=True)
     testdate = models.DateField(("Date"), default=date.today)
     consumersid = models.ForeignKey(
-        consumers, db_column='consumers', on_delete=models.CASCADE, db_index=True)
+        consumers, db_column='consumers', on_delete=models.PROTECT, db_index=True)
+    brandid = models.ForeignKey(
+        brands, db_column='brand', on_delete=models.PROTECT, db_index=True)
     serialno = models.CharField(max_length=15)
     gen_average = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                       MinValueValidator(Decimal('0.00'))])

@@ -5,7 +5,8 @@ from .views import *
 urlpatterns = [
     # path('', views.meterList, name='meterList'),
     # meters
-    path('', meterList.as_view(), name='meterList'),
+    # path('', meterList.as_view(), name='meterList'),
+    path('',  views.meter_test, name='test'),
     path('details/', views.meters_detail, name='mdetails'),
 
     path('multiple/<int:id>', views.calibrate_multiple, name='multiple'),

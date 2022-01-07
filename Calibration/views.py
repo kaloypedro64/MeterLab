@@ -21,7 +21,6 @@ datenow = datetime.datetime.now()
 html_calibration_history = 'calibration/calibration_history.html'
 html_calibration_edit = 'calibration/calibration_edit.html'
 html_test_preview = 'calibration/print_test.html'
-html_test_print = 'reports/meter_test_report.html'
 
 
 # class Calibration(ListView):
@@ -307,24 +306,7 @@ def dt_meterseal_details(request, id):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-# print
-def load_test_print(request, id):
-    if request.method == "POST":
-        queryset = metertest(pk=id)
-        form = metertestForm(request.POST, instance=queryset)
-        if form.is_valid():
-            rec = form.save(commit=False)
-            rec.updated_at = datenow
-            rec.save()
-            return redirect("/calibration")
-        else:
-            data = {"err_msg": form.errors}
-            return JsonResponse(data)
-    else:
-        queryset = metertest.objects.get(pk=id)
-        serials = meterdetails.objects.get(pk=queryset.meterdetailsid.id)
-        context = {'form': queryset, 'serials': serials,'idmeters': id}
-        return render(request, html_test_preview, context)
+
 
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):
