@@ -24,14 +24,14 @@
                 </div>
                 <div class="ml-auto ">
                     <button onclick="modal_calibration_update_multiple()" class="btn btn-info btn-sm mb-2">
-                        <i class="fad fa-tasks-alt mr-1"></i>
+                        <i class="fal fa-tasks mr-1"></i>
                         <span style="font-size: small">
                             Multiple Update
                         </span>
                     </button>
-                    <!-- <button onclick="modal_assign()" class="btn btn-info btn-sm mb-2">
-                    <i class="fal fa-plus-circle mr-1"></i><span style="font-size: small">Assign
-                      Selected</span></button> -->
+                    <button onclick="return_selected_meters()" class="btn btn-info btn-sm mb-2">
+                    <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
+                      Selected</span></button>
                 </div>
             </div>
         </div>
@@ -285,7 +285,7 @@
     </div>
 </div>
 
-<script src="{% static " js/alert.js" %}"></script>
+<script src="{% static "js/alert.js" %}"></script>
 <script type="text/javascript">
 
     let tablez;
@@ -304,7 +304,8 @@
     let urlSealList = "{% url 'seal_list' %}";
     let urlMeterList = "{% url 'meters_list' %}";
 
-    let status;
+    let status, data;
+    var count = 0;
 
     function selected_status(params)
     {
@@ -327,14 +328,19 @@
             "responsive": true,
             "columnDefs": [
                 { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
-                // { "targets": [7], "className": "text-right" }
+                // { "targets": [0], "checkboxes": { "selectRow": true } }
             ],
             "keys": true,
             "keys": { "blurable": false },
             "select": true,
             "select": {
-                'style': 'single',
-                'selector': 'td:first-child'
+                'style': 'multi',
+                // 'selector': 'td:first-child'
+            },
+            "initComplete": function (settings, json)
+            {
+                // tablez.wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+                // $('#Table-MeterSeal').DataTable().columns.adjust().draw();
             },
             "processing": true,
             "serverSide": true,
@@ -399,7 +405,7 @@
                         return '<span style=""> ' + meterstatus[data] + '</span>'
                     }
                 },
-            ]
+            ],
         });
         tablez.column(0).visible(false);
         tablez.column(6).visible(false);
@@ -410,7 +416,31 @@
 
         Load_serials_table(0);
 
-        $('#tablez tbody').on('click', 'tr', function ()
+        // tablez.on("click", "th.select-checkbox", function ()
+        // {
+        //     if ($("th.select-checkbox").hasClass("selected"))
+        //     {
+        //         example.rows().deselect();
+        //         $("th.select-checkbox").removeClass("selected");
+        //     } else
+        //     {
+        //         example.rows().select();
+        //         $("th.select-checkbox").addClass("selected");
+        //     }
+        // }).on("select deselect", function ()
+        // {
+        //     ("Some selection or deselection going on")
+        //     if (example.rows({
+        //         selected: true
+        //     }).count() !== example.rows().count())
+        //     {
+        //         $("th.select-checkbox").removeClass("selected");
+        //     } else
+        //     {
+        //         $("th.select-checkbox").addClass("selected");
+        //     }
+        // });
+       /*  $('#tablez tbody').on('click', 'tr', function ()
         {
             if ($(this).hasClass('selected'))
             {
@@ -431,7 +461,7 @@
             // loadConsumerDetails(id);
             // loadMeterSealDetails(metertestid);
 
-        });
+        // }); */
 
 
 
@@ -490,6 +520,7 @@
                 $("#Table-MeterSeal").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
                 // $('#Table-MeterSeal').DataTable().columns.adjust().draw();
             },
+            "select": { "style": 'multi' },
             "processing": true,
             "serverSide": true,
             "ajax": function (data, callback, settings)
@@ -739,21 +770,30 @@
     }
 
     let ar_icons = ['success', 'error', 'warning', 'info', 'question'];
-    function sweetAlert(header, remarks, ico)
-    {
-        Swal.fire(
-            header,
-            remarks,
-            ar_icons[ico]
-        )
-        // Swal.fire({
-        //     title: header,
-        //     text: remarks,
-        //     icon: ar_icons[ico],
-        //     confirmButtonText: 'Cool',
-        //     showConfirmButton: false,
-        //     timer: 1500
-        // });
+    function return_selected_meters(params) {
+        // if (count <= 0) return;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You wan't to return this meter(s) to warehouse!",
+            confirmButtonText: "Yes, return it!",
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            icon: "question",
+        }).then((result) =>
+        {
+            if (result.isConfirmed)
+            {
+                let rows = tablez.rows('.selected');
+                data = rows.data();
+                data.each(function (value, index)
+                {
+                    alert(value[1])
+                });
+            } else if (result.isDenied)
+            {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        });
     }
 
 </script>
