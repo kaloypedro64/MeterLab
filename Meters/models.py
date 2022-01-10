@@ -54,7 +54,7 @@ class acquisition(models.Model):
         suppliers, db_column='supplierid', related_name='suppliers', on_delete=models.PROTECT, db_index=True)
     # units = models.IntegerField(default=0)
     status = models.PositiveSmallIntegerField(
-        default=0, null=False)  # 0=default, 1=forwarded, 2=accepted, 3=returned,3=
+        default=0, null=False)  # 0=default, 1=forwarded, 2=accepted, 3=returned,4=canceled
     area = models.PositiveSmallIntegerField(
         default=0, null=False)  # 0=dmo, 1=pas, 2=sas, 3=las
     userid = models.IntegerField(default=0)
@@ -69,7 +69,7 @@ class acquisition(models.Model):
 class meters(models.Model):
     id = models.AutoField(primary_key=True)
     acquisitionid = models.ForeignKey(
-        acquisition, db_column='acquisitionid', on_delete=models.PROTECT, db_index=True)
+        acquisition, db_column='acquisitionid', on_delete=models.CASCADE, db_index=True)
     brandid = models.ForeignKey(
         brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
     mtypeid = models.ForeignKey(
@@ -187,7 +187,7 @@ class metertest(models.Model):
 class meterseal(models.Model):
     id = models.AutoField(primary_key=True)
     meterdetailsid = models.ForeignKey(
-        meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True)
+        meterdetails, db_column='meterdetailsid', on_delete=models.CASCADE, db_index=True)
 
     transactiondate = models.DateField(("Date"), default=date.today)
     seal_a = models.CharField(max_length=45, null=True)

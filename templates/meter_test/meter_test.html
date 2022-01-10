@@ -51,7 +51,8 @@
                 <div class="row">
                     <div class="col-12">
                         {% csrf_token %}
-                        <input type="hidden" id="id_consumersid" name="consumersid" >
+                        <input type="hidden" id="id_consumersid" name="consumersid">
+                        <input type="hidden" id="id_brandid" name="brandid">
                         <input type="hidden" name="active" min="0" required="" id="id_active" value="0">
                         <input type="hidden" name="userid" maxlength="45" required="" id="id_userid" value="0">
                         <div class="card card-info card-outline">
@@ -173,7 +174,7 @@
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl1" name="fl1"
-                                                            step="0.01" value="0.00" onchange="generate_average()">
+                                                            step="0.01" value="0.00" onchange="generate_average()" tabindex="2">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -182,7 +183,7 @@
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl2" name="fl2"
-                                                            step="0.01" value="0.00" onchange="generate_average()">
+                                                            step="0.01" value="0.00" onchange="generate_average()" tabindex="3">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -191,7 +192,7 @@
                                                     <div class="col">
                                                         <input type="number" class="form-control form-control-sm"
                                                             style="text-align: right;" id="id_fl3" name="fl3"
-                                                            step="0.01" value="0.00" onchange="generate_average()">
+                                                            step="0.01" value="0.00" onchange="generate_average()" tabindex="4">
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -403,10 +404,10 @@
             success: function (response)
             {
                 $('#id_consumersid').val(response[0][0]);
-                // $('#id_meterserialno').val(response[0][3]);
                 $('#lblName').html(response[0][1]);
                 $('#lblAddress').html(response[0][2]);
                 $('#id_brand').val(response[0][4]);
+                $('#id_brandid').val(response[0][5]);
 
             },
             error: function (respose)

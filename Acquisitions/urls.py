@@ -39,9 +39,10 @@ urlpatterns = [
     path('sealssave', views.seal_save, name='sealssave'),
     path('sealsdelete', views.seal_delete, name='sealsdelete'),
 
-    # accept acquisition
-    path('accept_acquisition', views.accept_acquisition, name='accept_acquisition'),
+    # accept, cancel acquisition
 
+    path('acquisition_response', views.acquisition_response,
+         name='acquisition_response'),
 
 
 ]

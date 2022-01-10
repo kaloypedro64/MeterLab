@@ -35,14 +35,15 @@
                 </div>
                 <div class="col-8">
                     <center>
-                            <h4>ZAMBOANGA DEL NORTE ELECTRIC COOP., INC.</h4>
+                            <h3>ZAMBOANGA DEL NORTE ELECTRIC COOP., INC.</h3>
                             <address>
-                                <b>TECHNICAL SERVICES DEPARTMENT (TSD)</b><br>
-                                <b>Network Management Division (NMD)</b>
+                                <h4>TECHNICAL SERVICES DEPARTMENT (TSD)</h4>
+                                <h4>NETWORK MANAGEMENT DIVISION (NMD)</h4>
                             </address>
                     </center>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col">
                 <center>
@@ -50,21 +51,22 @@
                 </center>
                 </div>
             </div>
+            <br>
             <hr>
             <div class="row font_twenty">
                 <div class="col-sm-2" style="text-align: right;">
-                    <!-- Consumer: <br>
-                    Address: -->
+                    Consumer: <br>
+                    Address:
                 </div>
                 <div class="col-sm-3">
-                    <!-- Name No <br>
-                    NPA -->
+                    {{ form.consumersid__consumer }} <br>
+                    {{ form.consumersid__address }}
                 </div>
                 <div class="col-sm-4" style="text-align: right;">
                     Date:
                 </div>
                 <div class="col">
-                    {{ datetoday }}
+                    {{ form.testdate }}
                 </div>
             </div>
             <br>
@@ -83,10 +85,10 @@
                     Type / Class:<br>
                 </div>
                 <div class="col-sm-3">
-                    {{ form.0.0 }}<br>
-                    {{ form.0.1 }}<br>
-                    {{ form.0.16 }}<br>
-                    {{ form.0.17 }}<br>
+                    {{ form.brandid__brand }}<br>
+                    {{ form.serialno }}<br>
+                    {{ form.reading }}<br>
+                    {{ form.type }}<br>
                 </div>
                 <div class="col-sm-4" style="text-align: right;">
                     Volts:<br>
@@ -95,10 +97,10 @@
                     T.A:<br>
                 </div>
                 <div class="col-sm-3">
-                    {{ form.0.18 }}<br>
-                    {{ form.0.19 }}<br>
-                    {{ form.0.20 }}<br>
-                    {{ form.0.21 }}<br>
+                    {{ form.volts }}<br>
+                    {{ form.phase }}<br>
+                    {{ form.kh }}<br>
+                    {{ form.ta }}<br>
                 </div>
             </div>
             <br>
@@ -113,52 +115,52 @@
                 <div class="col-sm-3" style="text-align: right;">
                     <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Full Load</b><br>
                     Trial 1:<br>
-                    Trial 2:<br>
-                    Trial 3:<br>
+                    2:<br>
+                    3:<br>
                     <b style="border-top: 1px solid rgb(0, 0, 0); ">70% Average:</b><br>
                 </div>
                 <div class="col-sm-3">
                     <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Test Result</b><br>
-                    {{ form.0.9 }}%<br>
-                    {{ form.0.10 }}%<br>
-                    {{ form.0.11 }}%<br>
-                    <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.0.9 }}%</b><br>
+                    {{ form.fl1 }}%<br>
+                    {{ form.fl2 }}%<br>
+                    {{ form.fl3 }}%<br>
+                    <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.fullload_average }}%</b><br>
                 </div>
                 <div class="col-sm-3" style="text-align: right;">
                     <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Light Load</b><br>
                     Trial 1:<br>
-                    Trial 2:<br>
-                    Trial 3:<br>
+                    2:<br>
+                    3:<br>
                     <b style="border-top: 1px solid rgb(0, 0, 0); ">30% Average:</b><br>
                 </div>
                 <div class="col-sm-3">
                     <b style="border-bottom: 1px solid rgb(0, 0, 0); ">Test Result</b><br>
-                    {{ form.0.13 }}%<br>
-                    {{ form.0.14 }}%<br>
-                    {{ form.0.15 }}%<br>
-                    <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.0.12 }}%</b><br>
+                    {{ form.ll1 }}%<br>
+                    {{ form.ll2 }}%<br>
+                    {{ form.ll3 }}%<br>
+                    <b style="border-top: 1px solid rgb(0, 0, 0); ">{{ form.lightload_average }}%</b><br>
                 </div>
             </div>
 
             <br>
             <div class="row font_twenty">
                 <div class="col-sm-3" style="text-align: right;">
-                    <b>General Average</b><br>
+                    <b>General Average:</b><br>
+                    <b>Findings:</b><br>
                 </div>
                 <div class="col-sm-3">
-                    <b>{{ form.0.7 }}%</b><br>
-                </div>
-                <div class="col-sm-3" style="text-align: right;">
-                    <b>Findings</b><br>
-                </div>
-                <div class="col-sm-3">
-                    <b>
-                        {% if form.0.7 >= 98 %}
+                    <b>{{ form.gen_average }}%</b><br>
+                    <h4>
+                        {% if form.gen_average >= 98 %}
                             Passed
                         {% else %}
                             Failed
                         {% endif %}
-                    </b><br>
+                    </h4><br>
+                </div>
+                <div class="col-sm-3" style="text-align: right;">
+                </div>
+                <div class="col-sm-3">
                 </div>
             </div>
             <br>
@@ -167,7 +169,7 @@
                     <center>
                         <p style="background-color: grey; border: 1px solid rgba(77, 72, 72, 0.3);">REMARKS</p>
                     </center>
-                    <p style="margin-left: 22px;"> {{ form.0.22 }}.</p>
+                    <p style="margin-left: 22px;"> {{ form.remarks }}.</p>
                 </div>
             </div>
 
@@ -180,9 +182,9 @@
                     <div class="col-sm-4" style="text-align: right;">
                         Calibrated By:
                     </div>
-                    <div class="col-sm-6" style="text-align: center;">
+                    <div class="col" style="text-align: center;">
                         <br><br><br>
-                        <p style="border-bottom: 1px solid rgb(0, 0, 0); ">JOSE DIONARD R. CUENCA</p>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">JOSE DIONARD R. CUENCA</p>
                         Calibrator
                     </div>
                 </div>
@@ -190,13 +192,25 @@
                     <div class="col-sm-4" style="text-align: right;">
                         Checked By:
                     </div>
-                    <div class="col-sm-6" style="text-align: center;">
+                    <div class="col" style="text-align: center;">
                         <br><br><br>
-                        <p style="border-bottom: 1px solid rgb(0, 0, 0); ">ENGR. IBO R. ORONG</p>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">ENGR. IBO R. ORONG</p>
                         NMD Chief
                     </div>
                 </div>
-                <br>
+
+                <div class="col-2"></div>
+                <div class="col-7 row">
+                    <div class="col-sm-4" style="text-align: right;">
+                        <br><br>
+                        Noted By:
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <br><br><br><br>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">ENGR. VIRGINIO F. CARDENAS</p>
+                        TSD Manager
+                    </div>
+                </div>
             </div>
         </section>
         <!-- /.content -->

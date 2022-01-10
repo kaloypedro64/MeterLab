@@ -1,3 +1,4 @@
+from functools import partialmethod
 import types
 from django.db.models import Sum
 from django.db.models import query
@@ -44,7 +45,7 @@ class acquisitionList(ListView):
     html = 'acquisitions/acquisitions.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('suppliers').filter(supplierid__suppliername__icontains=self.request.GET.get('filter')).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area', 'status').order_by(self.request.GET.get('order_by'))
+        return self.model.objects.select_related('suppliers').exclude(status=4).filter(supplierid__suppliername__icontains=self.request.GET.get('filter'), ).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area', 'status').order_by(self.request.GET.get('order_by'))
 
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
@@ -65,13 +66,6 @@ class acquisitionList(ListView):
             mSupplier = suppliers.objects.order_by('suppliername').distinct()
             return render(request, self.html, {'header': 'Meters', 'form': mform, 'mSupplier': mSupplier, 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'datetoday': datetoday, 'area': transaction_area.area})
 
-
-# def acquisition_selected(request):
-#     if request.is_ajax():
-#         id = request.GET.get('id')
-#         queryset = acquisition.objects.filter(pk=id).order_by('id')
-#         context = {'trans': queryset, 'id': id}
-#         return render(request, html_meters_data, context)
 
 # get rrnumbers from warehouse - dropdown
 def rrnumber_list(request):
@@ -207,10 +201,6 @@ def acquisition_delete(request, id):
         id = request.GET.get('id')
         acqinfo = acquisition.objects.get(pk=id)
         acqinfo.delete()
-
-        # meterinfo_details = meterdetails.objects.get(idmeters=id)
-        # meterinfo_details.delete()
-
         if True:
             data = {"msg": 'deleted'}
         else:
@@ -394,9 +384,7 @@ def mtypes_delete(request):
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 # end meter type
 
-# seal
-
-
+# meter seal
 @login_required(login_url=login_url)
 def acquisition_adds(request, id):
     transaction_area = userarea.objects.get(userid=request.user.id)
@@ -417,10 +405,6 @@ def seal_ss(request):
         limit = int(request.GET.get('limit'))
         filter = request.GET.get('filter')
         order_by = request.GET.get('order_by')
-        # query = seals.objects.select_related('brand').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
-        #                                                                               'boxes', 'ppb', 'serialnos').extra(select={'total': 'boxes * ppb'}).order_by(order_by)
-        # # print('query', query.query)
-
         cursor = connection.cursor()
         query = 'SELECT seals.id, brand, boxes, ppb, (boxes * ppb) as total, serialnos ' \
                     'FROM seals ' \
@@ -480,11 +464,6 @@ def seal_save(request):
 def seal_delete(request):
     if request.is_ajax():
         id = int(request.GET.get('id'))
-        # id = int(request.GET.get('id'))
-        # cursor = connection.cursor()
-        # cursor.execute(
-        #     'delete from zanecometerpy.metertype where id = "' + str(id) + '"')
-        # cursor.fetchall()
         sealinfo = seals.objects.get(id=id)
         sealinfo.delete()
         if True:
@@ -493,20 +472,25 @@ def seal_delete(request):
             data = {"msg": 'Not deleted'}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')
 
-#
-def accept_acquisition(request):
+
+def acquisition_response(request):
     if request.is_ajax():
+        response = int(request.GET.get('response'))
         acquisitionid = str(request.GET.get('id'))
         cursor = connection.cursor()
-        cursor.execute('update zanecometerpy.acquisition set status = 2 where id = "'+ acquisitionid +'"')
+        if response == 0:
+            cursor.execute("update zanecometerpy.acquisition set status = 2 where id = '{0}'".format(acquisitionid))
+        else:
+            cursor.execute("update zanecometerpy.acquisition set status = 4 where id = '{0}'".format(acquisitionid))
         cursor.fetchall()
         if True:
-            data = {"msg": 'saved'}
+            if response == 0:
+                data = {"msg": 'accepted'}
+            else:
+                data = {"msg": 'canceled'}
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
-
-
 
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):

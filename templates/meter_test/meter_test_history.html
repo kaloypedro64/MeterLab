@@ -12,13 +12,13 @@
                     <div class="input-group-prepend" style="height: 40px;">
                         <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown"
                             style="height: 31px">
-                            For Calibration
+                            All Meter Test
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="selected_status(0)"> Passed</a>
-                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> Failed</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(0)"> Passed Meter Test</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(1)"> Failed Meter Test</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="selected_status()"> All</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> All Meter Test</a>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
 <script type="text/javascript">
 
     let tablez;
-    let lbl_status = ['Passed', 'Failed', 'All'];
+    let lbl_status = ['Passed Meter Test', 'Failed Meter Test', 'All Meter Test'];
 
     // datatables
     let urlMeterTestDetails = "{% url 'testdetails' %}";
@@ -222,10 +222,11 @@
                     data: { serial: serial, },
                     success: function (response)
                     {
-                        if (response == '')
+                        if (response.msg == 'not found!')
                         {
                             Swal.fire("Record not found!", response, "error");
-                        } else
+                        }
+                        else
                         {
                             $('#id_idmeterserials').val(response[0][0]);
                             $('#id_meterserialno').val(response[0][3]);

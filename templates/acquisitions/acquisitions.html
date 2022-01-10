@@ -66,11 +66,11 @@
                       <tr>
                         <th data-sort-column="" class="leftmost" style="width: 20px;"><input type="checkbox"
                             id="select_all"><label for="select_all"><span></span></label></th>
-                        <th style="width: 120px;">Actions</th>
-                        <th style="width: 120px;">Date</th>
+                        <th>Actions</th>
+                        <th>Date</th>
+                        <th>RR Number</th>
                         <th>Supplier</th>
                         <th>Address</th>
-                        <th>RR Number</th>
                       </tr>
                     </thead>
                   </table>
@@ -216,7 +216,8 @@
   let urlsrrnumbers = "{% url 'selected_rrnumber' %}";
   let urlsuppliers = "{% url 'suppliers' %}";
   let urlssuppliers = "{% url 'selected_supplier' %}";
-  let urlsaccept = "{% url 'accept_acquisition' %}";
+
+  let urlresponse = "{% url 'acquisition_response' %}";
 
 
   // seal

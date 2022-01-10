@@ -54,7 +54,7 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" ondblclick="edit_meter_modal(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="edit_meter_modal(' + row["id"] + ')"><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
                                 '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
@@ -63,7 +63,7 @@ window.onload = function ()
                         {
                             return '<center>' +
                                 '<div class="btn-group">' +
-                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" ondblclick="edit_meter_modal(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-warning btn-xs text-sm" title="Edit" onclick="edit_meter_modal(' + row["id"] + ')"><i class="fal fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
                                 '<a href="#" class="btn btn-danger btn-xs text-sm" title="Delete" onclick="meter_delete(' + row["id"] + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
@@ -453,30 +453,42 @@ function meter_update(params)
 
 function meter_delete(params)
 {
-    var ok = confirm('Are you sure to delete this record?');
-    if (ok == true)
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        confirmButtonText: "Yes, delete it!",
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        icon: "question",
+    }).then((result) =>
     {
-        $.ajax({
-            url: mDeleteUrl,
-            type: 'GET',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            contentType: false,
-            data: { id: params, },
-            success: function (data)
-            {
-                if (data.msg == 'deleted')
+        if (result.isConfirmed)
+        {
+            $.ajax({
+                url: mDeleteUrl,
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                contentType: false,
+                data: { id: params, },
+                success: function (data)
                 {
-                    $('#tablex').DataTable().ajax.reload(null, false);
-                    Swal.fire('Deleted!', ' Successfully deleted!', 'warning');
+                    if (data.msg == 'deleted')
+                    {
+                        $('#tablex').DataTable().ajax.reload(null, false);
+                        Swal.fire('Deleted!', ' Successfully deleted!', 'warning');
+                    }
+                },
+                error: function (e)
+                {
+                    alert('err: brand_save');
                 }
-            },
-            error: function (e)
-            {
-                alert('err: brand_save');
-            }
-        });
-    }
+            });
+        } else if (result.isDenied)
+        {
+            Swal.fire('Changes are not saved', '', 'info')
+        }
+    });
 }
 
 function select_brand(params)
