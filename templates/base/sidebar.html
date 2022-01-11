@@ -35,24 +35,24 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="/assign" class="nav-link" id=""><i
                             class="nav-icon fal fa-users-class"></i>
                         <p>Meter Assign</p>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a href="/signatory" class="nav-link" id=""><i class="nav-icon fal fa-signature"></i>
                         <p>Signatory</p>
                     </a>
                 </li>
+                {% if user.is_superuser %}
                 <li class="nav-item">
                     <a href="/users/list" class="nav-link" id=""><i class="nav-icon fad fa-users"></i>
                         <p>Users</p>
                     </a>
                 </li>
-
-
+                {% endif %}
             </ul>
         </nav>
     </div>

@@ -11,8 +11,8 @@
                 <div class="col-sm-2 mr-2">
                 </div>
                 <div class="ml-auto ">
-                    <a href="add" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"><i
-                                class="fal fa-plus mr-1"></i>Add Request</span></a>
+                    <a href="new" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"><i
+                                class="fal fa-plus mr-1"></i>Add User</span></a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <table id="table_meters" class="table table-nowrap table-striped table-hover">
+                            <table id="table_meters" class="table table-nowrap table-striped table-hover table-sm">
                                 <thead>
                                     <tr>
                                         <th data-sort-column="" class="leftmost" style="width: 20px;"><input
@@ -44,6 +44,7 @@
 
 <script type="text/javascript">
     let table_meters;
+    let arr_area = ['Dipolog Main Office', 'Piñan Area Services', 'Sindangan Area Services', 'Liloy Area Services'];
 
     window.onload = function ()
     {
@@ -117,17 +118,17 @@
                     { "data": "username" },
                     { "data": "first_name" },
                     { "data": "last_name" },
-                    // { "data": "password" },
-                     {
+                    // { "data": "userarea__area" },
+                    {
                         "data": "userarea__area", "render": function (data, type, row)
                         {
-                            return AREA_CHOICES[ parseInt(row["userarea__area"]) ]
+                            return '<p>'+ arr_area[data] +'</p>';
                         }
                     },
                 ]
 
             });
-            // table_meters.column(0).visible(false);
+            table_meters.column(0).visible(false);
         }
         Load_serials_table();
     };

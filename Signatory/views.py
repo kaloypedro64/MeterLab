@@ -29,7 +29,7 @@ class Signs(FormView):
 def Signatories(request):
     if request.method == "POST":
         id = request.POST['id']
-        if id == 0:
+        if id == '':
             form = signatoryForm(request.POST)
         else:
             sign = signatory.objects.get(id=id)

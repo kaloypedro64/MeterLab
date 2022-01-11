@@ -27,6 +27,7 @@ urlpatterns = [
     path('regs', register, name='register'),
     path('logout', logout_view, name='logout'),
     path('list', UserList.as_view(), name='list'),
+    path('new', add_users, name='new'),
     path('edit/<int:id>/', edit_users, name='edit'),
 
 

@@ -51,7 +51,7 @@ class UserList(ListView):
 
 def login(request):
     if request.user.is_authenticated:
-        return render(request, 'dashboard.html')
+        return render(request, 'acquisitions/acquisitions.html')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -108,6 +108,55 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+
+def add_users(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    form = MyUserChangeForm(request.POST)
+    if request.method == "POST":
+        un = request.POST.get('username')
+        p1 = request.POST.get('password1')
+        p2 = request.POST.get('password2')
+        if p1 != p2:
+            data = {"err_msg": "Password does not match."}
+            return JsonResponse(data)
+        else:
+            # queryset.set_password(p1)
+            if form.is_valid():
+                # created = request.POST.get('created_at')
+                rec = form.save(commit=False)
+                rec.username = un
+                rec.password = make_password(p1)
+                rec.save()
+                # dj_login(request, rec)
+               # save area
+                userid = rec.id
+                area = request.POST['area_field']
+                username = request.POST['username']
+                designation = request.POST['designation']
+
+                # up = make_password(p1)
+                up = p1
+                # print('unsay area', up)
+
+                cursor = connection.cursor()
+                cursor.execute("""insert into zanecometerpy.auth_user_area (userid, area, user, designation, up)
+                                    values ('{0}','{1}','{2}','{3}')""".format(str(userid),area,username,designation,p1))
+                form = cursor.fetchall()
+                #  end save area
+
+                return redirect("/users/list")
+            else:
+                data = {"err_msg": form.errors}
+                return JsonResponse(data)
+    else:
+        queryset = UserForm(request.POST)
+        context = {'form': queryset, 'header': 'Edit Meter',
+                   'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'form_ex': '',
+                   'err_msg': ''}
+        return render(request, "users/add_user.html", context)
+
+
+
 def edit_users(request, id):
     queryset = User(pk=id)
     form = MyUserChangeForm(request.POST, instance=queryset)
@@ -140,7 +189,9 @@ def edit_users(request, id):
                 # print('unsay area', up)
 
                 cursor = connection.cursor()
-                cursor.execute('update zanecometerpy.auth_user_area set area = "' + area + '", user = "' + username + '", designation = "' + designation + '", up = "' + up + '" where userid = "' + str(userid) + '"')
+                cursor.execute(
+                    """update zanecometerpy.auth_user_area set area = '{0}', user = '{1}', designation = '{2}', up = '{3}' where userid = '{4}'
+                    """.format(area, username, designation, up, userid))
                 form = cursor.fetchall()
                 #  end save area
 
