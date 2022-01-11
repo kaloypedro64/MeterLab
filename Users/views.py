@@ -116,6 +116,10 @@ def add_users(request):
         un = request.POST.get('username')
         p1 = request.POST.get('password1')
         p2 = request.POST.get('password2')
+        issuperuser = int(request.POST.get('is_superuser') == 'on')
+        isstaff = int(request.POST.get('is_staff') == 'on')
+
+        # print('issuperuser', issuperuser)
         if p1 != p2:
             data = {"err_msg": "Password does not match."}
             return JsonResponse(data)
@@ -126,21 +130,19 @@ def add_users(request):
                 rec = form.save(commit=False)
                 rec.username = un
                 rec.password = make_password(p1)
+                rec.is_superuser = issuperuser
+                rec.is_staff = isstaff
                 rec.save()
+
                 # dj_login(request, rec)
-               # save area
+                # save area
                 userid = rec.id
                 area = request.POST['area_field']
                 username = request.POST['username']
                 designation = request.POST['designation']
-
-                # up = make_password(p1)
-                up = p1
-                # print('unsay area', up)
-
                 cursor = connection.cursor()
                 cursor.execute("""insert into zanecometerpy.auth_user_area (userid, area, user, designation, up)
-                                    values ('{0}','{1}','{2}','{3}')""".format(str(userid),area,username,designation,p1))
+                                    values ('{0}','{1}','{2}','{3}','{4}')""".format(str(userid),area,username,designation,p1))
                 form = cursor.fetchall()
                 #  end save area
 
@@ -150,14 +152,18 @@ def add_users(request):
                 return JsonResponse(data)
     else:
         queryset = UserForm(request.POST)
+        cursor = connection.cursor()
+        cursor.execute("""SELECT distinct designation from zanecometerpy.auth_user_area order by designation asc""")
+        designation = cursor.fetchall()
         context = {'form': queryset, 'header': 'Edit Meter',
                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'form_ex': '',
-                   'err_msg': ''}
+                   'err_msg': '', 'designation': designation}
         return render(request, "users/add_user.html", context)
 
 
 
 def edit_users(request, id):
+    transaction_area = userarea.objects.get(userid=request.user.id)
     queryset = User(pk=id)
     form = MyUserChangeForm(request.POST, instance=queryset)
     if request.method == "POST":
@@ -201,13 +207,56 @@ def edit_users(request, id):
                 return JsonResponse(data)
     else:
         queryset = User.objects.get(pk=id)
-        transaction_area = userarea.objects.get(userid=request.user.id)
         form_ex = userarea.objects.get(userid=id)
         context = {'form': queryset, 'header': 'Edit Meter',
                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'form_ex': form_ex,
                    'err_msg': ''}
         return render(request, "users/edit_user.html", context)
 
+def delete_users(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        user_info = User.objects.get(pk=id)
+        user_info.delete()
+        if True:
+            data = {"msg": 'deleted'}
+        else:
+            data = {"msg": 'Not deleted'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
+def selected_supplier(request):
+    if request.is_ajax():
+        cursor = connection.cursor()
+        cursor.execute("""SELECT distinct designation from zanecometerpy.auth_user_area order by designation asc""")
+        designation = cursor.fetchall()
+        if True:
+            data = {"form": designation}
+        else:
+            data = {"msg": 'Not found'}
+    return HttpResponse(json.dumps(data, default=default), content_type='application/json')
+
+
+def designations(request):
+    if request.is_ajax():
+        search = request.GET.get('searchTerm')
+        cursor = connection.cursor()
+        query = "SELECT distinct designation from zanecometerpy.auth_user_area "
+        if search:
+            query += "where designation like '%" + search + "%' "
+        query += " order by designation asc "
+        cursor.execute(query)
+        consumers = cursor.fetchall()
+        datas = []
+        list_data = []
+        for index, item in enumerate(consumers):
+            list_data.append(item)
+        for s in range(len(list_data)):
+            data = {
+                'id': list_data[s][0],
+                'text': list_data[s][1],
+            }
+            datas.append(data)
+    return HttpResponse(json.dumps(datas, default=default), 'application/json')
 
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):

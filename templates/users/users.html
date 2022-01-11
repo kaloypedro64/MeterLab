@@ -48,14 +48,6 @@
 
     window.onload = function ()
     {
-        // const cars = ["Saab", "Volvo", "BMW"];
-
-        var AREA_CHOICES = [
-            "Dipolog Main Office",
-            "Piñan Area Services",
-            "Sindangan Area Services",
-            "Liloy Area Services"];
-
         function Load_serials_table()
         {
             table_meters = $('#table_meters').DataTable({
@@ -111,6 +103,7 @@
                             return '<center>' +
                                 '<div class="btn-group">' +
                                 '<a href="edit/' + row["id"] + '" class="btn btn-warning btn-xs text-sm" title="Edit" onclick = "" ><i class="fas fa-pencil-alt"></i><span style="font-size: 12px;"> Edit</span></a>' +
+                                '<a href="#" class="btn btn-danger btn-xs text-sm" title="delete" onclick = delete_users(' + row["id"] + ') ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
                                 '</div>' +
                                 '</center>'
                         }
@@ -133,13 +126,21 @@
         Load_serials_table();
     };
 
-    function meters_delete(id)
+    function delete_users(id)
     {
-        var ok = confirm('Are you sure to delete this entry?');
-        if (ok == true)
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You wan't to delete this user!",
+            confirmButtonText: "Yes, delete it!",
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            icon: "question",
+        }).then((result) =>
         {
-            $.ajax({
-                url: "",
+            if (result.isConfirmed)
+            {
+                $.ajax({
+                url: "{% url 'delete' %}",
                 type: 'GET',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
@@ -147,15 +148,43 @@
                 data: { id: id, },
                 success: function (data)
                 {
-                    if (data == 'deleted')
-                        table_meters.draw();
+                    if (data.msg == 'deleted') {
+                        table_meters.ajax.reload(null, false);
+                        Swal.fire('Deleted!', ' Successfully deleted!', 'success');
+                    }
                 },
                 error: function (e)
                 {
-                    alert('err: meter list 158');
+                    // alert('err: meter list 158');
                 }
             });
-        }
+            } else if (result.isDenied)
+            {
+                Swal.fire('Changes are not saved', '', 'info')
+            }
+        });
+
+        // var ok = confirm('Are you sure to delete this entry?');
+        // if (ok == true)
+        // {
+        //     $.ajax({
+        //         url: "",
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         contentType: 'application/json; charset=utf-8',
+        //         contentType: false,
+        //         data: { id: id, },
+        //         success: function (data)
+        //         {
+        //             if (data == 'deleted')
+        //                 table_meters.draw();
+        //         },
+        //         error: function (e)
+        //         {
+        //             alert('err: meter list 158');
+        //         }
+        //     });
+        // }
     }
 
 </script>
