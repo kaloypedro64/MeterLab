@@ -84,27 +84,27 @@ def calibration(request):
         order_by = request.GET.get('order_by')
         isfiltered = ''
 
-        query = 'select md.id, md.serialno, ' + \
-                '    (select brand from brands where id=m.brandid) brand,' + \
-                '    (select metertype from metertype where id=m.mtypeid) metertype,' + \
-                ' ampheres, accuracy, md.status ' + \
-                'from meters m ' + \
-                'inner join acquisition a on a.id = m.acquisitionid ' + \
-                'left join meterdetails md on m.id = md.meterid '
+        query = """select md.id, md.serialno,
+                    (select brand from brands where id=m.brandid) brand,
+                    (select metertype from metertype where id=m.mtypeid) metertype,
+                 ampheres, ms.accuracy, md.status, metercondition
+                from meters m
+                inner join acquisition a on a.id = m.acquisitionid
+                left join meterdetails md on m.id = md.meterid
+                left join auth_user_area ua on ua.userid = a.userid
+                left join meterseal ms on ms.meterdetailsid = md.id """
 
         if filter:
             isfiltered = " and ( md.serialno like '%" + filter + "%' ) "
         if status == '':
             status = 0
-        # print('status', status)
         cursor = connection.cursor()
         query += "where md.status = " + str(status) + " " + isfiltered
-        # query += 'where status = 0 ' + isfiltered
-
+        query += " and ua.area = " + str(transaction_area.area)
         cursor.execute(query)
         mList = cursor.fetchall()
 
-        # print("query", query)
+        print('transaction_area', transaction_area.area)
         list_data = []
         for index, item in enumerate(mList[start:start+limit], start):
             list_data.append(item)

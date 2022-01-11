@@ -35,7 +35,7 @@ class UserList(ListView):
             start = int(request.GET.get('start'))
             limit = int(request.GET.get('limit'))
             list_data = []
-            print('users', self.get_queryset().query)
+            # print('users', self.get_queryset().query)
             for index, item in enumerate(self.get_queryset()[start:start+limit], start):
                 list_data.append(item)
             data = {
@@ -59,12 +59,14 @@ def login(request):
             username = cd['username']
             password = cd['password']
 
-            user = authenticate(
-                request, username=cd['username'], password=cd['password'])
+            user = authenticate(request, username=cd['username'], password=cd['password'])
+            # user = authenticate(
+            #     request, username=cd['username'])
+
             if user is not None:
                 if user.is_active:
                     dj_login(request, user)
-                    return render(request, 'dashboard.html', {'user': user, 'username': username})
+                    return render(request, 'acquisitions/acquisitions.html', {'user': user, 'username': username})
                 else:
                     return HttpResponse("Disabled Account")
             else:

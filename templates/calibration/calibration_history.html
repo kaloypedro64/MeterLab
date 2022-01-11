@@ -17,8 +17,8 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
                             <a class="dropdown-item" href="#" onclick="selected_status(2)"> Calibrated</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="selected_status()"> All</a>
+                            <!-- <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="selected_status()"> All</a> -->
                         </div>
                     </div>
                 </div>
@@ -402,7 +402,11 @@
                 {
                     "data": "6", "render": function (data, type, row)
                     {
-                        return '<span style=""> ' + meterstatus[data] + '</span>'
+                        if (data != 2) {
+                            return '<span style=""> ' + meterstatus[data] + '</span>'
+                        } else {
+                            return '<span style=""> ' + condition[row[7]] + '</span>'
+                        }
                     }
                 },
             ],

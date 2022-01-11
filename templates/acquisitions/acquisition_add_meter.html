@@ -154,7 +154,7 @@
                 <div class="form-group row">
                     <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
                     <div class="col">
-                        <select class="form-control form-control-sm " id="id_ampheres" name="ampheres">
+                        <select class="form-control form-control-sm select2" id="id_ampheres" name="ampheres">
                             {% for row in mAmp %}
                             <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
                             {% endfor %}
@@ -180,7 +180,7 @@
             <div class="modal-footer">
                 <div class="form-group row">
                     <div class="ml-auto">
-                        <button type="button" onclick="meter_save()" class="btn btn-success mr-1 ">
+                        <button type="button" onclick="meter_save()" class="btn btn-info mr-1 ">
                             <i class="fal fa-save mr-1" tabindex="-1"></i>
                             <span style="font-size: 12px;"> Save Meter Info </span>
                         </button>
@@ -226,7 +226,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                    <label for="id_ampheres_b" class="col-sm-3 col-form-label">Ampheres:</label>
                     <div class="col">
                         <select class="form-control form-control-sm select2" id="id_ampheres_b" name="ampheres_b">
                             {% for row in mAmp %}
@@ -254,7 +254,7 @@
             <div class="modal-footer">
                 <div class="form-group row">
                     <div class="ml-auto">
-                        <button type="button" onclick="meter_update()" class="btn btn-success mr-1 ">
+                        <button type="button" onclick="meter_update()" class="btn btn-info mr-1 ">
                             <i class="fal fa-save mr-1" tabindex="-1"></i>
                             <span style="font-size: 12px;"> Update Meter Info </span>
                         </button>

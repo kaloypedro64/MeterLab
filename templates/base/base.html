@@ -49,13 +49,9 @@
     <!-- <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/editor.dataTables.min.css" %}">
     <link rel="stylesheet" type="text/css" href={% static "dist/css/selectdatatables/datatables.min.css" %}"> -->
 
-
     <link rel="stylesheet" href="{% static "plugins/toastr/toastr.min.css" %}">
     <link rel="stylesheet" href="{% static "plugins/toast/toast.min.css" %}">
     <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css"" %}">
-
-
-
 </head>
 
 <!-- <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
@@ -65,6 +61,7 @@
         </li>
     </ul>
 </nav> -->
+
 {% if request.user.is_authenticated %}
     {% block header %}
     {% endblock header %}
@@ -156,5 +153,5 @@
 
 <script>
     $('.select2').select2();
-    $('#id_ampheres').editableSelect({ effects: 'fade' });
+    // $('#id_ampheres').editableSelect({ effects: 'fade' });
 </script>
