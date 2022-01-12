@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=E:\Program Development\Development\Python\MeterLab-Recovered\MeterLab\envy
+set VIRTUAL_ENV=E:\Program Development\Development\Github\MeterLab\env
 
 if not defined PROMPT set PROMPT=$P$G
 

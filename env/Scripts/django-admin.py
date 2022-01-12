@@ -1,4 +1,4 @@
-#!E:\Program Development\Development\Github\MeterLab\env\Scripts\python.exe
+#!e:\program development\development\github\meterlab\env\scripts\python.exe
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
