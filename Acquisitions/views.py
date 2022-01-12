@@ -49,6 +49,7 @@ class acquisitionList(ListView):
 
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)
+        print('request.method', request.method)
         if request.is_ajax():
             acqtype = int(request.GET.get('acqtype'))
             start = int(request.GET.get('start'))
@@ -502,3 +503,6 @@ def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):
         return o.isoformat()
 
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'

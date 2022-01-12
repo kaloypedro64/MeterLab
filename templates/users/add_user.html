@@ -1,0 +1,255 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% include "base/header.html" %}
+<style type="text/css">
+    label {
+        text-align: left;
+        color: darkslategray;
+        /* font-size: 4px; */
+        font-size-adjust: 0.58;
+        /* font-weight: normal !important; */
+    }
+</style>
+
+<div class="content-wrapper">
+    <form action method="POST" autocomplete="off">
+        {% csrf_token %}
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- <h1>New User Info</h1> -->
+                    </div>
+                    <div class="ml-auto">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <input type="hidden" id="id_id" name="id" min="0">
+        <input type="hidden" id="id_password" name="password">
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Request Information <span style="font-size: 12px;"><i>(All fields are
+                                            required)</i></span>
+                                </h3>
+                            </div>
+                            <div class="card-body register-card-body">
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+
+                                    <div class="form-group row">
+                                        <label for="id_username"
+                                            class="col-sm-3 col-form-label col-form-label-sm">Username:</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control form-control-sm" id="id_username"
+                                                name="username" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_password1" class="col-sm-3 col-form-label col-form-label-sm">New
+                                            Password:</label>
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control form-control-sm"
+                                                    id="id_password1" name="password1">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <i class="fal fa-eye-slash" id="togglePassword"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="id_password2"
+                                            class="col-sm-3 col-form-label col-form-label-sm">Confirm
+                                            Password:</label>
+                                        <div class="col">
+                                            <div class="input-group input-group-sm">
+                                                <input type="password" class="form-control form-control-sm"
+                                                    id="id_password2" name="password2">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <i class="fal fa-eye-slash" id="togglePassword2"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <label for="id_first_name"
+                                            class="col-sm-3 col-form-label col-form-label-sm">First
+                                            Name:</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control form-control-sm" id="id_first_name"
+                                                name="first_name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_last_name" class="col-sm-3 col-form-label col-form-label-sm">Last
+                                            Name:</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control form-control-sm" id="id_last_name"
+                                                name="last_name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_designation"
+                                            class="col-sm-3 col-form-label col-form-label-sm">Designation:</label>
+                                        <div class="col-sm-9">
+                                            <!-- <input type="text" class="form-control form-control-sm" id="id_designation"
+                                                name="designation"> -->
+                                            <select onchange="" class="form-control form-control-sm" id="id_designation" name="designation" >
+                                                {% for row in designation %}
+                                                <option value="{{ row.0 }}">{{ row.0 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="id_area_field"
+                                            class="col-sm-3 col-form-label col-form-label-sm">Area:</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control form-control-sm select2" id="id_area_field"
+                                                name="area_field">
+                                                <option value="0">Dipolog Main Office</option>
+                                                <option value="1">Piñan Area Services</option>
+                                                <option value="2">Sindangan Area Services</option>
+                                                <option value="3">Liloy Area Services</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="id_is_superuser" name="is_superuser" type="checkbox" disabled="">
+                                            <label class="form-check-label">is Superuser</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="id_is_staff" name="is_staff" type="checkbox">
+                                            <label class="form-check-label">is Staff</label>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="id_is_superuser" disabled="">
+                                            <label for="id_issuperuser" class="custom-control-label">is Superuser</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" id="id_i_sstaff" >
+                                            <label for="is_staff" class="custom-control-label">is Staff</label>
+                                        </div>
+                                    </div> -->
+                                    <!-- <center><label class="text-danger">{{ err_msg }}</label></center> -->
+
+                                </form>
+                            </div>
+                            <div class="card-footer float-left">
+                                    <button type="submit" class="btn btn-success btn-sm mr-1"><i
+                                            class="fal fa-save mr-1" tabindex="-1"></i> <span style="font-size: 12px;">
+                                            Save</span></button>
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                        class="btn btn-info btn-sm"><i class="fal fa-share-square mr-1"></i><span
+                                            style="font-size: 12px;">Cancel</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>
+
+<script>
+
+    // --------------- toogle eye/ view password ---------------
+    const togglePassword = document.querySelector('#togglePassword');
+    const togglePassword2 = document.querySelector('#togglePassword2');
+    const password = document.querySelector('#id_password1');
+    const password2 = document.querySelector('#id_password2');
+    togglePassword.addEventListener('click', function (e)
+    {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        password2.setAttribute('type', type);
+        $(togglePassword).toggleClass("fa-eye fa-eye-slash");
+        $(togglePassword2).toggleClass("fa-eye fa-eye-slash");
+    });
+    // --------------- end toogle eye/ view password ---------------
+
+    window.onload = function ()
+    {
+        $("#id_area_field").select2().val('{{ form_ex.area }}').trigger('change.select2');
+        $('#id_designation').editableSelect({ effects: 'fade' });
+        // dropdownlist('Search Designation', '.dropdown-list-rrnumber', urlrrnumbers);
+    }
+    // function save_user()
+    // {
+    //     var add = "save";
+    //     var username = $('#username').val();
+    //     var password = $('#password').val();
+    //     var password2 = $('#password2').val();
+    //     var fullname = $('#fullname option:selected').html();
+    //     var position = $('#position').val();
+
+    //     var area = $('#area').val();
+    //     var empno = $('#empno').val();
+
+    //     var issuperuser = $('#id_is_superuser').is(':checked');
+    //     var isstaff = $('#id_is_staff').is(':checked');
+
+    //     alert(issuperuser +" - "+ isstaff);
+
+    //     if (password === password2)
+    //     {
+    //         $.ajax({
+    //             url: 'datahelpers/regs_helper.php',
+    //             type: 'post',
+    //             dataType: 'json',
+    //             data: {
+    //                 add: 'register',
+    //                 username: username,
+    //                 password: password,
+    //                 fullname: fullname,
+    //                 position: position,
+    //                 area: area,
+    //                 empno: empno,
+    //                 issuperuser: issuperuser,
+    //                 isstaff: isstaff
+    //             },
+    //             success: function (data)
+    //             {
+    //                 if (Number(data.found) == 1)
+    //                 {
+    //                     alert(data.stats);
+    //                 } else
+    //                 {
+    //                     window.location = "login.php";
+    //                 }
+    //             },
+    //             error: function ()
+    //             {
+    //                 alert('err');
+    //             }
+    //         });
+    //     } else
+    //     {
+    //         alert('Password mismatch...');
+    //     }
+    // };
+
+</script>
+
+{% endblock content %}

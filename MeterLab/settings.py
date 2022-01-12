@@ -32,7 +32,7 @@ ENCRYPT_KEY = 'cniyhb@tr-#mw)5)ta_ln*1g&0u4r9o&ryl+b=uo)apb(^@!)5'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['192.168.1.4', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.2', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'Calibration',
     'Users',
     'Assign',
-    'MeterTest'
+    'MeterTest',
+    'service_objects'
+    # 'django_windows_tools',
 ]
 
 MIDDLEWARE = [
@@ -99,15 +101,15 @@ DATABASES = {
         'PORT': '3306',
         'CONN_MAX_AGE': 290,
     },
-    'warehouse': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zanecoinvphp',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': 'blaise',
-        'PORT': '3306',
-        'CONN_MAX_AGE': 290,
-    },
+    # 'warehouse': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'zanecoinvphp',
+    #     'HOST': 'localhost',
+    #     'USER': 'root',
+    #     'PASSWORD': 'blaise',
+    #     'PORT': '3306',
+    #     'CONN_MAX_AGE': 290,
+    # },
     'OPTIONS': {
         'connect_timeout': 5,
     }
