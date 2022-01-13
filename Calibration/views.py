@@ -95,12 +95,12 @@ def calibration(request):
                 left join meterseal ms on ms.meterdetailsid = md.id """
 
         if filter:
-            isfiltered = " and ( md.serialno like '%" + filter + "%' ) "
+            isfiltered = "and ( md.serialno like '%" + filter + "%' ) "
         if status == '':
             status = 0
         cursor = connection.cursor()
         query += "where md.status = " + str(status) + " " + isfiltered
-        query += " and ua.area = " + str(transaction_area.area)
+        query += "and ua.area = " + str(transaction_area.area)
         cursor.execute(query)
         mList = cursor.fetchall()
 

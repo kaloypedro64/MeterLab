@@ -17,7 +17,7 @@ colorama==0.4.3
 coverage==5.3.1
 crypto==1.4.1
 cryptography==3.3.1
-dash==1.18.1
+dash==1.18.1 
 dash-core-components==1.14.1
 dash-html-components==1.1.1
 dash-renderer==1.8.3
