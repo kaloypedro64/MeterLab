@@ -16,7 +16,7 @@
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
-                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> Calibrated</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(6)"> Calibration Repair</a>
                             <!-- <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" onclick="selected_status()"> All</a> -->
                         </div>
@@ -47,6 +47,7 @@
                                             <input type="checkbox" id="select_all"><label
                                                 for="select_all"><span></span></label>
                                         </th>
+                                        <!-- <th></th> -->
                                         <th style="width: 60px;">Action</th>
                                         <th>Serial No.</th>
                                         <th>Brand</th>
@@ -327,8 +328,9 @@
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+                // { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
                 // { "targets": [0], "checkboxes": { "selectRow": true } }
+                { orderable: false, className: 'select-checkbox', targets: 0 }
             ],
             "keys": true,
             "keys": { "blurable": false },
@@ -365,10 +367,16 @@
                 });
             },
             columns: [
+                // {
+                //     "data": "0", "render": function (data, type, row)
+                //     {
+                //         return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
+                //     }
+                // },
                 {
                     "data": "0", "render": function (data, type, row)
                     {
-                        return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
+                        return '<td class="selected"><label for=""><span></span></label></td>'
                     }
                 },
                 {
@@ -379,10 +387,12 @@
                             '    <div class="dropdown-menu">' +
                             // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
                             // '      <div class="dropdown-divider"></div>' +
-                            '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Meter Calibration Update</a>' +
-                            '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
+                            '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
                             '      <div class="dropdown-divider"></div>' +
-                            '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
+                            '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
+                            '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
+                            // '      <div class="dropdown-divider"></div>' +
+                            // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
                             '    </div>' +
                             '  </div >'
                     }
@@ -411,7 +421,7 @@
                 },
             ],
         });
-        tablez.column(0).visible(false);
+        // tablez.column(0).visible(false);
         tablez.column(6).visible(false);
     }
 
@@ -420,54 +430,30 @@
 
         Load_serials_table(0);
 
-        // tablez.on("click", "th.select-checkbox", function ()
-        // {
-        //     if ($("th.select-checkbox").hasClass("selected"))
-        //     {
-        //         example.rows().deselect();
-        //         $("th.select-checkbox").removeClass("selected");
-        //     } else
-        //     {
-        //         example.rows().select();
-        //         $("th.select-checkbox").addClass("selected");
-        //     }
-        // }).on("select deselect", function ()
-        // {
-        //     ("Some selection or deselection going on")
-        //     if (example.rows({
-        //         selected: true
-        //     }).count() !== example.rows().count())
-        //     {
-        //         $("th.select-checkbox").removeClass("selected");
-        //     } else
-        //     {
-        //         $("th.select-checkbox").addClass("selected");
-        //     }
-        // });
-       /*  $('#tablez tbody').on('click', 'tr', function ()
+        tablez.on("click", "th.select-checkbox", function ()
         {
-            if ($(this).hasClass('selected'))
+            if ($("th.select-checkbox").hasClass("selected"))
             {
-                $(this).removeClass('selected');
-            }
-            else
+                tablez.rows().deselect();
+                $("th.select-checkbox").removeClass("selected");
+            } else
             {
-                tablez.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
+                tablez.rows().select();
+                $("th.select-checkbox").addClass("selected");
             }
-
-            //var data = tablez.rows(this).data();
-            //var id = data[0][0];
-            // var metertestid = data[0][9];
-            //$("#Table-Consumer").dataTable().fnDestroy();
-            //$("#Table-MeterSeal").dataTable().fnDestroy();
-
-            // loadConsumerDetails(id);
-            // loadMeterSealDetails(metertestid);
-
-        // }); */
-
-
+        }).on("select deselect", function ()
+        {
+            ("Some selection or deselection going on")
+            if (tablez.rows({
+                selected: true
+            }).count() !== tablez.rows().count())
+            {
+                $("th.select-checkbox").removeClass("selected");
+            } else
+            {
+                $("th.select-checkbox").addClass("selected");
+            }
+        });
 
         dropdownlist('Enter Consumer', '.dropdown-list-consumer', urlConsumerList);
         dropdownlist('Enter Seal Number', '.dropdown-list-seal_a', urlSealList);

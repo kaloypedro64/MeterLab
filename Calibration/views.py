@@ -84,6 +84,8 @@ def calibration(request):
         order_by = request.GET.get('order_by')
         isfiltered = ''
 
+        # status 0 and 6
+
         query = """select md.id, md.serialno,
                     (select brand from brands where id=m.brandid) brand,
                     (select metertype from metertype where id=m.mtypeid) metertype,
@@ -101,6 +103,7 @@ def calibration(request):
         cursor = connection.cursor()
         query += "where md.status = " + str(status) + " " + isfiltered
         query += "and ua.area = " + str(transaction_area.area)
+        query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
         cursor.execute(query)
         mList = cursor.fetchall()
 
