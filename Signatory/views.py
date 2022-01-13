@@ -38,7 +38,7 @@ def Signatories(request):
             form.save()
         return redirect("../../")
     else:
-        form = signatory.objects.all()
+        form = signatory.objects.get(id=1)
         template_name = 'signatory/signatory.html'
         context = {'form': form, }
         return render(request, template_name, context)

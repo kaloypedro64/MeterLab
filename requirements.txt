@@ -17,7 +17,7 @@ colorama==0.4.3
 coverage==5.3.1
 crypto==1.4.1
 cryptography==3.3.1
-dash==1.18.1 
+dash==1.18.1
 dash-core-components==1.14.1
 dash-html-components==1.1.1
 dash-renderer==1.8.3
@@ -71,7 +71,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 model-bakery==1.2.1
 mysql-connector-python==8.0.22
-mysqlclient @ file:///E:/Program%20Development/Development/Python/MeterLab/mysqlclient-1.4.6-cp39-cp39-win_amd64.whl
+mysqlclient
 Naked==0.1.31
 oauthlib==3.1.0
 packaging==20.8
@@ -85,7 +85,7 @@ plotly==4.14.1
 pluggy==0.13.1
 prompt-toolkit==3.0.8
 protobuf==3.14.0
-psycopg2==2.8.6
+psycopg2==2.9.3
 py==1.10.0
 pycodestyle==2.6.0
 pycparser==2.20
@@ -103,7 +103,7 @@ python-dateutil==2.8.1
 python-decouple==3.4
 python3-openid==3.2.0
 pytz==2020.1
-pywin32==300
+pywin32==303
 PyYAML==5.4.1
 pyzmq==20.0.0
 requests==2.25.1
