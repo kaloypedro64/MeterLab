@@ -104,7 +104,6 @@ def calibration(request):
         cursor.execute(query)
         mList = cursor.fetchall()
 
-        print('transaction_area', transaction_area.area)
         list_data = []
         for index, item in enumerate(mList[start:start+limit], start):
             list_data.append(item)
