@@ -5,69 +5,143 @@
 {% include "base/header.html" %}
 
 <div class="content-wrapper">
+
     <div class="content-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-2 mr-2">
-                    <div class="input-group-prepend" style="height: 40px;">
-                        <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown"
-                            style="height: 31px">
-                            For Calibration
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
-                            <a class="dropdown-item" href="#" onclick="selected_status(6)"> Calibration Repair</a>
-                            <!-- <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="selected_status()"> All</a> -->
+
+        <!-- /.card -->
+        <div class="card card-primary card-outline">
+            <!-- <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    Tabs Custom Content Examples
+                </h3>
+            </div> -->
+            <div class="card-body">
+                <!-- <h4 class="mt-5 ">Custom Content Above</h4> -->
+                <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-content-above-home-tab" data-toggle="pill"
+                            href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home"
+                            aria-selected="true">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-content-above-profile-tab" data-toggle="pill"
+                            href="#custom-content-above-profile" role="tab" aria-controls="custom-content-above-profile"
+                            aria-selected="false">History</a>
+                    </li>
+                </ul>
+                <div class="tab-custom-content">
+                    <!-- <p class="lead mb-0">Custom Content goes here</p> -->
+                    <div class="input-group-prepend">
+
+                        <div class="ml-auto ">
+
                         </div>
                     </div>
                 </div>
-                <div class="ml-auto ">
-                    <button onclick="modal_calibration_update_multiple()" class="btn btn-info btn-sm mb-2">
-                        <i class="fal fa-tasks mr-1"></i>
-                        <span style="font-size: small">
-                            Multiple Update
-                        </span>
-                    </button>
-                    <button onclick="return_selected_meters()" class="btn btn-info btn-sm mb-2">
-                    <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
-                      Selected</span></button>
+
+                <div class="tab-content" id="custom-content-above-tabContent">
+                    <div class="tab-pane fade" id="custom-content-above-home" role="tabpanel"
+                        aria-labelledby="custom-content-above-home-tab">
+                        <div class="mailbox-controls">
+                            <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown"
+                                style="height: 31px">
+                                For Calibration
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
+                                <a class="dropdown-item" href="#" onclick="selected_status(6)"> Calibration Repair</a>
+                            </div>
+                            <button type="button" class="btn btn-default btn-sm"><i
+                                    class="fas fa-sync-alt"></i></button>
+                            <div class="float-right">
+                                <button onclick="modal_calibration_update_multiple()" class="btn btn-info btn-sm">
+                                    <i class="fal fa-tasks mr-1"></i>
+                                    <span style="font-size: small">
+                                        Multiple Update
+                                    </span>
+                                </button>
+                                <button onclick="return_selected_meters()" class="btn btn-info btn-sm">
+                                    <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
+                                        Selected</span></button>
+                            </div>
+                        </div>
+                        <table id="tablez" class="table table-nowrap table-hover table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th data-sort-column="" class="leftmost">
+                                        <input type="checkbox" id="select_all"><label
+                                            for="select_all"><span></span></label>
+                                    </th>
+                                    <th style="width: 60px;">Action</th>
+                                    <th>Serial No.</th>
+                                    <th>Brand</th>
+                                    <th>Type</th>
+                                    <th>Amphere</th>
+                                    <th>Accuracy</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade show active" id="custom-content-above-profile" role="tabpanel"
+                        aria-labelledby="custom-content-above-profile-tab">
+                        <div class="mailbox-controls">
+                            <div class="row">
+                            <div class="col-sm-4 mt-1">
+                                <!-- <div class="form-group row">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="radio1">
+                                        <label class="form-check-label">New Meter Testing</label>
+                                    </div>
+                                    <div class="form-check ml-3">
+                                        <input class="form-check-input" type="radio" name="radio1" checked="">
+                                        <label class="form-check-label">Old Meter Repair</label>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="form-group row">
+                                    <p class="col-form-label col-form-label-sm">From </p>
+                                    <div class="col input-group nput-group-sm">
+                                        <input type="date" class="form-control form-control-sm" id="id_datefrom"
+                                            name="datefrom" data-mask value="{{ datetoday|date:'Y-m-d' }}">
+                                    </div>
+                                    <p class="col-form-label col-form-label-sm" style="text-align: right;">To</p>
+                                    <div class="col input-group input-group-sm">
+                                        <input type="date" class="form-control form-control-sm" id="id_dateto" name="dateto"
+                                            data-mask value="{{ datetoday|date:'Y-m-d' }}">
+                                    </div>
+                                    <button onclick="reload_calibration_history()" type="button" class="btn btn-default btn-sm"><i
+                                            class="fas fa-sync-alt"></i></button>
+                                    <button onclick="print_calibration_history()" class="btn btn-info btn-sm ml-1">
+                                        <i class="fal fa-print mr-1"></i><span style="font-size: small">Print</span></button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <table id="tabley" class="table table-nowrap table-hover table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;"></th>
+                                    <th style="width: 60px;">Date</th>
+                                    <th>Serial No.</th>
+                                    <th>Brand</th>
+                                    <th>Reading</th>
+                                    <th>Condition</th>
+                                    <th>Accuracy</th>
+                                    <th>Amphere</th>
+                                    <th>Type</th>
+                                    <th>Meter Seal</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <!-- /.card -->
         </div>
-        <section class="content">
-            <div class="row">
-                <section class="col-lg-12 connectedSortable">
-                    <div class="card card-primary card-outline">
-                        <div class="card-body">
-                            <table id="tablez" class="table table-nowrap table-hover table-striped table-sm">
-                                <thead>
-                                    <tr>
-                                        <th data-sort-column="" class="leftmost">
-                                            <input type="checkbox" id="select_all"><label
-                                                for="select_all"><span></span></label>
-                                        </th>
-                                        <!-- <th></th> -->
-                                        <th style="width: 60px;">Action</th>
-                                        <th>Serial No.</th>
-                                        <th>Brand</th>
-                                        <th>Type</th>
-                                        <th>Amphere</th>
-                                        <th>Accuracy</th>
-                                        <th>Status</th>
-                                        <!-- <th style="display: none;">metertestid</th> -->
-                                        <!-- <th>Condition</th> -->
-                                        <!-- <th>Seal 1</th> -->
-                                        <!-- <th>Seal 2</th> -->
-                                    </tr>
-                                </thead>
-                            </table>
-                </section>
-                <!-- <section class="col-lg-7 connectedSortable">
-                  something here
-                </section> -->
-            </div>
-        </section>
+        <!-- /.card -->
     </div>
 </div>
 
@@ -286,11 +360,11 @@
     </div>
 </div>
 
-<script src="{% static "js/alert.js" %}"></script>
+<!-- <script src="{% static "js/alert.js" %}"></script> -->
 <script type="text/javascript">
 
-    let tablez;
-    let lbl_status = ['For Calibration', 'Calibrated', 'All'];
+    let tablez, tabley;
+    let lbl_status = ['For Calibration', 'Calibration Repair'];
     let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
     let meterstatus = [' Initial Testing', 'Transfer', 'Available', 'Installed', 'Damage/Salvage', 'Removed Meter', 'Calibration/Repair', 'for Verification'];
     let urlCalibrated = "{% url 'calibrated' %}";
@@ -310,10 +384,19 @@
 
     function selected_status(params)
     {
+        var new_params = params;
+        if (params == 6) new_params = 1;
         $('.lbl_status').html(lbl_status[params]);
-
         $("#tablez").dataTable().fnDestroy();
         Load_serials_table(params);
+    }
+
+    function reload_calibration_history(params) {
+        var date_from = $('#id_datefrom').val();
+        var date_to = $('#id_dateto').val();
+        // $('#tabley').DataTable().ajax.reload(null, false);
+        $('#tabley').DataTable().destroy();
+        Load_serials_tabley(2, date_from, date_to);
     }
 
     function Load_serials_table(params)
@@ -337,12 +420,7 @@
             "select": true,
             "select": {
                 'style': 'multi',
-                // 'selector': 'td:first-child'
-            },
-            "initComplete": function (settings, json)
-            {
-                // tablez.wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
-                // $('#Table-MeterSeal').DataTable().columns.adjust().draw();
+                'selector': 'td:first-child'
             },
             "processing": true,
             "serverSide": true,
@@ -353,6 +431,7 @@
                 if (data.order[0].dir == "desc") { direction = "-" };
                 $.get(urlCalibrated, {
                     status: params,
+                    action: 'home',
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -367,12 +446,6 @@
                 });
             },
             columns: [
-                // {
-                //     "data": "0", "render": function (data, type, row)
-                //     {
-                //         return '<td class="selected"><input type="checkbox" id="" value="20"><label for=""><span></span></label></td>'
-                //     }
-                // },
                 {
                     "data": "0", "render": function (data, type, row)
                     {
@@ -412,9 +485,11 @@
                 {
                     "data": "6", "render": function (data, type, row)
                     {
-                        if (data != 2) {
+                        if (data != 2)
+                        {
                             return '<span style=""> ' + meterstatus[data] + '</span>'
-                        } else {
+                        } else
+                        {
                             return '<span style=""> ' + condition[row[7]] + '</span>'
                         }
                     }
@@ -425,10 +500,86 @@
         tablez.column(6).visible(false);
     }
 
+    function Load_serials_tabley(params, date_from, date_to)
+    {
+        tabley = $('#tabley').DataTable({
+            "searching": true,
+            "info": true,
+            "paging": true,
+            "autoWidth": false,
+            "responsive": true,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                'style': 'multi',
+                'selector': 'td:first-child'
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings)
+            {
+                var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                var direction = "";
+                if (data.order[0].dir == "desc") { direction = "-" };
+                $.get(urlCalibrated, {
+                    status: params,
+                    action: 'history',
+                    limit: data.length,
+                    start: data.start,
+                    filter: data.search.value,
+                    order_by: direction + sort_column_name,
+                    date_from:date_from,
+                    date_to:date_to,
+                }, function (res)
+                {
+                    callback({
+                        recordsTotal: res.length,
+                        recordsFiltered: res.length,
+                        data: res.objects
+                    });
+                });
+            },
+            columns: [
+                {
+                    "data": "0", "render": function (data, type, row)
+                    {
+                        return '<td class="selected"><label for=""><span></span></label></td>'
+                    }
+                },
+                { "data": "7" },
+                { "data": "1" },
+                { "data": "2" },
+                { "data": "10" },
+                {
+                    "data": "8", "render": function (data, type, row)
+                    {
+                        return '<span style=""> ' + condition[row[8]] + '</span>'
+                    }
+                },
+                { "data": "4" },
+                { "data": "9" },
+                { "data": "13" },
+                {
+                    "data": "11", "render": function (data, type, row)
+                    {
+                        return '<span style=""> ' + [row[11]] + '-' + [row[12]] + '</span>'
+                    }
+                },
+            ],
+        });
+        // tablez.column(0).visible(false);
+        tabley.column(6).visible(false);
+    }
+
     window.onload = function ()
     {
 
         Load_serials_table(0);
+        Load_serials_tabley(2);
 
         tablez.on("click", "th.select-checkbox", function ()
         {
@@ -580,7 +731,6 @@
         $('#id_serialno').val(meterserial);
         $('#modal-assign').find('.modal-title').text("Assign Meter");
         $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
-
     }
 
     function modal_calibration_update(params)
@@ -597,7 +747,7 @@
     function modal_calibration_update_multiple(params)
     {
         ismulti_update("block");
-        $('#modal-calibration-update').find('.modal-title').text("Multi Calibration Update Multiple");
+        $('#modal-calibration-update').find('.modal-title').text("Multi Calibration Update");
         $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
     }
 
@@ -760,7 +910,8 @@
     }
 
     let ar_icons = ['success', 'error', 'warning', 'info', 'question'];
-    function return_selected_meters(params) {
+    function return_selected_meters(params)
+    {
         // if (count <= 0) return;
         Swal.fire({
             title: "Are you sure?",

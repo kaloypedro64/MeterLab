@@ -20,5 +20,8 @@ urlpatterns = [
     path('dt_meterseal_details/<int:id>', views.dt_meterseal_details,
          name='dt_meterseal_details'),
 
+    path('print_calibration_history', views.print_calibration_history,
+         name='print_calibration_history'),
+
 
 ]

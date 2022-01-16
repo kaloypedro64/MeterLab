@@ -21,6 +21,7 @@ datenow = datetime.datetime.now()
 html_calibration_history = 'calibration/calibration_history.html'
 html_calibration_edit = 'calibration/calibration_edit.html'
 html_test_preview = 'calibration/print_test.html'
+html_print_calibration_history = 'calibration/print_calibration_history.html'
 
 
 # class Calibration(ListView):
@@ -89,7 +90,8 @@ def calibration(request):
         query = """select md.id, md.serialno,
                     (select brand from brands where id=m.brandid) brand,
                     (select metertype from metertype where id=m.mtypeid) metertype,
-                 ampheres, ms.accuracy, md.status, metercondition
+                 ampheres, ms.accuracy, md.status,
+                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b
                 from meters m
                 inner join acquisition a on a.id = m.acquisitionid
                 left join meterdetails md on m.id = md.meterid
@@ -119,6 +121,68 @@ def calibration(request):
         # serials = meterdetails.objects.all()
         context = {'datetoday': datetoday, 'header': 'Calibration', 'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
         return render(request, html_calibration_history, context)
+
+
+def calibration(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    if request.is_ajax():
+        action = request.GET.get('action')
+        status = int(request.GET.get('status'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+        isfiltered = ''
+
+        # status 0 and 6
+        query = """
+                select md.id, md.serialno,
+                    (select brand from brands where id=m.brandid) brand,
+                    (select metertype from metertype where id=m.mtypeid) metertype,
+                 ampheres, ms.accuracy, md.status,
+                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
+                from meters m
+                inner join acquisition a on a.id = m.acquisitionid
+                left join metertype mt on mt.id = m.mtypeid
+                left join meterdetails md on m.id = md.meterid
+                left join auth_user_area ua on ua.userid = a.userid
+                left join meterseal ms on ms.meterdetailsid = md.id
+                """
+
+        if filter:
+            isfiltered = "and ( md.serialno like '%" + filter + "%' ) "
+        if status == '':
+            status = 0
+        cursor = connection.cursor()
+        query += "where md.status = " + str(status) + " " + isfiltered
+        query += "and ua.area = " + str(transaction_area.area)
+
+        if date_from:
+            query += " and ms.transactiondate between '{0}' and '{1}'".format(date_from, date_to)
+
+        if action == 'history':
+            query += " and ms.transactiondate is not null "
+
+        query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
+        cursor.execute(query)
+        mList = cursor.fetchall()
+
+        list_data = []
+        for index, item in enumerate(mList[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': len(mList),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+    else:
+        # serials = meterdetails.objects.all()
+        context = {'datetoday': datetoday, 'header': 'Calibration',
+                   'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
+        return render(request, html_calibration_history, context)
+
 
 def calibrate_edit(request, id):
     if request.method == "POST":
@@ -308,6 +372,55 @@ def dt_meterseal_details(request, id):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+
+def print_calibration_history(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    if request.is_ajax():
+        action = request.GET.get('action')
+        status = int(request.GET.get('status'))
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+        isfiltered = ''
+
+        # status 0 and 6
+        query = """
+                select md.id, md.serialno,
+                    (select brand from brands where id=m.brandid) brand,
+                    (select metertype from metertype where id=m.mtypeid) metertype,
+                 ampheres, ms.accuracy, md.status,
+                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
+                from meters m
+                inner join acquisition a on a.id = m.acquisitionid
+                left join metertype mt on mt.id = m.mtypeid
+                left join meterdetails md on m.id = md.meterid
+                left join auth_user_area ua on ua.userid = a.userid
+                left join meterseal ms on ms.meterdetailsid = md.id
+                """
+
+        if status == '':
+            status = 0
+
+        cursor = connection.cursor()
+        query += "where md.status = " + str(status) + " " + isfiltered
+        query += "and ua.area = " + str(transaction_area.area)
+        query += " and ms.transactiondate between '{0}' and '{1}'".format(date_from, date_to)
+        query += " and ms.transactiondate is not null "
+        query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
+        cursor.execute(query)
+
+        mList = cursor.fetchall()
+        list_data = []
+        for index, item in enumerate(mList):
+            list_data.append(item)
+        data = {
+            'length': len(mList),
+            'objects': list_data,
+        }
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+    else:
+        context = {'datetoday': datetoday, 'header': 'Calibration',
+                   'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
+        return render(request, html_calibration_history, context)
 
 
 def default(o):
