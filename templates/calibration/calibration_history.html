@@ -114,8 +114,9 @@
                                     </div>
                                     <button onclick="reload_calibration_history()" type="button" class="btn btn-default btn-sm"><i
                                             class="fas fa-sync-alt"></i></button>
-                                    <button onclick="print_calibration_history()" class="btn btn-info btn-sm ml-1">
-                                        <i class="fal fa-print mr-1"></i><span style="font-size: small">Print</span></button>
+                                    <!-- urlPrintHistory -->
+                                    <a href="#" onclick="print_calibration_history()" class="btn btn-info btn-sm ml-1">
+                                        <i class="fal fa-print mr-1"></i><span style="font-size: small">Print</span></a>
                                 </div>
                             </div>
                             </div>
@@ -937,6 +938,43 @@
         });
     }
 
+let urlPrintHistory = "{% url 'print_calibration_history' %}"
+
+function print_calibration_history(params) {
+    var date_from = $('#id_datefrom').val();
+    var date_to = $('#id_dateto').val();
+    // window.location.href = "{% url 'print_calibration_history' %}" + "?search=" + searchWord;
+    window.open(urlPrintHistory + "?id=" + 2 + "&range=" + date_from + "|" + date_to, "_self");
+
+    // $.ajax({
+    //     url: urlPrintHistory,
+    //     type: 'GET',
+    //     dataType: 'json',
+    //     contentType: 'application/json; charset=utf-8',
+    //     contentType: false,
+    //     data: {
+    //         date_from: date_from,
+    //         date_to: date_to
+    //     },
+    //     success: function (data)
+    //     {
+    //         // alert(data.mList);
+    //         // if (data.msg == "saved")
+    //         //     $('#modal-assign').modal('hide');
+
+    //         // var redirectWindow = window.open(urlPrintHistory + "?id=" + 2 + "&range=" + date_from + "|" + date_to, '_blank');
+    //         // redirectWindow.location;
+    //     },
+    //     error: function (e)
+    //     {
+    //         alert('err: selected_consumer');
+    //     }
+    // });
+
+
+    // $('#tabley').DataTable().destroy();
+    // Load_serials_tabley(2, date_from, date_to);
+}
 </script>
 
 

@@ -1,3 +1,4 @@
+from queue import Empty
 from typing import cast
 from django.http.response import HttpResponse, JsonResponse
 from MeterLab.settings import AREA_CHOICES
@@ -375,52 +376,43 @@ def dt_meterseal_details(request, id):
 
 def print_calibration_history(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
-    if request.is_ajax():
-        action = request.GET.get('action')
-        status = int(request.GET.get('status'))
-        date_from = request.GET.get('date_from')
-        date_to = request.GET.get('date_to')
-        isfiltered = ''
 
-        # status 0 and 6
-        query = """
-                select md.id, md.serialno,
-                    (select brand from brands where id=m.brandid) brand,
-                    (select metertype from metertype where id=m.mtypeid) metertype,
-                 ampheres, ms.accuracy, md.status,
-                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
-                from meters m
-                inner join acquisition a on a.id = m.acquisitionid
-                left join metertype mt on mt.id = m.mtypeid
-                left join meterdetails md on m.id = md.meterid
-                left join auth_user_area ua on ua.userid = a.userid
-                left join meterseal ms on ms.meterdetailsid = md.id
-                """
+    date_from = request.GET.get('range')
+    d_range = date_from.split('|')
 
-        if status == '':
-            status = 0
+    isfiltered = ''
 
-        cursor = connection.cursor()
-        query += "where md.status = " + str(status) + " " + isfiltered
-        query += "and ua.area = " + str(transaction_area.area)
-        query += " and ms.transactiondate between '{0}' and '{1}'".format(date_from, date_to)
-        query += " and ms.transactiondate is not null "
-        query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
-        cursor.execute(query)
+    # status 0 and 6
+    query = """
+            select md.id, md.serialno,
+                (select brand from brands where id=m.brandid) brand,
+                (select metertype from metertype where id=m.mtypeid) metertype,
+                ampheres, ms.accuracy, md.status,
+                ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
+            from meters m
+            inner join acquisition a on a.id = m.acquisitionid
+            left join metertype mt on mt.id = m.mtypeid
+            left join meterdetails md on m.id = md.meterid
+            left join auth_user_area ua on ua.userid = a.userid
+            left join meterseal ms on ms.meterdetailsid = md.id
+            """
+    # let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
 
-        mList = cursor.fetchall()
-        list_data = []
-        for index, item in enumerate(mList):
-            list_data.append(item)
-        data = {
-            'length': len(mList),
-            'objects': list_data,
-        }
-        return HttpResponse(json.dumps(data, default=default), 'application/json')
-    else:
-        context = {'datetoday': datetoday, 'header': 'Calibration',
-                   'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
-        return render(request, html_calibration_history, context)
+    cursor = connection.cursor()
+    query += "where md.status = 2 " + isfiltered
+    query += "and ua.area = " + str(transaction_area.area)
+    query += " and ms.transactiondate between '{0}' and '{1}'".format(
+        d_range[0], d_range[1])
+    query += " and ms.transactiondate is not null "
+    query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
+    cursor.execute(query)
+
+    mList = cursor.fetchall()
+    context = {'mList': mList, 'date_from': d_range[0], 'date_to': d_range[1]}
+    # return HttpResponse(json.dumps(context, default=default), 'application/json')
+    # else:
+    #     context = {'mList': ''}
+    return render(request, html_print_calibration_history, context)
 
 
 def default(o):

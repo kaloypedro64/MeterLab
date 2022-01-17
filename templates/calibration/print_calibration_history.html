@@ -1,0 +1,140 @@
+{% extends "base/prn_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css" media="print">
+    @page {
+        size: landscape;
+    }
+
+    body {
+        height: 850px;
+        width: 1400px;
+    }
+</style>
+
+
+<section class="content" style="size: 8.5in 11in; size: landscape;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice p-3 mb-3">
+                    <!-- title row -->
+                    <div class="row header">
+                        <div class="col-sm-2 invoice-col">
+                            <img src="{% static "dist/img/logo2-1.2x1.2.png" %}" alt="ZANECO">
+                            <br>
+                            <br>
+                        </div>
+                        <div class="col-9 mt-2">
+                            <center>
+                                <b>
+                                    ZAMBOANGA DEL NORTE ELECTRIC COOPERATIVE, INC.<br>
+                                    TECHNICAL SERVICES DEPARTMENT (TSD)<br>
+                                    Power System and Special Equipment Division (PSSED)<br>
+
+                                </b>
+                                <address>
+                                    <b>PERIOD COVERED  {{ date_from }} - {{ date_to }}</b>
+                                    <br>
+                                    <strong></strong><br>
+                                    <b>CALIBRATION REPORT</b>
+                                </address>
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 table-responsive ">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date Calibrated</th>
+                                        <th width="90px;">Brand</th>
+                                        <th>Serial</th>
+                                        <th>Type</th>
+                                        <th>Amphere</th>
+                                        <th>Meter Condition</th>
+                                        <th>Accuracy</th>
+                                        <th>Initial Reading</th>
+                                        <th>Calibration Seal</th>
+                                    </tr>
+                                </thead>
+                            <tbody>
+                                <!-- {{ mList }} -->
+                                {% for list in mList %}
+                                <tr>
+                                    <td>{{ list.7 }}</td>
+                                    <td>{{ list.2 }}</td>
+                                    <td>{{ list.1 }}</td>
+                                    <td>{{ list.13 }}</td>
+                                    <td>{{ list.4 }}</td>
+                                    <td>
+                                        {% if list.8 == 0 %} Good {% endif %}
+                                        {% if list.8 == 1 %} Damage {% endif %}
+                                        {% if list.8 == 2 %} Substandard {% endif %}
+                                        {% if list.8 == 3 %} Rehab. {% endif %}
+                                    </td> <!-- meter condition let condition = ['Good', 'Damage', 'Substandard', 'Rehab']; -->
+                                    <td>{{ list.9 }}</td>
+                                    <td>{{ list.10 }}</td>
+                                    <td>{{ list.11 }}-{{ list.11 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row font_twenty">
+                        <div class="col-12" style=" width: 7in;">
+                            <p style="background-color: rgba(255, 255, 255, 0); border: 1px solid rgba(255, 255, 255, 0);"></p>
+                        </div>
+                        <div class="col-6 row">
+                            <div class="col-sm-4" style="text-align: right;">
+                                Prepared By:
+                            </div>
+                            <div class="col-sm-6" style="text-align: center;">
+                                <br><br><br>
+                                <p style="border-bottom: 1px solid rgb(0, 0, 0); ">JOSE DIONARD R. CUENCA</p>
+                                Calibrator
+                            </div>
+                        </div>
+                        <div class="col-6 row">
+                            <div class="col-sm-4" style="text-align: right;">
+                                Received By:
+                            </div>
+                            <div class="col-sm-6" style="text-align: center;">
+                                <br><br><br>
+                                <p style="border-bottom: 1px solid rgb(0, 0, 0); ">ENGR. IBO R. ORONG</p>
+                                NMD Chief
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <a href="invoice-print.html" target="_blank" class="btn btn-default"><i
+                                    class="fas fa-print"></i> Print</a>
+                            <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                                <i class="fas fa-download"></i> Generate PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    window.addEventListener("", window.print());
+</script>
+
+<script type="text/javascript">
+
+
+</script>
+
+{% endblock content %}
