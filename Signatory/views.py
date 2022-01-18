@@ -40,7 +40,7 @@ def Signatories(request):
     else:
         form = signatory
         if form:
-            form = signatory.objects.get(id=1)
+            form = signatory.objects.all().first()
         template_name = 'signatory/signatory.html'
         context = {'form': form, }
         return render(request, template_name, context)
