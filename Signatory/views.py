@@ -38,10 +38,9 @@ def Signatories(request):
             form.save()
         return redirect("../../")
     else:
-        try:
+        form = signatory
+        if form:
             form = signatory.objects.get(id=1)
-        except form.DoesNotExists:
-            form = None
         template_name = 'signatory/signatory.html'
         context = {'form': form, }
         return render(request, template_name, context)
