@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.forms.widgets import NullBooleanSelect
 from MeterLab.settings import AREA_CHOICES
 import datetime
@@ -16,6 +17,7 @@ from django.contrib.auth.hashers import make_password
 from .forms import *
 from .models import *
 # Create your views here.
+from django.contrib.sites.shortcuts import get_current_site
 
 datetoday = datetime.date.today()
 
@@ -66,7 +68,9 @@ def login(request):
             if user is not None:
                 if user.is_active:
                     dj_login(request, user)
-                    return render(request, 'acquisitions/acquisitions.html', {'user': user, 'username': username})
+                    return HttpResponseRedirect('/')
+                    # return render(request, 'acquisitions/acquisitions.html', {})
+                    # return render(request, 'acquisitions/acquisitions.html', {'user': user, 'username': username})
                 else:
                     return HttpResponse("Disabled Account")
             else:
