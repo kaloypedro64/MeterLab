@@ -32,7 +32,7 @@ ENCRYPT_KEY = 'cniyhb@tr-#mw)5)ta_ln*1g&0u4r9o&ryl+b=uo)apb(^@!)5'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['192.168.1.2', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.2', 'localhost', '127.0.0.1','124.6.183.67']
 
 
 # Application definition
