@@ -6,9 +6,9 @@
 
 {% block content %}
 
-  <div class="content-wrapper">
-    <div class="content-header">
-      <!-- <div class="container-fluid">
+<div class="content-wrapper">
+  <div class="content-header">
+    <!-- <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Dashboard</h1>
@@ -21,88 +21,328 @@
           </div>
         </div>
       </div> -->
-    </div>
-
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>150</h3>
-                <p>New Orders</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-        <div class="row">
-        </div>
-      </div>
-    </section>
   </div>
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Info boxes -->
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">CPU Traffic</span>
+              <span class="info-box-number">
+                10
+                <small>%</small>
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Likes</span>
+              <span class="info-box-number">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix hidden-md-up"></div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Sales</span>
+              <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">New Members</span>
+              <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-8">
+
+
+          <!-- /.row -->
+
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="card">
+            <div class="card-header border-transparent">
+              <!-- <h3 class="card-title">Latest Orders</h3> -->
+
+              <div class="card-tabs">
+                <div class="card-header p-0 pt-1">
+                  <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="pill" href="#meter" role="tab"
+                        aria-controls="custom-tabs-meter" aria-selected="true"><i
+                          class="fal fad fa-books-medical mr-2"></i>Meter</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#seal" role="tab" aria-controls="custom-tabs-seal"
+                        aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
+                    </li>
+                    <div class="ml-auto card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                  <div class="tab-pane fade show active" id="meter" role="tabpanel" aria-labelledby="custom-tabs-meter">
+                    <table id="acqTable" class="table table-nowrap table-striped table-sm ">
+                      <thead>
+                        <tr>
+                          <th style="width: 80px;">Date</th>
+                          <th style="width: 120px;">RR Number</th>
+                          <th>Supplier</th>
+                          <th>Progress</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div class="tab-pane fade" id="seal" role="tabpanel" aria-labelledby="custom-tabs-seal">
+                    <table id="acqTable_mSeal" class="table table-nowrap table-striped table-sm">
+                      <thead>
+                        <tr>
+                          <th style="width: 80px;">Date</th>
+                          <th style="width: 120px;">RR Number</th>
+                          <th>Supplier</th>
+                          <th>Progress</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+              <!-- <div class="card-footer clearfix">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+              </div> -->
+              <!-- /.card-footer -->
+            </div>
+          </div>
+
+          <!-- /.card-body -->
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+
+        <!-- /.col -->
+        <div class="col-md-4">
+          <p class="text-center">
+            <strong>Calibration Status</strong>
+          </p>
+
+          <div class="progress-group">
+            Good
+            <span class="float-right"><b>160</b>/200</span>
+            <div class="progress progress-sm">
+              <div class="progress-bar bg-primary" style="width: 80%"></div>
+            </div>
+          </div>
+          <!-- /.progress-group -->
+
+          <div class="progress-group">
+            Damage
+            <span class="float-right"><b>310</b>/400</span>
+            <div class="progress progress-sm">
+              <div class="progress-bar bg-danger" style="width: 75%"></div>
+            </div>
+          </div>
+
+          <!-- /.progress-group -->
+          <div class="progress-group">
+            <span class="progress-text">Substandard</span>
+            <span class="float-right"><b>480</b>/800</span>
+            <div class="progress progress-sm">
+              <div class="progress-bar bg-success" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <!-- /.progress-group -->
+          <div class="progress-group">
+            Rehab Meter
+            <span class="float-right"><b>250</b>/500</span>
+            <div class="progress progress-sm">
+              <div class="progress-bar bg-warning" style="width: 50%"></div>
+            </div>
+          </div>
+          <!-- /.progress-group -->
+        </div>
+
+      </div>
+      <!-- /.row -->
     </div>
-  </footer>
+    <!--/. container-fluid -->
+  </section>
+  <!-- /.content -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+</div>
+<footer class="main-footer">
+  <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+  All rights reserved.
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Version</b> 3.1.0
+  </div>
+</footer>
 
-  {% endblock content %}
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+
+<script>
+  let acqTable;
+  let acqListUrl = "{% url 'acqList' %}";
+  let acqAdd = "{% url 'acqadd' 0 %}";
+  let acqSave = "{% url 'acqsave' %}";
+  let acqEdit = "{% url 'acqedit' 0 %}";
+  let acqDelete = "{% url 'acqdelete' 0 %}";
+
+  let urlrrnumbers = "{% url 'rrnumbers' %}";
+  let urlsrrnumbers = "{% url 'selected_rrnumber' %}";
+  let urlsuppliers = "{% url 'suppliers' %}";
+  let urlssuppliers = "{% url 'selected_supplier' %}";
+
+  let urlresponse = "{% url 'acquisition_response' %}";
+
+
+  // seal
+  let acqAdds = "{% url 'acqadds' 0 %}";
+
+
+  window.onload = function ()
+  {
+
+    loadAcquisition(0);
+    loadAcquisition(1);
+
+  };
+
+  function loadAcquisition(params)
+  {
+    var tbl = "acqTable";
+    if (params == 1) tbl = "acqTable_mSeal";
+    acqTable = $('#' + tbl + '').DataTable({
+      "searching": true,
+      "processing": true,
+      "stateSave": true,
+      "info": false,
+      "paging": true,
+      "lengthChange": true,
+      "autoWidth": false,
+      "responsive": true,
+      "columnDefs": [
+        // { "targets": [0], "searchable": false, "orderable": false, "visible": true },
+        // { "targets": [5], "className": "text-left" }
+      ],
+      "keys": true,
+      "keys": { "blurable": false },
+      "select": true,
+      "select": {
+        "style": 'multi',
+        "selector": 'td:first-child',
+      },
+      "serverSide": true,
+      "processing": true,
+      "ajax": function (data, callback, settings)
+      {
+        var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+        var direction = "";
+        if (data.order[0].dir == "desc") { direction = "-" };
+        $.get(acqListUrl, {
+          acqtype: params,
+          limit: data.length,
+          start: data.start,
+          filter: data.search.value,
+          order_by: direction + sort_column_name
+        }, function (res)
+        {
+          callback({
+            recordsTotal: res.length,
+            recordsFiltered: res.length,
+            data: res.objects
+          });
+        });
+      },
+      columns: [
+        {
+          "data": "transactiondate", "render": function (data, type, row)
+          {
+            if (row["status"] == 1)
+            {
+              return '<td style="width: fit-content;"> ' + data + '</td>'
+
+            }
+            else
+            {
+              if (params == 0)
+                return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '" style="color:primary">' + data + '</a></td>'
+              else
+                return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
+            }
+          }
+        },
+        { "data": "rrnumber" },
+        { "data": "supplierid__suppliername" },
+        {
+          "data": "transactiondate", "render": function (data, type, row)
+          {
+            return '<td>' +
+                      '<div class="progress progress-xs">' +
+                        '<div class="progress-bar progress-bar-danger" style="width: 10%"></div>' +
+                      '</div>' +
+                    '</td>'
+
+          }
+        },
+      ],
+      // "dom": '<"top"i>rt<"bottom"flp><"clear">',
+    });
+
+  }
+
+</script>
+
+{% endblock content %}
