@@ -4,6 +4,9 @@ from django.http import HttpResponseRedirect
 
 from cryptography.fernet import Fernet
 from django.contrib.auth.decorators import login_required
+from MeterLab.settings import AREA_CHOICES
+
+from Users.models import userarea
 
 MASTER_KEY = "Some-long-base-key-to-use-as-encryption-key"
 login_url = 'login'
@@ -13,7 +16,8 @@ login_url = 'login'
 @login_required(login_url=login_url)
 def dashboard(request):
     if request.user.is_authenticated:
-        return render(request, 'dashboard.html')
+        transaction_area = userarea.objects.get(userid=request.user.id)
+        return render(request, 'dashboard.html', {'transaction_area': AREA_CHOICES[int(transaction_area.area)]})
     else:
         return render(request, 'base/login.html')
 

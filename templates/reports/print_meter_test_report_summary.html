@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Invoice Print</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static "plugins/fontawesome-free/css/all.min.css" %}">
+    <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css" %}">
+    <link rel="stylesheet" href="{% static "plugins/fontawesome-pro-5.13.0-web/css/all.min.css" %}">
+</head>
+
+<style>
+    .font_twenty {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <!-- Main content -->
+        <section class="invoice">
+            <!-- title row -->
+            <div class="row">
+                <div class="col-2">
+                    <img src="{% static "dist/img/logo2-1.2x1.2.png" %}" alt="ZANECO">
+                </div>
+                <div class="col-8">
+                    <center>
+                        <h3>ZAMBOANGA DEL NORTE ELECTRIC COOP., INC.</h3>
+                        <address>
+                            <h4>TECHNICAL SERVICES DEPARTMENT (TSD)</h4>
+                            <h4>NETWORK MANAGEMENT DIVISION (NMD)</h4>
+                        </address>
+                    </center>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <center>
+                        <h4>SUMMARY OF METER TEST REPORT</h4>
+                        <p>PERIOD COVERED: {{ date_from }}-{{ date_to }}</p>
+                    </center>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12 table-responsive ">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Name of Consumer</th>
+                                <th width="90px;">Serial No.</th>
+                                <th style="text-align: center;">Reading</th>
+                                <th style="text-align: center;">Gen. Average</th>
+                                <th>Findings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- {{ mList }} -->
+                            {% for list in form %}
+                            <tr>
+                                <td>{{ forloop.counter }}.</td>
+                                <td>{{ list.consumersid__consumer }}</td>
+                                <td>{{ list.serialno }}</td>
+                                <td style="text-align: center;">{{ list.reading }}</td>
+                                <td style="text-align: center;">{{ list.gen_average }}</td>
+                                <td>
+                                    {% if list.gen_average <= 98 %} Failed {% endif %}
+                                    {% if list.gen_average >= 99 %} Passed {% endif %}
+                                    {% if list.gen_average == 0 %} Damage {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <hr>
+                </div>
+            </div>
+
+
+            <div class="row font_twenty" style="position: fixed; bottom: 0;">
+                <div class="col-12" style=" width: 7in;">
+                    <p style="background-color: rgba(255, 255, 255, 0); border: 1px solid rgba(255, 255, 255, 0);"></p>
+                </div>
+                <div class="col-6 row">
+                    <div class="col-sm-4" style="text-align: right;">
+                        Calibrated By:
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <br><br><br>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">JOSE DIONARD R. CUENCA</p>
+                        Calibrator
+                    </div>
+                </div>
+                <div class="col-6 row">
+                    <div class="col-sm-4" style="text-align: right;">
+                        Checked By:
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <br><br><br>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">ENGR. IBO R. ORONG</p>
+                        NMD Chief
+                    </div>
+                </div>
+
+                <div class="col-2"></div>
+                <div class="col-7 row">
+                    <div class="col-sm-4" style="text-align: right;">
+                        <br><br>
+                        Noted By:
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <br><br><br><br>
+                        <p style="border-bottom: 1px solid rgb(0, 0, 0); font-weight: bold;">ENGR. VIRGINIO F. CARDENAS
+                        </p>
+                        TSD Manager
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+
+    <script type="text/javascript">
+        window.addEventListener("load", window.print());
+    </script>
+
+
+</body>
+
+</html>

@@ -67,7 +67,7 @@
             </div>
         <li class="nav-item dropdown">
             <a class="nav-link" href="#" data-toggle="dropdown">
-                <p data-toggle="tooltip" title="Logout" href="#">{{ request.user.username|title }}
+                <p data-toggle="tooltip" title="Logout" href="#">
                     <i class="fa fa-caret-down fa-fw"></i>
                 </p>
                 <!-- <p data-toggle="tooltip" title="Logout" href="#">{{ request.userarea.area|title }}</p> -->
@@ -80,6 +80,7 @@
                                 src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture">
                         </a>
                     </div>
+                    <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name }} {{ request.user.last_name }}</p>
                     <p class="text-muted text-center">{{ transaction_area.1 }}</p>
                 </div>
                 <div class="dropdown-divider"></div>
@@ -89,6 +90,14 @@
         </li>
         </li>
         {% endif %}
+        <li class="nav-item">
+            <div class="form-group">
+                <div class="custom-control custom-switch custom-switch-off-default custom-switch-on-success mt-1">
+                    <input type="checkbox" class="custom-control-input" id="customSwitch3" onchange="change_theme_color()">
+                    <label class="custom-control-label" for="customSwitch3"></label>
+                </div>
+            </div>
+        </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
@@ -102,5 +111,18 @@
     </ul>
 </nav>
 
+<script type="text/javascript">
+    function change_theme_color(params) {
+        var check = $('#customSwitch3').is(':checked');
+        let basebody = document.getElementById("base_body");
+        if (check==true) {
+            basebody.className = "sidebar-mini light-mode text-sm"
+        } else {
+            basebody.className = "sidebar-mini dark-mode text-sm";
+        }
+        // alert(basebody.className);
+    }
+
+</script>
 
 {% endblock header %}

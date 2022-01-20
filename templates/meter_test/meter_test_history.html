@@ -8,27 +8,49 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-2 mr-2">
-                    <div class="input-group-prepend" style="height: 40px;">
+                <div class="col-sm-4 mr-2">
+                    <div class="input-group-prepend">
                         <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown"
                             style="height: 31px">
                             All Meter Test
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="selected_status(0)"> Passed Meter Test</a>
-                            <a class="dropdown-item" href="#" onclick="selected_status(1)"> Failed Meter Test</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(1)"> Passed Meter Test</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> Failed Meter Test</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> All Meter Test</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(3)"> All Meter Test</a>
                         </div>
+                        <button onclick="search_for_meter()" class="btn btn-info btn-sm mb-2 ml-1">
+                            <i class="fal fa-plus mr-1"></i>
+                            <span style="font-size: small">
+                                New Test
+                            </span>
+                        </button>
                     </div>
                 </div>
-                <div class="ml-auto ">
-                    <button onclick="search_for_meter()" class="btn btn-info btn-sm mb-2">
-                        <i class="fal fa-plus mr-2"></i>
-                        <span style="font-size: small">
-                            New Test
-                        </span>
-                    </button>
+                <div class="ml-auto">
+                    <div class="form-group row">
+
+                        <p class="col-form-label col-form-label-sm">From </p>
+                        <div class="col input-group nput-group-sm">
+                            <input type="date" class="form-control form-control-sm" id="id_datefrom" name="datefrom"
+                                data-mask value="{{ datetoday|date:'Y-m-01' }}">
+                        </div>
+                        <p class="col-form-label col-form-label-sm" style="text-align: right;">To</p>
+                        <div class="col input-group input-group-sm">
+                            <input type="date" class="form-control form-control-sm" id="id_dateto" name="dateto"
+                                data-mask value="{{ datetoday|date:'Y-m-d' }}">
+                        </div>
+                        <button onclick="reload_metertest_history()" type="button"
+                            class="btn btn-default btn-sm mr-2"><i class="fas fa-sync-alt"></i></button>
+
+                        <button onclick="summary_report()" class="btn btn-info btn-sm mr-2">
+                            <i class="fal fa-print"></i>
+                            <span style="font-size: small">
+                                Summary
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,27 +89,46 @@
     let lbl_status = ['Passed Meter Test', 'Failed Meter Test', 'All Meter Test'];
 
     // datatables
-    let urlMeterTestDetails = "{% url 'testdetails' %}";
+    let urlMeterTestDetails = "{% url 'metertest' %}";
     let urlSerialSearch = "{% url 'search_for_meter' %}";
     let urlNewMeterTest = "{% url 'new' 0 %}";
+    let urlPrepareSummary = "{% url 'prepare_summary' %}";
+    let status = 0
 
     function selected_status(params)
     {
-        $('.lbl_status').html(lbl_status[params]);
-
+        status = params
+        $('.lbl_status').html(lbl_status[status]);
         $("#table-test-history").dataTable().fnDestroy();
-        Load_serials_table(params);
+        Load_serials_table(status);
     }
 
-    function Load_serials_table(params)
+    function reload_metertest_history(params)
+    {
+        var date_from = $('#id_datefrom').val();
+        var date_to = $('#id_dateto').val();
+        $("#table-test-history").dataTable().fnDestroy();
+        Load_serials_table(status, date_from, date_to);
+    }
+
+    // "searching": true,
+    // "processing": true,
+    // "stateSave": true,
+    // "info": false,
+    // "paging": true,
+    // "lengthChange": true,
+    // "autoWidth": false,
+    // "responsive": true,
+
+    function Load_serials_table(params, datefrom, dateto)
     {
         tablez = $('#table-test-history').DataTable({
             // "scrollX": true,
             "searching": true,
-            // "stateSave": true,
-            "info": true,
+            "stateSave": true,
+            "info": false,
             "paging": true,
-            // "lengthChange": true,
+            "lengthChange": true,
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
@@ -110,6 +151,8 @@
                 if (data.order[0].dir == "desc") { direction = "-" };
                 $.get(urlMeterTestDetails, {
                     status: params,
+                    datefrom: datefrom,
+                    dateto: dateto,
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -145,32 +188,20 @@
                 },
                 { "data": "testdate" },
                 {
-                    "data": "gen_average" , "render": function (data, type, row)
+                    "data": "gen_average", "render": function (data, type, row)
                     {
-                        if (data >=98 && data<=102 )
+                        if (data >= 98 && data <= 102)
                         {
                             return '<span style="color:green"> Passed</span>'
-                        } else {
+                        } else
+                        {
                             return '<span style="color:red"> Failed</span>'
                         }
                     }
-// if(Total >= 98) and(Total <= 102) then
-// begin Label34.caption := 'Passed'; end
-// else
-// begin Label34.caption := 'Failed'; end;
-
-// end else begin MessageDlg('Incomplete Test Result.....', mtError, [mbOK], 0); end;
                 },
                 { "data": "gen_average" },
                 { "data": "serialno" },
                 { "data": "consumersid__consumer" },
-                // { "data": "5" },
-                // {
-                //     "data": "6", "render": function (data, type, row)
-                //     {
-                //         return '<span style=""> ' + meterstatus[data] + '</span>'
-                //     }
-                // },
             ]
         });
         tablez.column(0).visible(false);
@@ -178,10 +209,7 @@
 
     window.onload = function ()
     {
-        // $("#table-test-history").dataTable().fnDestroy();
-
         Load_serials_table(0);
-
         $('#table-test-history tbody').on('click', 'tr', function ()
         {
             if ($(this).hasClass('selected'))
@@ -193,10 +221,7 @@
                 tablez.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             }
-
-
         });
-
     };
 
     function search_for_meter(params)
@@ -235,7 +260,6 @@
                             $('#id_brand').val(response[0][6]);
                             window.open(urlNewMeterTest.replace('0', response[0][3]), "_self");
                             Swal.fire(response[0][1], response[0][2], "success");
-                            // window.open(mMultiUrl.replace('0', selectedmeterid), "_self");
                         }
                     },
                     error: function (respose)
@@ -243,24 +267,77 @@
                         Swal.fire('Not Found.', response, 'error')
                     }
                 });
-                // return fetch(urlSerialSearch.replace('0', serial))
-                //     .then(response =>
-                //     {
-                //         if (!response.ok)
-                //         {
-                //             throw new Error(response.statusText)
-                //         }
-                //         return response.json()
-                //     })
-                //     .catch(error =>
-                //     {
-                //         Swal.showValidationMessage(
-                //             `Request failed: ${ error }`
-                //         )
-                //     })
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
+    }
+
+    const inputOptions = new Promise((resolve) =>
+        {
+            // setTimeout(() =>
+            // {
+                resolve({
+                    '1': 'All',
+                    '2': 'Passed',
+                    '3': 'Failed',
+                    '4': 'Damage'
+                })
+            // }, 1000)
+        })
+
+    function summary_report(params)
+    {
+
+        var datefrom = $('#id_datefrom').val();
+        var dateto = $('#id_dateto').val();
+
+        Swal.fire({
+            // title: 'Select Options',
+            input: 'radio',
+            text: "Please Select Option!",
+            icon: 'info',
+            inputOptions: inputOptions,
+            confirmButtonText: 'Preview',
+            showCancelButton: true,
+            inputValidator: (value) =>
+            {
+                if (!value)
+                {
+                    return 'You need to choose something!'
+                }
+                else
+                {
+                    // Swal.fire({ html: `You selected: ${ value }` })
+                    let x = 1;
+                    if (value == 1) x = 3;
+                    if (value == 2) x = 2;
+                    if (value == 3) x = 1;
+                    window.open(urlPrepareSummary + "?id=" + x + "&range=" + datefrom + "|" + dateto, "_blank");
+                }
+            }
+        })
+
+
+
+
+
+        // $.ajax({
+        //     url: urlPrepareSummary, // get the route value
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     contentType: 'application/json; charset=utf-8',
+        //     contentType: false,
+        //     data: { status:status, datefrom:datefrom, dateto:dateto },
+        //     success: function (response)
+        //     {
+        //         alert(response);
+        //         window.open(urlPrepareSummary, "_self");
+        //     },
+        //     error: function (respose)
+        //     {
+        //         Swal.fire('Not Found.', response, 'error')
+        //     }
+        // });
     }
 
 

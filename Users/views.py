@@ -58,8 +58,8 @@ def login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            username = cd['username']
-            password = cd['password']
+            # username = cd['username']
+            # password = cd['password']
 
             user = authenticate(request, username=cd['username'], password=cd['password'])
             # user = authenticate(
