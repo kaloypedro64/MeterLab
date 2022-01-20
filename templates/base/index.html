@@ -276,14 +276,13 @@
   <!-- /.content -->
 
 </div>
-<footer class="main-footer">
+<!-- <footer class="main-footer">
   <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
   All rights reserved.
   <div class="float-right d-none d-sm-inline-block">
     <b>Version</b> 3.1.0
   </div>
-</footer>
-
+</footer> -->
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
@@ -320,12 +319,12 @@
     {
       if ($(this).hasClass('selected'))
       {
-        $(this).removeClass('selected');
+        // $(this).removeClass('selected');
       }
       else
       {
-        acqTable.$('tr.selected').removeClass('selected');
-        $(this).addClass('selected');
+        // acqTable.$('tr.selected').removeClass('selected');
+        // $(this).addClass('selected');
       }
 
       // var data = table.rows(this).data();
@@ -357,13 +356,9 @@
         // { "targets": [0], "searchable": false, "orderable": false, "visible": true },
         // { "targets": [5], "className": "text-left" }
       ],
-      "keys": true,
-      "keys": { "blurable": false },
-      // "select": true,
-      // "select": {
-      //   "style": 'single',
-      //   "selector": 'td:first-child',
-      // },
+      "select": {
+        "style": 'single',
+      },
       "serverSide": true,
       "processing": true,
       "ajax": function (data, callback, settings)

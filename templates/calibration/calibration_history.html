@@ -61,19 +61,13 @@
                                         Multiple Update
                                     </span>
                                 </button>
-                                <button onclick="return_selected_meters()" class="btn btn-info btn-sm">
-                                    <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
-                                        Selected</span></button>
                             </div>
                         </div>
                         <table id="tablez" class="table table-nowrap table-hover table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th data-sort-column="" class="leftmost">
-                                        <input type="checkbox" id="select_all"><label
-                                            for="select_all"><span></span></label>
-                                    </th>
-                                    <th style="width: 60px;">Action</th>
+                                    <th style="display: none;"></th>
+                                    <th style="width: 90px;">Action</th>
                                     <th>Serial No.</th>
                                     <th>Brand</th>
                                     <th>Type</th>
@@ -89,6 +83,9 @@
                         <div class="mailbox-controls">
                             <div class="row">
                                 <div class="col-sm-4 mt-1">
+                                    <button onclick="return_selected_meters()" class="btn btn-info btn-sm">
+                                        <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
+                                            Selected</span></button>
                                     <!-- <div class="form-group row">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="radio1">
@@ -105,7 +102,7 @@
                                         <p class="col-form-label col-form-label-sm">From </p>
                                         <div class="col input-group nput-group-sm">
                                             <input type="date" class="form-control form-control-sm" id="id_datefrom"
-                                                name="datefrom" data-mask value="{{ datetoday|date:'Y-m-d' }}">
+                                                name="datefrom" data-mask value="{{ datetoday|date:'Y-m-01' }}">
                                         </div>
                                         <p class="col-form-label col-form-label-sm" style="text-align: right;">To</p>
                                         <div class="col input-group input-group-sm">
@@ -126,7 +123,10 @@
                         <table id="tabley" class="table table-nowrap table-hover table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th style="display: none;"></th>
+                                    <th data-sort-column="" class="leftmost">
+                                        <input type="checkbox" id="select_all"><label for="select_all"><span></span></label>
+                                    </th>
+                                    <th style="width: 90px;">Action</th>
                                     <th style="width: 60px;">Date</th>
                                     <th>Serial No.</th>
                                     <th>Brand</th>
@@ -415,16 +415,16 @@
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
-                // { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false, },
                 // { "targets": [0], "checkboxes": { "selectRow": true } }
-                { orderable: false, className: 'select-checkbox', targets: 0 }
+                // { orderable: false, className: 'select-checkbox', targets: 0 }
             ],
             "keys": true,
             "keys": { "blurable": false },
             "select": true,
             "select": {
-                'style': 'multi',
-                'selector': 'td:first-child'
+                'style': 'single',
+                // 'selector': 'td:first-child'
             },
             "processing": true,
             "serverSide": true,
@@ -459,30 +459,35 @@
                 {
                     "data": "0", "render": function (data, type, row)
                     {
-                        return '<div class="input-group-prepend">' +
-                            '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                            '    <div class="dropdown-menu">' +
-                            // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
-                            // '      <div class="dropdown-divider"></div>' +
-                            '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
-                            '      <div class="dropdown-divider"></div>' +
-                            '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
-                            '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
-                            // '      <div class="dropdown-divider"></div>' +
-                            // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
-                            '    </div>' +
-                            '  </div >'
+                        return '<div class="btn-group">' +
+                            '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_calibration_update(' + row[0] + ')" ><i class="fal fa-tags mr-1"></i><span style="font-size: 12px;">Calibrate</span></a>' +
+                            // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
+                            '</div>'
+                        // return '<button type="button" class="btn btn-info btn-sm" onclick=modal_calibration_update(' + row[0] + ') > <i class="fal fa-tags mr-1"></i> Calibrate</button> '
+                        // return '<div class="input-group-prepend">' +
+                        //     '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+                        //     '    <div class="dropdown-menu">' +
+                        //     // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
+                        //     // '      <div class="dropdown-divider"></div>' +
+                        //     '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
+                        //     '      <div class="dropdown-divider"></div>' +
+                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
+                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
+                        //     // '      <div class="dropdown-divider"></div>' +
+                        //     // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
+                        //     '    </div>' +
+                        //     '  </div >'
                     }
                 },
                 //
                 { "data": "1" },
-                {
-                    "data": "2", "render": function (data, type, row)
-                    {
-                        return '<td style="width: fit-content;"> <a href="#" onclick="modal_details()" title="View Details">' + data + '</a></td>'
-                    }
-                },
-                // { "data": "2" },
+                // {
+                //     "data": "2", "render": function (data, type, row)
+                //     {
+                //         return '<td style="width: fit-content;"> <a href="#" onclick="modal_details()" title="View Details">' + data + '</a></td>'
+                //     }
+                // },
+                { "data": "2" },
                 { "data": "3" },
                 { "data": "4" },
                 { "data": "5" },
@@ -513,7 +518,8 @@
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+                // { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+                { orderable: false, className: 'select-checkbox', targets: 0 }
             ],
             "keys": true,
             "keys": { "blurable": false },
@@ -554,6 +560,29 @@
                         return '<td class="selected"><label for=""><span></span></label></td>'
                     }
                 },
+                {
+                    "data": "0", "render": function (data, type, row)
+                    {
+                        return '<div class="btn-group">' +
+                            '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info mr-1"></i><span style="font-size: 12px;">Info</span></a>' +
+                            // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
+                            '</div>'
+                        // return '<button type="button" class="btn btn-info btn-sm" onclick=modal_calibration_update(' + row[0] + ') > <i class="fal fa-tags mr-1"></i> Calibrate</button> '
+                        // return '<div class="input-group-prepend">' +
+                        //     '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
+                        //     '    <div class="dropdown-menu">' +
+                        //     // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
+                        //     // '      <div class="dropdown-divider"></div>' +
+                        //     '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
+                        //     '      <div class="dropdown-divider"></div>' +
+                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
+                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
+                        //     // '      <div class="dropdown-divider"></div>' +
+                        //     // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
+                        //     '    </div>' +
+                        //     '  </div >'
+                    }
+                },
                 { "data": "7" },
                 { "data": "1" },
                 { "data": "2" },
@@ -585,21 +614,21 @@
         Load_serials_table(0);
         Load_serials_tabley(2);
 
-        tablez.on("click", "th.select-checkbox", function ()
+        tabley.on("click", "th.select-checkbox", function ()
         {
             if ($("th.select-checkbox").hasClass("selected"))
             {
-                tablez.rows().deselect();
+                tabley.rows().deselect();
                 $("th.select-checkbox").removeClass("selected");
             } else
             {
-                tablez.rows().select();
+                tabley.rows().select();
                 $("th.select-checkbox").addClass("selected");
             }
         }).on("select deselect", function ()
         {
             ("Some selection or deselection going on")
-            if (tablez.rows({
+            if (tabley.rows({
                 selected: true
             }).count() !== tablez.rows().count())
             {
@@ -899,7 +928,7 @@
 
     function modal_details(params)
     {
-        var data = tablez.rows('.selected').data();
+        var data = tabley.rows('.selected').data();
         var id = data[0][0];
         var meterserial = data[0][1];
         // var metertestid = data[0][7];
@@ -908,6 +937,7 @@
         $('#modal-details').modal('show').draggable({ handle: ".modal-header" });
 
         // alert(meterserial);
+        // tabley.fnDestroy();
         $("#Table-MeterSeal").dataTable().fnDestroy();
         loadMeterSealDetails(id);
 
@@ -928,7 +958,7 @@
         {
             if (result.isConfirmed)
             {
-                let rows = tablez.rows('.selected');
+                let rows = tabley.rows('.selected');
                 data = rows.data();
                 data.each(function (value, index)
                 {
@@ -947,7 +977,7 @@
     {
         var date_from = $('#id_datefrom').val();
         var date_to = $('#id_dateto').val();
-        window.open(urlPrintHistory + "?id=" + 2 + "&range=" + date_from + "|" + date_to, "_self");
+        window.open(urlPrintHistory + "?id=" + 2 + "&range=" + date_from + "|" + date_to, "_blank");
     }
 </script>
 

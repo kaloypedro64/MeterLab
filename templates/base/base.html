@@ -68,13 +68,16 @@
 
     <!-- <body class="sidebar-mini sidebar-collapse text-sm" style="height: auto;"> -->
         <!-- <body class="sidebar-mini dark-mode text-sm" style="height: auto;"></body> -->
-    <body id="base_body" class="sidebar-mini dark-mode text-sm" style="height: auto;">
+    <body id="base_body" class="sidebar-mini light-mode text-sm" style="height: auto;">
         <div class="wrapper">
             {% include 'base/sidebar.html' %}
             {% block content %}
             {% endblock content %}
         </div>
     </body>
+    <footer class="main-footer" style="font-size: 12px;">
+        Copyright &copy; 2020 <a href="#">CORPLAN - ZANECO MIS</a>. All rights reserved.
+    </footer>
 {% else %}
     {% include 'base/login.html' %}
 {% endif %}

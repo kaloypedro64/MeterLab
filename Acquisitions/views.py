@@ -45,7 +45,7 @@ class acquisitionList(ListView):
     html = 'acquisitions/acquisitions.html'
 
     def get_queryset(self):
-        return self.model.objects.select_related('suppliers').exclude(status=4).filter(supplierid__suppliername__icontains=self.request.GET.get('filter'), ).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area', 'status').order_by(self.request.GET.get('order_by'))
+        return self.model.objects.select_related('suppliers').exclude(status=4).filter(supplierid__suppliername__icontains=self.request.GET.get('filter'), ).values('id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address', 'area', 'status').order_by('-transactiondate')
 
     def get(self, request, *args, **kwargs):
         transaction_area = userarea.objects.get(userid=request.user.id)

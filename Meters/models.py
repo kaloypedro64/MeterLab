@@ -165,13 +165,14 @@ class metertest(models.Model):
                               MinValueValidator(Decimal('0.00'))])
     reading = models.DecimalField(max_digits=5, decimal_places=2, validators=[
                                   MinValueValidator(Decimal('0.00'))])
-    type = models.PositiveSmallIntegerField(
-        default=0, null=True)        # type, class
-    volts = models.CharField(max_length=45)
-    phase = models.CharField(max_length=45)
-    kh = models.CharField(max_length=45)
-    ta = models.CharField(max_length=45)
-    remarks = models.CharField(max_length=245)
+    # type = models.PositiveSmallIntegerField(
+    #     default=0, null=True)        # type, class
+    type = models.CharField(max_length=15)        # type, class
+    volts = models.CharField(max_length=15)
+    phase = models.CharField(max_length=15)
+    kh = models.CharField(max_length=15)
+    ta = models.CharField(max_length=15)
+    remarks = models.TextField(blank=True, null=True)
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
     isdamage = models.BooleanField(default=False)

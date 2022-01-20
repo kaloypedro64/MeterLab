@@ -27,8 +27,8 @@ function loadAcquisition(params)
         "keys": { "blurable": false },
         "select": true,
         "select": {
-            "style": 'multi',
-            "selector": 'td:first-child',
+            "style": 'single',
+            // "selector": 'td:first-child',
         },
         "serverSide": true,
         "processing": true,
@@ -67,7 +67,7 @@ function loadAcquisition(params)
                     if (row["status"] == 1)
                     {
                         return '<div class="btn-group">' +
-                            '<a href="#" class="btn btn-warning btn-xs" title="Accept" onclick = "acquisition_response(' + row["id"] + ', 0)" ><i class="fal fa-check mr-1"></i><span style="font-size: 12px;">Accept</span></a>' +
+                            '<a href="#" class="btn btn-info btn-xs" title="Accept" onclick = "acquisition_response(' + row["id"] + ', 0)" ><i class="fal fa-check mr-1"></i><span style="font-size: 12px;">Accept</span></a>' +
                             '<a href="#" class="btn btn-danger btn-xs" title="Cancel" onclick="acquisition_response(' + row["id"] + ', 1)" ><i class="fal fa-times"></i><span style="font-size: 12px;"></span></a>' +
                             '</div>'
                         // '<span class="badge bg-success float-right" style="font-size:8px"> 3 </span>'
@@ -75,13 +75,17 @@ function loadAcquisition(params)
                     }
                     else
                     {
-                        return '<div class="input-group-prepend">' +
-                            '  <button type="button" class="btn btn-info btn-xs dropdown-toggle dropdown-icon mr-1" data-toggle="dropdown">Action </button>' +
-                            '    <div class="dropdown-menu">' +
-                            '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt mr-1"></i> Edit</a>' +
-                            '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt mr-1"></i> Delete</a>' +
-                            '    </div>' +
-                            '  </div >'
+                        return '<div class="btn-group">' +
+                            '<a href="#" class="btn btn-warning btn-xs" title="Edit" onclick = "modal_editacquisition(' + row["id"] + ', 0)" ><i class="fal fa-pencil-alt mr-1"></i><span style="font-size: 12px;">Edit</span></a>' +
+                            '<a href="#" class="btn btn-danger btn-xs" title="Delete" onclick="meter_delete(' + row["id"] + ', 1)" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                            '</div>'
+                        // return '<div class="input-group-prepend">' +
+                        //     '  <button type="button" class="btn btn-info btn-xs dropdown-toggle dropdown-icon mr-1" data-toggle="dropdown">Action </button>' +
+                        //     '    <div class="dropdown-menu">' +
+                        //     '      <a class="dropdown-item" href="#" onclick="modal_editacquisition(' + row["id"] + ')"><i class="fal fa-pencil-alt mr-1"></i> Edit</a>' +
+                        //     '      <a class="dropdown-item" onclick="meter_delete(' + row["id"] + ')"><i class="fal fa-trash-alt mr-1"></i> Delete</a>' +
+                        //     '    </div>' +
+                        //     '  </div >'
                     }
                 }
             },
