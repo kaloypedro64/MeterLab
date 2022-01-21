@@ -355,7 +355,6 @@
     </div>
 </div>
 
-<!-- <script src="{% static "js/alert.js" %}"></script> -->
 <script type="text/javascript">
 
     let tablez, tabley;
@@ -455,30 +454,9 @@
                             '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_calibration_update(' + row[0] + ')" ><i class="fal fa-tags mr-1"></i><span style="font-size: 12px;">Calibrate</span></a>' +
                             // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
                             '</div>'
-                        // return '<button type="button" class="btn btn-info btn-sm" onclick=modal_calibration_update(' + row[0] + ') > <i class="fal fa-tags mr-1"></i> Calibrate</button> '
-                        // return '<div class="input-group-prepend">' +
-                        //     '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                        //     '    <div class="dropdown-menu">' +
-                        //     // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
-                        //     // '      <div class="dropdown-divider"></div>' +
-                        //     '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
-                        //     '      <div class="dropdown-divider"></div>' +
-                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
-                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
-                        //     // '      <div class="dropdown-divider"></div>' +
-                        //     // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
-                        //     '    </div>' +
-                        //     '  </div >'
                     }
                 },
-                //
                 { "data": "1" },
-                // {
-                //     "data": "2", "render": function (data, type, row)
-                //     {
-                //         return '<td style="width: fit-content;"> <a href="#" onclick="modal_details()" title="View Details">' + data + '</a></td>'
-                //     }
-                // },
                 { "data": "2" },
                 { "data": "3" },
                 { "data": "4" },
@@ -557,22 +535,7 @@
                     {
                         return '<div class="btn-group">' +
                             '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info mr-1"></i><span style="font-size: 12px;">Info</span></a>' +
-                            // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
                             '</div>'
-                        // return '<button type="button" class="btn btn-info btn-sm" onclick=modal_calibration_update(' + row[0] + ') > <i class="fal fa-tags mr-1"></i> Calibrate</button> '
-                        // return '<div class="input-group-prepend">' +
-                        //     '  <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">Action </button>' +
-                        //     '    <div class="dropdown-menu">' +
-                        //     // '      <a class="dropdown-item" href="edit/' + row[9] + '" ><i class="fal fa-edit mr-1"></i> Modify Calibration</a>' +
-                        //     // '      <div class="dropdown-divider"></div>' +
-                        //     '      <a class="dropdown-item" href="#" onclick=modal_calibration_update(' + row[0] + ')><i class="fal fa-tags mr-1"></i> Calibrate</a>' +
-                        //     '      <div class="dropdown-divider"></div>' +
-                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-user-tag mr-1"></i> Assign this meter</a>' +
-                        //     '      <a class="dropdown-item" href="#" onclick="modal_assign(' + row[0] + ')"><i class="fal fa-history mr-1"></i> View details history</a>' +
-                        //     // '      <div class="dropdown-divider"></div>' +
-                        //     // '      <a class="dropdown-item" href="print_test/' + row[0] + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
-                        //     '    </div>' +
-                        //     '  </div >'
                     }
                 },
                 { "data": "7" },
@@ -596,7 +559,6 @@
                 },
             ],
         });
-        // tablez.column(0).visible(false);
         tabley.column(6).visible(false);
     }
 
@@ -964,6 +926,8 @@
     }
 
     let urlPrintHistory = "{% url 'print_calibration_history' %}"
+    let urlReturnByRange = "{% url 'return_meters_by_range' %}"
+
 
     function print_calibration_history(params)
     {
@@ -974,8 +938,8 @@
 
     function custom_return(params) {
         Swal.fire({
-            title: "Meter Range",
-            text: "ex: 000001-000100",
+            title: "Custom Meter Return",
+            text: "Enter meter serial by range, ex: 000001-000100",
             content: "input",
             input: 'text',
             inputAttributes: {
@@ -988,7 +952,7 @@
             preConfirm: (serial) =>
             {
                 $.ajax({
-                    url: "", // get the route value
+                    url: urlReturnByRange, // get the route value
                     type: 'GET',
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',
@@ -1005,6 +969,7 @@
                 });
             },
             allowOutsideClick: () => !Swal.isLoading()
+        });
     }
 </script>
 

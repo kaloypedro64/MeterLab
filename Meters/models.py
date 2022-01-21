@@ -95,8 +95,8 @@ class meterdetails(models.Model):
     #     default=0, null=True)    # pending, passed, failed
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
-    rtw_at = models.DateTimeField(null=true) # return to warehouse
-    updated_at = models.DateTimeField(auto_now=True, null=true)
+    updated_at = models.DateTimeField(null=true)
+    rtw_at = models.DateTimeField(null=true)  # return to warehouse
     class Meta:
         db_table = "meterdetails"
 
