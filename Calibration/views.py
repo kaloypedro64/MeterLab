@@ -303,9 +303,8 @@ def return_meters_by_range(request):
         serial = request.GET.get('range')
         s_range = serial.split('-')
         cursor = connection.cursor()
-        query = """ update meterdetails set wms_status = 2 """
+        query = """ update meterdetails set wms_status = 2, rtw_at = now() where serialno between '{0}' and '{1}' and status <> 0 """.format(s_range[0], s_range[1])
         cursor.execute(query)
-
         if True:
             data = {"msg": 'saved'}
         else:

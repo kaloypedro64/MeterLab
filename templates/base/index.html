@@ -127,6 +127,11 @@
             <div class="card-body">
               <div class="tab-content" id="custom-tabs-two-tabContent">
                 <div class="tab-pane fade show active" id="meter" role="tabpanel" aria-labelledby="custom-tabs-meter">
+                  <!-- <div class="mailbox-controls">
+                    <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown" style="height: 31px">
+                      For Calibration
+                    </button>
+                  </div> -->
                   <table id="acqTable" class="table table-nowrap table-striped table-sm ">
                     <thead>
                       <tr>
@@ -134,6 +139,7 @@
                         <th style="width: 120px;">RR Number</th>
                         <th>Supplier</th>
                         <th>Progress</th>
+                        <th></th>
                       </tr>
                     </thead>
                   </table>
@@ -273,21 +279,8 @@
     </div>
     <!--/. container-fluid -->
   </section>
-  <!-- /.content -->
-
 </div>
-<!-- <footer class="main-footer">
-  <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block">
-    <b>Version</b> 3.1.0
-  </div>
-</footer> -->
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
-  <!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar -->
+<aside class="control-sidebar control-sidebar-dark"></aside>
 
 <script>
   let acqTable;
@@ -304,10 +297,8 @@
 
   let urlresponse = "{% url 'acquisition_response' %}";
 
-
   // seal
   let acqAdds = "{% url 'acqadds' 0 %}";
-
 
   window.onload = function ()
   {
@@ -315,29 +306,20 @@
     loadAcquisition(0);
     loadAcquisition(1);
 
-    $('#acqTable tbody').on('click', 'tr', function ()
+
+    $('#acqTable tbody').on('click', 'tr', function (e, datatable, cell)
     {
-      if ($(this).hasClass('selected'))
-      {
-        // $(this).removeClass('selected');
-      }
-      else
-      {
-        // acqTable.$('tr.selected').removeClass('selected');
-        // $(this).addClass('selected');
-      }
+      $('#acqTable').DataTable().rows('.selected').nodes().to$().removeClass();
+      $(this).toggleClass('selected');
 
-      // var data = table.rows(this).data();
-      // var id = data[0]['id'];
-      // selectedmeterid = id;
-
-      // alert(selectedmeterid);
-      // $("#table_meterdetails").dataTable().fnDestroy();
-      // loadDetails(id);
-      // $('#table_meterdetails').DataTable().ajax.reload(null, false);
+      var data = $('#acqTable').DataTable().row('.selected').data();
+      load_calibratiion_status(data['id']);
     });
-
   };
+
+  function load_calibratiion_status(params) {
+    alert(params);
+  }
 
   function loadAcquisition(params)
   {
@@ -347,18 +329,27 @@
       "searching": true,
       "processing": true,
       "stateSave": true,
-      "info": false,
+      // "info": false,
       "paging": true,
       "lengthChange": true,
       "autoWidth": false,
       "responsive": true,
-      "columnDefs": [
+      // "columnDefs": [
         // { "targets": [0], "searchable": false, "orderable": false, "visible": true },
         // { "targets": [5], "className": "text-left" }
-      ],
-      "select": {
-        "style": 'single',
-      },
+      // ],
+
+      // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+      // {
+      //   if (aData['status'] == "1")
+      //   {
+      //     $('td', nRow).css('background-color', 'gray');
+      //   }
+      // },
+      // "select": true,
+      // "select": {
+      //   "style": 'single',
+      // },
       "serverSide": true,
       "processing": true,
       "ajax": function (data, callback, settings)
@@ -382,23 +373,6 @@
         });
       },
       columns: [
-        // {
-        //   "data": "transactiondate", "render": function (data, type, row)
-        //   {
-        //     if (row["status"] == 1)
-        //     {
-        //       return '<td style="width: fit-content;"> ' + data + '</td>'
-
-        //     }
-        //     else
-        //     {
-        //       if (params == 0)
-        //         return '<td style="width: fit-content;"> <a href="acqadd/' + row["id"] + '" style="color:primary">' + data + '</a></td>'
-        //       else
-        //         return '<td style="width: fit-content;"> <a href="acqadds/' + row["id"] + '">' + data + '</a></td>'
-        //     }
-        //   }
-        // },
         { "data": "transactiondate" },
         { "data": "rrnumber" },
         { "data": "supplierid__suppliername" },
@@ -413,10 +387,11 @@
 
           }
         },
+        { "data": "id" },
       ],
       // "dom": '<"top"i>rt<"bottom"flp><"clear">',
     });
-
+    acqTable.column(4).visible(false);
   }
 
 </script>

@@ -73,23 +73,20 @@
         </div>
     </body>
     <footer class="main-footer" style="font-size: 12px;">
-        Copyright &copy; 2020 <a href="#">CORPLAN - ZANECO MIS</a>. All rights reserved.
+        Copyright &copy; 2021 <a href="#">CORPLAN - ZANECO MIS</a>. All rights reserved.
     </footer>
 {% else %}
     {% include 'base/login.html' %}
 {% endif %}
 
-<!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-<!-- https://sweetalert2.github.io/#download -->
 <script src="{% static "plugins/sweetalert2/sweetalert2.all.min.js" %}"></script>
-
-<!-- <script src="sweetalert2.all.min.js"></script> -->
-
 <script src="{% static "plugins/jquery/jquery.min.js" %}"></script>
 <script src="{% static "plugins/jquery-ui/jquery-ui.min.js" %}"></script>
+
 <script>
-    // $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button)
 </script>
+
 <script src="{% static "plugins/chart.js/Chart.min.js" %}"></script>
 <script src="{% static "plugins/sparklines/sparkline.js" %}"></script>
 <script src="{% static "plugins/jqvmap/jquery.vmap.min.js" %}"></script>
