@@ -72,7 +72,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 model-bakery==1.2.1
 mysql-connector-python==8.0.22
-mysqlclient @ file:///E:/Program%20Development/Development/Python/MeterLab/mysqlclient-1.4.6-cp39-cp39-win_amd64.whl
+mysqlclient
 Naked==0.1.31
 oauthlib==3.1.0
 packaging==20.8
