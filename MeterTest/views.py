@@ -33,7 +33,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 datetoday = datetime.date.today()
 datenow = datetime.datetime.now()
-findings = {' gen_average__lte = 98', ' gen_average__gte 99', ''}
+# findings = {' gen_average__lte = 98', ' gen_average__gte 99', ''}
 header = 'Meter Test'
 
 html_metertest_history = "meter_test/meter_test_history.html"
@@ -174,9 +174,6 @@ def prepare_summary(request):
     status = request.GET.get('id')
     date_from = request.GET.get('range')
     d_range = date_from.split('|')
-
-    # datefrom = request.GET.get('datefrom')
-    # dateto = request.GET.get('dateto')
     if int(status) == 1:
         lookupb = Q(gen_average__lte = 98)
     elif int(status) == 2:

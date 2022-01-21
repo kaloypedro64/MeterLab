@@ -4,6 +4,7 @@ from django.db import models
 from datetime import date
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
+from sqlalchemy import true
 
 # Create your models here.
 
@@ -94,7 +95,8 @@ class meterdetails(models.Model):
     #     default=0, null=True)    # pending, passed, failed
     active = models.PositiveSmallIntegerField(
         default=0, null=True)        # active, deleted
-
+    rtw_at = models.DateTimeField(null=true) # return to warehouse
+    updated_at = models.DateTimeField(auto_now=True, null=true)
     class Meta:
         db_table = "meterdetails"
 

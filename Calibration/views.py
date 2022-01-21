@@ -6,14 +6,11 @@ from Users.models import userarea
 import datetime
 import json
 from django.db import connection
-from django.db.models.expressions import Window
 from django.shortcuts import render, redirect
 
 from Meters.models import *
 from Meters.forms import *
 
-from django.views.generic import CreateView, FormView, RedirectView, ListView
-from django.utils.dateparse import parse_datetime, postgres_interval_re
 
 # Create your views here.
 header = 'Calibration'
@@ -23,57 +20,6 @@ html_calibration_history = 'calibration/calibration_history.html'
 html_calibration_edit = 'calibration/calibration_edit.html'
 html_test_preview = 'calibration/print_test.html'
 html_print_calibration_history = 'calibration/print_calibration_history.html'
-
-
-# class Calibration(ListView):
-#     model = meterdetails
-#     html = 'calibration/calibration_history.html'
-#     success_url = '/'
-
-#     def get_queryset(self):
-#         query = 'select md.id, md.serialno, ' + \
-#                 '    (select brand from brands where id=m.brandid) brand,' + \
-#                 '    (select metertype from metertype where id=m.mtypeid) metertype,' + \
-#                 ' ampheres, accuracy, md.status ' + \
-#                 'from meters m ' + \
-#                 'left join meterdetails md on m.id = md.meterid '
-#         return query
-
-#     def get(self, request, *args, **kwargs):
-#         transaction_area = userarea.objects.get(userid=request.user.id)
-#         query = self.get_queryset()
-#         if request.is_ajax():
-#             status = int(request.GET.get('status'))
-#             start = int(request.GET.get('start'))
-#             limit = int(request.GET.get('limit'))
-#             filter = request.GET.get('filter')
-#             order_by = request.GET.get('order_by')
-
-#             isfiltered = ''
-#             if filter:
-#                 isfiltered = " and ( md.serialno like '%" + filter + "%' ) "
-
-#             cursor = connection.cursor()
-#             # query += 'where status = '+ status +' '+ isfiltered
-#             query += 'where status = 0 ' + isfiltered
-
-#             cursor.execute(query)
-#             mList = cursor.fetchall()
-
-#             print('query', query)
-
-#             list_data = []
-#             for index, item in enumerate(mList[start:start+limit], start):
-#                 list_data.append(item)
-#             data = {
-#                 'length': len(mList),
-#                 'objects': list_data,
-#             }
-#             return HttpResponse(json.dumps(data, default=default), 'application/json')
-#         else:
-#             context = {'datetoday': datetoday, 'header': 'Calibration',
-#                        'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
-#             return render(request, self.html, context)
 
 
 def calibration(request):
@@ -179,7 +125,6 @@ def calibration(request):
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
     else:
-        # serials = meterdetails.objects.all()
         context = {'datetoday': datetoday, 'header': 'Calibration',
                    'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
         return render(request, html_calibration_history, context)
@@ -193,14 +138,7 @@ def calibrate_edit(request, id):
 
             rec = form.save(commit=False)
             rec.updated_at = datenow
-
             rec.save()
-            # meterid = request.POST['meterdetailsid']
-            # average = request.POST['gen_average']
-            # cursor = connection.cursor()
-            # cursor.execute(
-            #     'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
-            # cursor.fetchall()
             return redirect("/calibration")
         else:
             data = {"err_msg": form.errors}
@@ -322,14 +260,9 @@ def calibration_update_save(request):
         cursor = connection.cursor()
         query = 'update zanecometerpy.sealdetails set active = 1 where serialno like "' + seal_a + '"; ' + \
                 'update zanecometerpy.sealdetails set active = 1 where serialno like "' + seal_b + '"; ' + \
-                'update zanecometerpy.meterdetails set status = 2 where id like "' + meterdetailsid + '"; ' + \
+                'update zanecometerpy.meterdetails set status = 2, updated_at = now() where id like "' + meterdetailsid + '"; ' + \
                 'insert into zanecometerpy.meterseal (transactiondate, seal_a, seal_b, metercondition, accuracy, reading, remarks, meterdetailsid, userid) ' + \
                        'values ("' + transactiondate + '","' + seal_a + '","' + seal_b + '","' + metercondition + '","' + accuracy + '","' + reading + '","' + remarks + '","' + meterdetailsid + '","' + str(request.user.id) + '")'
-
-        # cursor.execute('insert into zanecometerpy.meterseal (transactiondate, seal_a, seal_b, metercondition, accuracy, reading, remarks, meterdetailsid, userid) ' +
-        #                'values ("' + transactiondate + '","' + seal_a + '","' + seal_b + '","' + metercondition + '","' + accuracy + '","' + reading + '","' + remarks + '","' + meterdetailsid + '","' + str(request.user.id) + '")')
-        # cursor.fetchall()
-
         cursor.execute(query)
 
         if True:
@@ -409,11 +342,22 @@ def print_calibration_history(request):
 
     mList = cursor.fetchall()
     context = {'mList': mList, 'date_from': d_range[0], 'date_to': d_range[1]}
-    # return HttpResponse(json.dumps(context, default=default), 'application/json')
-    # else:
-    #     context = {'mList': ''}
     return render(request, html_print_calibration_history, context)
 
+def return_meters_by_range(request):
+    if request.is_ajax():
+        serial = request.GET.get('range')
+        s_range = serial.split('-')
+        cursor = connection.cursor()
+        query = """ update meterdetails set wms_status = 2 """
+        cursor.execute(query)
+
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):
