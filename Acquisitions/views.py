@@ -492,6 +492,28 @@ def acquisition_response(request):
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
+def get_details(request):
+    if request.is_ajax():
+        id = int(request.GET.get('id'))
+        action = str(request.GET.get('action'))
+        cursor = connection.cursor()
+        query = """select m.id, metercondition, count(ms.id) cnt, m.units
+                            FROM zanecometerpy.meterseal ms
+                            left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
+                            left join zanecometerpy.meters m on m.id=md.meterid
+                            group by metercondition 
+                            """.format()
+        if action == 1:
+            query += """where m.id = '{0}'""".format(id)
+        cursor.execute()
+        cursor.fetchall()
+        if True:
+            data = {"msg": 'accepted'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
 def datetime_handler(x):
     if isinstance(x, datetime.datetime):
         return x.isoformat()

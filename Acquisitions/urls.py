@@ -4,7 +4,7 @@ from .views import *
 
 urlpatterns = [
 
-    path('', acquisitionList.as_view(), name='acqList'), 
+    path('', acquisitionList.as_view(), name='acqList'),
     path('acqadd/<int:id>', views.acquisition_add, name='acqadd'),
     path('acqsave', views.acquisition_save, name='acqsave'),
     # path('acqselected/', views.acquisition_selected, name='acqselected'),
@@ -44,6 +44,7 @@ urlpatterns = [
     path('acquisition_response', views.acquisition_response,
          name='acquisition_response'),
 
+    print('get_details', views.get_details, 'get_details'),
 
 ]
 

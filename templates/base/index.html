@@ -229,8 +229,8 @@
       <!-- /.row -->
       <div class="row">
         <!-- <div class="col-md-4"> -->
-          <!-- Info Boxes Style 2 -->
-          <div class="col-12 col-sm-6 col-md-3">
+        <!-- Info Boxes Style 2 -->
+        <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-warning elevation-2">
             <span class="info-box-icon"><i class="fas fa-tag"></i></span>
             <div class="info-box-content">
@@ -239,9 +239,9 @@
             </div>
             <!-- /.info-box-content -->
           </div>
-          </div>
-          <!-- /.info-box -->
-          <div class="col-12 col-sm-6 col-md-3">
+        </div>
+        <!-- /.info-box -->
+        <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-success elevation-2">
             <span class="info-box-icon"><i class="far fa-heart"></i></span>
             <div class="info-box-content">
@@ -249,8 +249,8 @@
               <span class="info-box-number">92,050</span>
             </div>
           </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-danger elevation-2">
             <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
             <div class="info-box-content">
@@ -258,8 +258,8 @@
               <span class="info-box-number">114,381</span>
             </div>
           </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-info elevation-2">
             <span class="info-box-icon"><i class="far fa-comment"></i></span>
             <div class="info-box-content">
@@ -267,11 +267,11 @@
               <span class="info-box-number">163,921</span>
             </div>
           </div>
-          </div>
-          <!-- /.info-box -->
+        </div>
+        <!-- /.info-box -->
 
 
-          <!-- /.card -->
+        <!-- /.card -->
         <!-- </div> -->
       </div>
       <!-- /.col -->
@@ -317,10 +317,6 @@
     });
   };
 
-  function load_calibratiion_status(params) {
-    alert(params);
-  }
-
   function loadAcquisition(params)
   {
     var tbl = "acqTable";
@@ -335,21 +331,21 @@
       "autoWidth": false,
       "responsive": true,
       // "columnDefs": [
-        // { "targets": [0], "searchable": false, "orderable": false, "visible": true },
-        // { "targets": [5], "className": "text-left" }
+      // { "targets": [0], "searchable": false, "orderable": false, "visible": true },
+      // { "targets": [5], "className": "text-left" }
       // ],
 
-      // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
-      // {
-      //   if (aData['status'] == "1")
-      //   {
-      //     $('td', nRow).css('background-color', 'gray');
-      //   }
-      // },
-      // "select": true,
-      // "select": {
-      //   "style": 'single',
-      // },
+      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+      {
+        if (aData['status'] == "1")
+        {
+          $('td', nRow).css('background-color', 'gray');
+        }
+      },
+      "select": true,
+      "select": {
+        "style": 'single',
+      },
       "serverSide": true,
       "processing": true,
       "ajax": function (data, callback, settings)
@@ -393,6 +389,28 @@
     });
     acqTable.column(4).visible(false);
   }
+
+
+  function load_calibratiion_status(params)
+  {
+    $.ajax({
+      url: "",
+      type: 'GET',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      contentType: false,
+      data: { id: params, },
+      success: function (data)
+      {
+        // $('#lblAddress').html(data[0][2]);
+      },
+      error: function (e)
+      {
+        alert('err: ' + e);
+      }
+    });
+  }
+
 
 </script>
 
