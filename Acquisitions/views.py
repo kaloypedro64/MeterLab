@@ -492,25 +492,36 @@ def acquisition_response(request):
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-def get_details(request):
+def get_meter_details(request):
     if request.is_ajax():
         id = int(request.GET.get('id'))
-        action = str(request.GET.get('action'))
+        action = int(request.GET.get('action'))
         cursor = connection.cursor()
-        query = """select m.id, metercondition, count(ms.id) cnt, m.units
+        query = """select m.id, metercondition, count(ms.id) cnt, m.units,
+                            (select count(id) cal from zanecometerpy.meterdetails where status = 0) ex
                             FROM zanecometerpy.meterseal ms
                             left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
                             left join zanecometerpy.meters m on m.id=md.meterid
-                            group by metercondition 
-                            """.format()
+                            """
         if action == 1:
-            query += """where m.id = '{0}'""".format(id)
-        cursor.execute()
-        cursor.fetchall()
-        if True:
-            data = {"msg": 'accepted'}
-        else:
-            data = {"msg": 'Not saved'}
+            query += """where m.acquisitionid = '{0}' """.format(id)
+
+        query += """group by metercondition """
+        cursor.execute(query)
+        row_headers = [x[0] for x in cursor.description]
+        cnt = cursor.fetchall()
+
+        json_data=[]
+        for result in cnt:
+            json_data.append(dict(zip(row_headers,result)))
+        # return json.dumps(json_data)
+
+
+        # if result == None:
+        #     data = {"data": "None" }
+        # else:
+        data = {"data": json_data}
+        # print(json_data, json_data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 

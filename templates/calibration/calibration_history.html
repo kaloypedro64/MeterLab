@@ -326,14 +326,14 @@
                 <div class="form-group row">
                     <label for="id_accuracy" class="col-sm-4 col-form-label mlabel">Accuracy:</label>
                     <div class="col">
-                        <input type="text" class="form-control form-control-sm" id="id_accuracy" name="accuracy"
+                        <input type="number" class="form-control form-control-sm" id="id_accuracy" name="accuracy"
                             maxlength="145" placeholder="Accuracy">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="id_reading" class="col-sm-4 col-form-label mlabel">Reading:</label>
                     <div class="col">
-                        <input type="text" class="form-control form-control-sm" id="id_reading" name="reading"
+                        <input type="number" class="form-control form-control-sm" id="id_reading" name="reading"
                             maxlength="145" placeholder="Reading">
                     </div>
                 </div>
@@ -866,6 +866,7 @@
                         Swal.fire('Saved!', meterserial + ' Successfully calibrated!', 'success');
                     }
                     tablez.ajax.reload(null, false);
+                    reload_calibration_history();
                     clear_modal_input();
                 }
                 else

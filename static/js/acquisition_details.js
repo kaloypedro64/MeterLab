@@ -236,7 +236,8 @@ window.onload = function ()
 
 function add_meter_modal(params)
 {
-    $('#modal-add_meter').modal('show').draggable({ handle: ".modal-header" });
+    $('#id_ampheres').editableSelect({ effects: 'fade' });
+    $('#modal-add_meter').modal('show').draggable( { handle: ".modal-header" } );
 }
 
 function brand_modal(params)

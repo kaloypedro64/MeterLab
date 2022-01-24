@@ -33,40 +33,27 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Good Meters</span>
-              <span class="info-box-number">
-                10
-                <small>%</small>
-              </span>
+              <span class="info-box-number" id="id_all_good">0</span>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
-
             <div class="info-box-content">
-              <span class="info-box-text">Damanage Meters</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-text">Damage Meters</span>
+              <span class="info-box-number" id="id_all_damage">0</span>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
 
-        <!-- fix for small devices only -->
         <div class="clearfix hidden-md-up"></div>
-
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
             <div class="info-box-content">
               <span class="info-box-text">Substandard Meters</span>
-              <span class="info-box-number">760</span>
+              <span class="info-box-number" id="id_all_substandard">0</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -79,7 +66,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Rehab Meters</span>
-              <span class="info-box-number">2,000</span>
+              <span class="info-box-number" id="id_all_rehab">0</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -138,7 +125,7 @@
                         <th style="width: 80px;">Date</th>
                         <th style="width: 120px;">RR Number</th>
                         <th>Supplier</th>
-                        <th>Progress</th>
+                        <th>Address</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -151,7 +138,7 @@
                         <th style="width: 80px;">Date</th>
                         <th style="width: 120px;">RR Number</th>
                         <th>Supplier</th>
-                        <th>Progress</th>
+                        <th>Address</th>
                       </tr>
                     </thead>
                   </table>
@@ -181,44 +168,41 @@
 
           <div class="progress-group">
             Good
-            <span class="float-right"><b>160</b>/200</span>
+            <span class="float-right"><b id="id_good">0</b></span>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-primary" style="width: 80%"></div>
+              <div class="progress-bar bg-primary good" style="width: 80%"></div>
             </div>
           </div>
-          <!-- /.progress-group -->
 
           <div class="progress-group">
             Damage
-            <span class="float-right"><b>310</b>/400</span>
+            <span class="float-right"><b id="id_damage">0</b></span>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-danger" style="width: 75%"></div>
+              <div class="progress-bar bg-danger damage" style="width: 75%"></div>
             </div>
           </div>
 
-          <!-- /.progress-group -->
           <div class="progress-group">
             <span class="progress-text">Substandard</span>
-            <span class="float-right"><b>480</b>/800</span>
+            <span class="float-right"><b id="id_substandard">0</b></span>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-success" style="width: 60%"></div>
+              <div class="progress-bar bg-success substandard" style="width: 60%"></div>
             </div>
           </div>
 
-          <!-- /.progress-group -->
           <div class="progress-group">
             Rehab Meter
-            <span class="float-right"><b>250</b>/500</span>
+            <span class="float-right"><b id="id_rehab">0</b></span>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-warning" style="width: 50%"></div>
+              <div class="progress-bar bg-warning  rehab" style="width: 50%"></div>
             </div>
           </div>
 
           <div class="progress-group">
-            Not Calibrated
-            <span class="float-right"><b>250</b>/500</span>
+            Total Calibrated
+            <span class="float-right"><b id="id_notcalibrated">0</b></span>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-success" style="width: 50%"></div>
+              <div class="progress-bar bg-success notcalibrated" style="width: 0%"></div>
             </div>
           </div>
           <!-- /.progress-group -->
@@ -235,7 +219,7 @@
             <span class="info-box-icon"><i class="fas fa-tag"></i></span>
             <div class="info-box-content">
               <span class="info-box-text">For Calibration</span>
-              <span class="info-box-number">5,200</span>
+              <span class="info-box-number" id="id_all_for_calibration">0</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -246,7 +230,7 @@
             <span class="info-box-icon"><i class="far fa-heart"></i></span>
             <div class="info-box-content">
               <span class="info-box-text">Calibrated</span>
-              <span class="info-box-number">92,050</span>
+              <span class="info-box-number" id="id_all_calibrated">0</span>
             </div>
           </div>
         </div>
@@ -255,7 +239,7 @@
             <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
             <div class="info-box-content">
               <span class="info-box-text">Returned to Warehouse</span>
-              <span class="info-box-number">114,381</span>
+              <span class="info-box-number" id="id_all_returned">0</span>
             </div>
           </div>
         </div>
@@ -264,7 +248,7 @@
             <span class="info-box-icon"><i class="far fa-comment"></i></span>
             <div class="info-box-content">
               <span class="info-box-text">Remaining Meters</span>
-              <span class="info-box-number">163,921</span>
+              <span class="info-box-number" id="id_all_remaining">0</span>
             </div>
           </div>
         </div>
@@ -296,8 +280,9 @@
   let urlssuppliers = "{% url 'selected_supplier' %}";
 
   let urlresponse = "{% url 'acquisition_response' %}";
+  let urlGetMeterDetails = "{% url 'get_meter_details' %}";
+  let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
 
-  // seal
   let acqAdds = "{% url 'acqadds' 0 %}";
 
   window.onload = function ()
@@ -315,6 +300,8 @@
       var data = $('#acqTable').DataTable().row('.selected').data();
       load_calibratiion_status(data['id']);
     });
+
+    load_all_status(0);
   };
 
   function loadAcquisition(params)
@@ -372,17 +359,18 @@
         { "data": "transactiondate" },
         { "data": "rrnumber" },
         { "data": "supplierid__suppliername" },
-        {
-          "data": "transactiondate", "render": function (data, type, row)
-          {
-            return '<td>' +
-              '<div class="progress progress-xs">' +
-              '<div class="progress-bar progress-bar-danger" style="width: 10%"></div>' +
-              '</div>' +
-              '</td>'
+        // {
+        //   "data": "transactiondate", "render": function (data, type, row)
+        //   {
+        //     return '<td>' +
+        //       '<div class="progress progress-xs">' +
+        //       '<div class="progress-bar progress-bar-danger" style="width: 10%"></div>' +
+        //       '</div>' +
+        //       '</td>'
 
-          }
-        },
+        //   }
+        // },
+        { "data": "supplierid__address" },
         { "data": "id" },
       ],
       // "dom": '<"top"i>rt<"bottom"flp><"clear">',
@@ -390,19 +378,125 @@
     acqTable.column(4).visible(false);
   }
 
+  function load_all_status(params)
+    {
+      $.ajax({
+        url: urlGetMeterDetails,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        data: {
+          id: params,
+          action: 0,
+        },
+        success: function (response)
+        {
+
+          $('#id_all_good').html(0);
+          $('#id_all_damage').html(0);
+          $('#id_all_substandard').html(0);
+          $('#id_all_rehab').html(0);
+
+          $('#id_all_for_calibration').html(1);
+          $('#id_all_calibrated').html(0);
+          $('#id_all_returned').html(0);
+          $('#id_all_remaining').html(0);
+
+          // $('.good').attr('style', 'width: 0%');
+          // $('.damage').attr('style', 'width: 0%');
+          // $('.substandard').attr('style', 'width: 0%');
+          // $('.rehab').attr('style', 'width: 0%');
+
+          $.each(response.data, function (key, value)
+          {
+            if (value.metercondition == 0)
+            {
+              $('#id_all_good').html(value.cnt);
+            }
+            else if (value.metercondition == 1)
+            {
+              $('#id_all_damage').html(value.cnt);
+            }
+            else if (value.metercondition == 2)
+            {
+              $('#id_all_substandard').html(value.cnt);
+            }
+            else
+            {
+              $('#id_all_rehab').html(value.cnt);
+            }
+
+              $('#id_all_for_calibration').html(value.ex);
+              $('#id_all_calibrated').html(value.units - value.ex);
+              // $('#id_all_returned').html(value.cnt + '/' + value.units);
+              // $('#id_all_remaining').html(value.cnt + '/' + value.units);
+          });
+          //m.id, metercondition, count(ms.id) cnt, m.units
+          // $('#id_good').val()
+          // alert(data.data);
+        },
+        error: function (e)
+        {
+          alert('err: ' + e);
+        }
+      });
+    }
+
 
   function load_calibratiion_status(params)
   {
     $.ajax({
-      url: "",
+      url: urlGetMeterDetails,
       type: 'GET',
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
       contentType: false,
-      data: { id: params, },
-      success: function (data)
+      data: {
+        id: params,
+        action: 1,
+      },
+      success: function (response)
       {
-        // $('#lblAddress').html(data[0][2]);
+        // alert(response.data);
+        if ( response.data == "" ) return;
+        $('#id_good').html(0);
+        $('#id_damage').html(0);
+        $('#id_substandard').html(0);
+        $('#id_rehab').html(0);
+        $('.good').attr('style', 'width: 0%');
+        $('.damage').attr('style', 'width: 0%');
+        $('.substandard').attr('style', 'width: 0%');
+        $('.rehab').attr('style', 'width: 0%');
+
+        $.each(response.data, function (key, value)
+        {
+          if (value.metercondition == 0) {
+            $('#id_good').html(value.cnt +'/'+ value.units);
+            $('.good').attr('style', 'width: ' + (value.cnt / value.units) * 100 +'%');
+          }
+          else if (value.metercondition == 1)
+          {
+            $('#id_damage').html(value.cnt + '/' + value.units);
+            $('.damage').attr('style', 'width: ' + (value.cnt / value.units) * 100 + '%');
+          }
+          else if (value.metercondition == 2)
+          {
+            $('#id_substandard').html(value.cnt + '/' + value.units);
+            $('.substandard').attr('style', 'width: ' + (value.cnt / value.units) * 100 + '%');
+          }
+          else
+          {
+            $('#id_rehab').html(value.cnt + '/' + value.units);
+            $('.rehab').attr('style', 'width: ' + (value.cnt / value.units) * 100 + '%');
+          }
+            $('#id_notcalibrated').html(value.units - value.ex + '/' + value.units);
+            $('.notcalibrated').attr('style', 'width: ' + ((value.units - value.ex)/value.units)*100 + '%');
+
+        });
+        //m.id, metercondition, count(ms.id) cnt, m.units
+        // $('#id_good').val()
+        // alert(data.data);
       },
       error: function (e)
       {

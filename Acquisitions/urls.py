@@ -44,7 +44,7 @@ urlpatterns = [
     path('acquisition_response', views.acquisition_response,
          name='acquisition_response'),
 
-    print('get_details', views.get_details, 'get_details'),
+    path('get_meter_details', views.get_meter_details, name='get_meter_details'),
 
 ]
 

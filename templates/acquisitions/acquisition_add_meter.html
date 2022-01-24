@@ -154,7 +154,7 @@
                 <div class="form-group row">
                     <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
                     <div class="col">
-                        <select class="form-control form-control-sm select2" id="id_ampheres" name="ampheres">
+                        <select class="form-control form-control-sm" id="id_ampheres" name="ampheres">
                             {% for row in mAmp %}
                             <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
                             {% endfor %}
@@ -357,7 +357,10 @@
     let mDeleteUrl = "{% url 'metersdelete' %}";
 
     $("#id_brandid").select2().val(1).trigger('change.select2');
+     window.onload = function ()
+        {
 
+        }
 
 </script>
 
