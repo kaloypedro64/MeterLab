@@ -141,8 +141,9 @@ def seal_list(request):
                         left join seals s on s.id = sd.sealid
                         left join acquisition a on a.id = s.acquisitionid
                         where a.area = '{0}' and serialno like '%{1}%' and active = 0
-                        order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area, search)
+                        order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area.area, search)
         cursor = connection.cursor()
+        # print('query', query)
         cursor.execute(query)
         row_headers = [x[0] for x in cursor.description]
         cnt = cursor.fetchall()
