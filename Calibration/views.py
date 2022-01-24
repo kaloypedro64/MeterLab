@@ -43,10 +43,10 @@ def calibration(request):
                  ampheres, ms.accuracy, md.status,
                  ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
                 from meters m
-                inner join acquisition a on a.id = m.acquisitionid
+                inner join acquisition a on a.id = m.acquisitionid and a.status <> 1
                 left join metertype mt on mt.id = m.mtypeid
                 left join meterdetails md on m.id = md.meterid
-                left join auth_user_area ua on ua.userid = a.userid
+                -- left join auth_user_area ua on ua.userid = a.userid
                 left join meterseal ms on ms.meterdetailsid = md.id
                 """
 
@@ -56,7 +56,7 @@ def calibration(request):
             status = 0
         cursor = connection.cursor()
         query += "where md.status = " + str(status) + " " + isfiltered
-        query += "and ua.area = " + str(transaction_area.area)
+        query += "and a.area = " + str(transaction_area.area)
 
         if date_from:
             query += " and ms.transactiondate between '{0}' and '{1}'".format(date_from, date_to)
@@ -130,12 +130,30 @@ def consumer_list(request):
 def seal_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
-        query = sealdetails.objects.filter(serialno__icontains=search, active__icontains=0).extra(select={'serialnos': 'cast(serialno AS UNSIGNED INTEGER)'}).values('id', 'sealid', 'meterdetailsid',
-                                                                               'serialno', 'techcrew', 'status', 'active').order_by('serialnos')
+        transaction_area = userarea.objects.get(userid=request.user.id)
+        # .filter(area=transaction_area.area, acqtype=acqtype)
+        # acquisitionid__area=transaction_area.area,
+        # query = sealdetails.objects.select_related('acquisition', 'seals').filter(serialno__icontains=search, active__icontains=0).extra(select={'serialnos': 'cast(serialno AS UNSIGNED INTEGER)'}).values('id', 'sealid', 'meterdetailsid',
+        #                                                                                                                                                                                                    'serialno', 'techcrew', 'status', 'active').order_by('serialnos')
+        # print('query', query.query)
+        query = """select sd.id, sd.serialno
+                        from sealdetails sd
+                        left join seals s on s.id = sd.sealid
+                        left join acquisition a on a.id = s.acquisitionid
+                        where a.area = '{0}' and serialno like '%{1}%' and active = 0
+                        order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area, search)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        row_headers = [x[0] for x in cursor.description]
+        cnt = cursor.fetchall()
+
+        json_data=[]
+        for result in cnt:
+            json_data.append(dict(zip(row_headers,result)))
+
         list_data = []
         datas = []
-        list_data = []
-        for index, item in enumerate(query):
+        for index, item in enumerate(json_data):
             list_data.append(item)
         for s in range(len(list_data)):
             data = {

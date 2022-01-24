@@ -113,8 +113,7 @@
                                     src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture">
                             </a>
                         </div>
-                        <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name }} {{
-                            request.user.last_name }}</p>
+                        <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name }} {{request.user.last_name }}</p>
                         <p class="text-muted text-center">{{ transaction_area.1 }}</p>
                     </div>
                     <div class="dropdown-divider"></div>

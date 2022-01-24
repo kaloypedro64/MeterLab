@@ -190,16 +190,7 @@ def meter_test_new(request, serialno):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            # meterid = request.POST['idmeterdetails']
-            # average = request.POST['gen_average']
-            # cursor = connection.cursor()
-            # cursor.execute('INSERT INTO zanecometerpy.metertest (testdate,serialno,gen_average,fullload_average,lightload_average,fl1,fl2,fl3,ll1,ll2,ll3,reading,type,volts,phase,kh,ta,remarks,active,isdamage,userid,created_at,updated_at,consumers) VALUES')
-
-            # cursor.execute(
-            #     'update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(average) + '" >= 98,1,2), accuracy="' + str(average) + '" where id = "' + str(meterid) + '"')
-            # cursor.fetchall()
         return HttpResponseRedirect('..')
-        # return render(request, html_metertest_history, {})
     else:
         context = {'form': form, 'datetoday': datetoday, 'serialno': serialno}
         return render(request, html_metertest, context)
@@ -209,7 +200,7 @@ def calibrate(request, id):
         form = metertestForm(request.POST)
         if form.is_valid():
             form.save()
-            meterdetailsid = request.POST['meterdetailsid']
+            # meterdetailsid = request.POST['meterdetailsid']
             average = request.POST['gen_average']
             cursor = connection.cursor()
             cursor.execute('update zanecometerpy.meterdetails set wms_status=1, status = if("' + str(

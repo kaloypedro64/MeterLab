@@ -403,11 +403,6 @@
           $('#id_all_returned').html(0);
           $('#id_all_remaining').html(0);
 
-          // $('.good').attr('style', 'width: 0%');
-          // $('.damage').attr('style', 'width: 0%');
-          // $('.substandard').attr('style', 'width: 0%');
-          // $('.rehab').attr('style', 'width: 0%');
-
           $.each(response.data, function (key, value)
           {
             if (value.metercondition == 0)
@@ -432,9 +427,6 @@
             $('#id_all_returned').html(value.wms_returned);
             $('#id_all_remaining').html(value.units - value.wms_returned);
           });
-          //m.id, metercondition, count(ms.id) cnt, m.units
-          // $('#id_good').val()
-          // alert(data.data);
         },
         error: function (e)
         {
