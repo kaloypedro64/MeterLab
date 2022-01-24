@@ -498,7 +498,8 @@ def get_meter_details(request):
         action = int(request.GET.get('action'))
         cursor = connection.cursor()
         query = """select m.id, metercondition, count(ms.id) cnt, m.units,
-                            (select count(id) cal from zanecometerpy.meterdetails where status = 0) ex
+                            (select count(id) cal from zanecometerpy.meterdetails where status = 0) for_calibration,
+                            (select count(id) cal from zanecometerpy.meterdetails where wms_status = 2) wms_returned
                             FROM zanecometerpy.meterseal ms
                             left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
                             left join zanecometerpy.meters m on m.id=md.meterid
@@ -514,14 +515,8 @@ def get_meter_details(request):
         json_data=[]
         for result in cnt:
             json_data.append(dict(zip(row_headers,result)))
-        # return json.dumps(json_data)
 
-
-        # if result == None:
-        #     data = {"data": "None" }
-        # else:
         data = {"data": json_data}
-        # print(json_data, json_data)
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 

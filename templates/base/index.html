@@ -427,10 +427,10 @@
               $('#id_all_rehab').html(value.cnt);
             }
 
-              $('#id_all_for_calibration').html(value.ex);
-              $('#id_all_calibrated').html(value.units - value.ex);
-              // $('#id_all_returned').html(value.cnt + '/' + value.units);
-              // $('#id_all_remaining').html(value.cnt + '/' + value.units);
+            $('#id_all_for_calibration').html(value.for_calibration);
+            $('#id_all_calibrated').html(value.units - value.for_calibration);
+            $('#id_all_returned').html(value.wms_returned);
+            $('#id_all_remaining').html(value.units - value.wms_returned);
           });
           //m.id, metercondition, count(ms.id) cnt, m.units
           // $('#id_good').val()
@@ -490,8 +490,8 @@
             $('#id_rehab').html(value.cnt + '/' + value.units);
             $('.rehab').attr('style', 'width: ' + (value.cnt / value.units) * 100 + '%');
           }
-            $('#id_notcalibrated').html(value.units - value.ex + '/' + value.units);
-            $('.notcalibrated').attr('style', 'width: ' + ((value.units - value.ex)/value.units)*100 + '%');
+            $('#id_notcalibrated').html(value.units - value.for_calibration + '/' + value.units);
+            $('.notcalibrated').attr('style', 'width: ' + ((value.units - value.for_calibration)/value.units)*100 + '%');
 
         });
         //m.id, metercondition, count(ms.id) cnt, m.units
