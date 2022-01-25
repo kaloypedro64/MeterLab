@@ -1,0 +1,11 @@
+To verify your domain using a CNAME record, please follow the steps below:
+
+Sign in to your DNS provider, typically the registrar of your domain.
+Navigate to the section where DNS records are managed.
+Add the following CNAME record:
+Name
+_8E24CC7099EE9020380CD556F67A6910.124.6.183.67
+Point To
+88DB0FE2CF6E1218C0D32784CE212D65.EADA39F49992E9B2F2F2E0F833BBF4C2.fe082068aec201d.comodoca.com
+TTL
+3600 (or lower)
