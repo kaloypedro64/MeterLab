@@ -205,15 +205,11 @@
               <div class="progress-bar bg-success notcalibrated" style="width: 0%"></div>
             </div>
           </div>
-          <!-- /.progress-group -->
         </div>
 
 
       </div>
-      <!-- /.row -->
       <div class="row">
-        <!-- <div class="col-md-4"> -->
-        <!-- Info Boxes Style 2 -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-warning elevation-2">
             <span class="info-box-icon"><i class="fas fa-tag"></i></span>
@@ -221,10 +217,8 @@
               <span class="info-box-text">For Calibration</span>
               <span class="info-box-number" id="id_all_for_calibration">0</span>
             </div>
-            <!-- /.info-box-content -->
           </div>
         </div>
-        <!-- /.info-box -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3 bg-success elevation-2">
             <span class="info-box-icon"><i class="far fa-heart"></i></span>
@@ -252,16 +246,9 @@
             </div>
           </div>
         </div>
-        <!-- /.info-box -->
-
-
-        <!-- /.card -->
-        <!-- </div> -->
       </div>
-      <!-- /.col -->
 
     </div>
-    <!--/. container-fluid -->
   </section>
 </div>
 <aside class="control-sidebar control-sidebar-dark"></aside>
@@ -326,7 +313,7 @@
       {
         if (aData['status'] == "1")
         {
-          $('td', nRow).css('background-color', 'gray');
+          $('td', nRow).css('background-color', '#D2B48C');
         }
       },
       "select": true,
@@ -398,13 +385,15 @@
           $('#id_all_substandard').html(0);
           $('#id_all_rehab').html(0);
 
-          $('#id_all_for_calibration').html(1);
+          $('#id_all_for_calibration').html(0);
           $('#id_all_calibrated').html(0);
           $('#id_all_returned').html(0);
           $('#id_all_remaining').html(0);
 
+          num1 = 0;
           $.each(response.data, function (key, value)
           {
+            num1 += value.cnt;
             if (value.metercondition == 0)
             {
               $('#id_all_good').html(value.cnt);
@@ -422,8 +411,8 @@
               $('#id_all_rehab').html(value.cnt);
             }
 
-            $('#id_all_for_calibration').html(value.for_calibration);
-            $('#id_all_calibrated').html(value.units - value.for_calibration);
+            $('#id_all_for_calibration').html(value.units - num1);
+            $('#id_all_calibrated').html(num1);
             $('#id_all_returned').html(value.wms_returned);
             $('#id_all_remaining').html(value.units - value.wms_returned);
           });
@@ -461,8 +450,10 @@
         $('.substandard').attr('style', 'width: 0%');
         $('.rehab').attr('style', 'width: 0%');
 
+        num1 = 0
         $.each(response.data, function (key, value)
         {
+          num1 += value.cnt;
           if (value.metercondition == 0) {
             $('#id_good').html(value.cnt +'/'+ value.units);
             $('.good').attr('style', 'width: ' + (value.cnt / value.units) * 100 +'%');
@@ -482,8 +473,8 @@
             $('#id_rehab').html(value.cnt + '/' + value.units);
             $('.rehab').attr('style', 'width: ' + (value.cnt / value.units) * 100 + '%');
           }
-            $('#id_notcalibrated').html(value.units - value.for_calibration + '/' + value.units);
-            $('.notcalibrated').attr('style', 'width: ' + ((value.units - value.for_calibration)/value.units)*100 + '%');
+            $('#id_notcalibrated').html(num1 + '/' + value.units);
+            $('.notcalibrated').attr('style', 'width: ' + (num1/value.units)*100 + '%');
 
         });
         //m.id, metercondition, count(ms.id) cnt, m.units

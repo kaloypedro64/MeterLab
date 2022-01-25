@@ -496,18 +496,33 @@ def get_meter_details(request):
     if request.is_ajax():
         id = int(request.GET.get('id'))
         action = int(request.GET.get('action'))
+        transaction_area = userarea.objects.get(userid=request.user.id)
         cursor = connection.cursor()
         query = """select m.id, metercondition, count(ms.id) cnt, m.units,
-                            (select count(id) cal from zanecometerpy.meterdetails where status = 0) for_calibration,
-                            (select count(id) cal from zanecometerpy.meterdetails where wms_status = 2) wms_returned
+                            (select count(ms.id) cnt
+								FROM zanecometerpy.meterseal ms
+								left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
+								left join zanecometerpy.meters m on m.id=md.meterid
+								left join zanecometerpy.acquisition a on a.id = m.acquisitionid
+								where a.area = '0' and md.status = 0) for_calibration,
+                            (select count(ms.id) cnt
+								FROM zanecometerpy.meterseal ms
+								left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
+								left join zanecometerpy.meters m on m.id=md.meterid
+								left join zanecometerpy.acquisition a on a.id = m.acquisitionid
+								where a.area = '0' and wms_status = 2) wms_returned
                             FROM zanecometerpy.meterseal ms
                             left join zanecometerpy.meterdetails md on md.id=ms.meterdetailsid
                             left join zanecometerpy.meters m on m.id=md.meterid
+                            left join zanecometerpy.acquisition a on a.id = m.acquisitionid
+                            where 1 = 1
                             """
         if action == 1:
-            query += """where m.acquisitionid = '{0}' """.format(id)
+            query += """and m.acquisitionid = '{0}' """.format(id)
 
+        query += """and a.area = '{0}' """.format(transaction_area.area)
         query += """group by metercondition """
+        print('query', query)
         cursor.execute(query)
         row_headers = [x[0] for x in cursor.description]
         cnt = cursor.fetchall()

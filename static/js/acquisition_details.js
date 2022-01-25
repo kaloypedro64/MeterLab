@@ -259,13 +259,14 @@ function brand_save(params)
         {
             if (data.msg == 'saved')
             {
-                msgAlert('Save', 'Successfully saved!', 1);
+                Swal.fire('Successfully saved!', '', 'success');
+                //Swal.fire('Successfully saved!', '', 'success')
                 $('#table_brand').DataTable().ajax.reload(null, false);
             }
         },
         error: function (e)
         {
-            alert('err: brand_save');
+            Swal.fire('Error!', e, 'warning')
         }
     });
 }
@@ -286,13 +287,14 @@ function brand_delete(params)
             {
                 if (data.msg == 'deleted')
                 {
-                    msgAlert('Delete', 'Successfully deleted!', 3);
+                    Swal.fire('Successfully deleted!', '', 'success');
+                    // msgAlert('Delete', 'Successfully deleted!', 3);
                     $('#table_brand').DataTable().ajax.reload(null, false);
                 }
             },
             error: function (e)
             {
-                alert('err: brand_save');
+                Swal.fire('Error!', e, 'warning');
             }
         });
     }
@@ -317,13 +319,13 @@ function mtypes_save(params)
         {
             if (data.msg == 'saved')
             {
-                msgAlert('Save', 'Successfully saved!', 1);
+                Swal.fire('Successfully saved!', '', 'success');
                 $('#table_types').DataTable().ajax.reload(null, false);
             }
         },
         error: function (e)
         {
-            alert('err: brand_save');
+            Swal.fire('Error!', e, 'warning');
         }
     });
 }
@@ -344,13 +346,13 @@ function mtypes_delete(params)
             {
                 if (data.msg == 'deleted')
                 {
-                    msgAlert('Delete', 'Successfully deleted!', 3);
+                    Swal.fire('Successfully deleted!', '', 'success');
                     $('#table_types').DataTable().ajax.reload(null, false);
                 }
             },
             error: function (e)
             {
-                alert('err: brand_save');
+                Swal.fire('Error!', e, 'warning');
             }
         });
     }
@@ -383,7 +385,7 @@ function meter_save(params)
             {
                 $('#tablex').DataTable().ajax.reload(null, false);
                 $('#modal-add_meter').modal('hide');
-                Swal.fire('Saved!', ' Successfully saved!', 'success');
+                Swal.fire('Successfully saved!', '', 'success');
             }
         },
         error: function (e)
@@ -416,7 +418,7 @@ function edit_meter_modal(params)
         },
         error: function (e)
         {
-            alert('err: brand_save');
+            Swal.fire('Error!', e, 'warning');
         }
     });
 }
@@ -482,12 +484,12 @@ function meter_delete(params)
                 },
                 error: function (e)
                 {
-                    alert('err: brand_save');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         } else if (result.isDenied)
         {
-            Swal.fire('Changes are not saved', '', 'info')
+            Swal.fire('Changes are not saved', '', 'error')
         }
     });
 }

@@ -41,7 +41,8 @@ def calibration(request):
                     (select brand from brands where id=m.brandid) brand,
                     (select metertype from metertype where id=m.mtypeid) metertype,
                  ampheres, ms.accuracy, md.status,
-                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
+                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype,
+                 wms_status
                 from meters m
                 inner join acquisition a on a.id = m.acquisitionid and a.status <> 1
                 left join metertype mt on mt.id = m.mtypeid
@@ -244,22 +245,7 @@ def calibration_update_save(request):
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
-# def load_assigned_consumers(request, id):
-#     if request.is_ajax():
-#         start = int(request.GET.get('start'))
-#         limit = int(request.GET.get('limit'))
-#         filter = request.GET.get('filter')
-#         order_by = request.GET.get('order_by')
-#         query = assigned_meter.objects.filter(meterdetailsid=id, consumer__icontains=filter,).values(
-#             'id', 'transactiondate', 'meterdetailsid', 'consumer', 'address', 'type', 'active', 'userid').order_by(order_by)
-#         list_data = []
-#         for index, item in enumerate(query[start:start+limit], start):
-#             list_data.append(item)
-#         data = {
-#             'length': query.count(),
-#             'objects': list_data,
-#         }
-#         return HttpResponse(json.dumps(data, default=default), 'application/json')
+
 
 def dt_meterseal_details(request, id):
     if request.is_ajax():
@@ -317,6 +303,19 @@ def print_calibration_history(request):
     context = {'mList': mList, 'date_from': d_range[0], 'date_to': d_range[1]}
     return render(request, html_print_calibration_history, context)
 
+
+def return_meters_one_by_one(request):
+    if request.is_ajax():
+        id = request.GET.get('id')
+        cursor = connection.cursor()
+        query = """ update meterdetails set wms_status = 2, rtw_at = now() where id = '{0}' and status <> 0 """.format(id)
+        cursor.execute(query)
+        if True:
+            data = {"msg": 'saved'}
+        else:
+            data = {"msg": 'Not saved'}
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+
 def return_meters_by_range(request):
     if request.is_ajax():
         serial = request.GET.get('range')
@@ -328,7 +327,6 @@ def return_meters_by_range(request):
             data = {"msg": 'saved'}
         else:
             data = {"msg": 'Not saved'}
-
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 def default(o):

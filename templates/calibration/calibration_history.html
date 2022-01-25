@@ -87,7 +87,8 @@
                                         <i class="fal fa-undo mr-1"></i><span style="font-size: small">Return
                                             Selected</span></button>
                                     <button onclick="custom_return()" class="btn btn-info btn-sm">
-                                        <i class="fal fa-undo mr-1"></i><span style="font-size: small">Custom Return</span></button>
+                                        <i class="fal fa-undo mr-1"></i><span style="font-size: small">Custom
+                                            Return</span></button>
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="form-group row">
@@ -116,7 +117,8 @@
                             <thead>
                                 <tr>
                                     <th data-sort-column="" class="leftmost">
-                                        <input type="checkbox" id="select_all"><label for="select_all"><span></span></label>
+                                        <input type="checkbox" id="select_all"><label
+                                            for="select_all"><span></span></label>
                                     </th>
                                     <th style="width: 90px;">Action</th>
                                     <th style="width: 60px;">Date</th>
@@ -133,6 +135,10 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer clearfix">
+                <!-- <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button> -->
+
             </div>
             <!-- /.card -->
         </div>
@@ -202,7 +208,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.card -->
                 </div>
                 <!-- <div class="modal-footer justify-content-left">
                   <button type="button" class="btn btn-info inputs" data-dismiss="static" onclick="consumer_save()"><i
@@ -370,7 +375,7 @@
 
     // serverside dropdown
     let urlConsumerList = "{% url 'consumer_list' %}";
-    let urlSealList = "{% url 'seal_list' %}"; 
+    let urlSealList = "{% url 'seal_list' %}";
     let urlMeterList = "{% url 'meters_list' %}";
 
     let status, data;
@@ -491,6 +496,13 @@
                 // { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
                 { orderable: false, className: 'select-checkbox', targets: 0 }
             ],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+            {
+                if (aData[14] == "2")
+                {
+                    $('td', nRow).css('background-color', '#90EE90');
+                }
+            },
             "keys": true,
             "keys": { "blurable": false },
             "select": true,
@@ -527,7 +539,13 @@
                 {
                     "data": "0", "render": function (data, type, row)
                     {
-                        return '<td class="selected"><label for=""><span></span></label></td>'
+                        if (row[14] == 2)
+                        {
+                            return '<td></td>'
+                        } else
+                        {
+                            return '<td class="selected"><label for=""><span></span></label></td>'
+                        }
                     }
                 },
                 {
@@ -568,30 +586,30 @@
         Load_serials_table(0);
         Load_serials_tabley(2);
 
-        tabley.on("click", "th.select-checkbox", function ()
-        {
-            if ($("th.select-checkbox").hasClass("selected"))
-            {
-                tabley.rows().deselect();
-                $("th.select-checkbox").removeClass("selected");
-            } else
-            {
-                tabley.rows().select();
-                $("th.select-checkbox").addClass("selected");
-            }
-        }).on("select deselect", function ()
-        {
-            ("Some selection or deselection going on")
-            if (tabley.rows({
-                selected: true
-            }).count() !== tablez.rows().count())
-            {
-                $("th.select-checkbox").removeClass("selected");
-            } else
-            {
-                $("th.select-checkbox").addClass("selected");
-            }
-        });
+        // tabley.on("click", "th.select-checkbox", function ()
+        // {
+        //     if ($("th.select-checkbox").hasClass("selected"))
+        //     {
+        //         tabley.rows().deselect();
+        //         $("th.select-checkbox").removeClass("selected");
+        //     } else
+        //     {
+        //         tabley.rows().select();
+        //         $("th.select-checkbox").addClass("selected");
+        //     }
+        // }).on("select deselect", function ()
+        // {
+        //     ("Some selection or deselection going on")
+        //     if (tabley.rows({
+        //         selected: true
+        //     }).count() !== tablez.rows().count())
+        //     {
+        //         $("th.select-checkbox").removeClass("selected");
+        //     } else
+        //     {
+        //         $("th.select-checkbox").addClass("selected");
+        //     }
+        // });
 
         dropdownlist('Enter Consumer', '.dropdown-list-consumer', urlConsumerList);
         dropdownlist('Enter Seal Number', '.dropdown-list-seal_a', urlSealList);
@@ -884,7 +902,8 @@
     function modal_details(params)
     {
         var data = tabley.rows('.selected').data();
-        var id = data[0][0];
+        // var id = data[0][0];
+        var id = params;
         var meterserial = data[0][1];
         // var metertestid = data[0][7];
 
@@ -917,8 +936,9 @@
                 data = rows.data();
                 data.each(function (value, index)
                 {
-                    alert(value[1])
+                    return_meters(value[0])
                 });
+                Swal.fire('Successfully returned!', '', 'info')
             } else if (result.isDenied)
             {
                 Swal.fire('Changes are not saved', '', 'info')
@@ -926,8 +946,28 @@
         });
     }
 
+    function return_meters(params)
+    {
+        $.ajax({
+            url: urlReturnByOne, // get the route value
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params, },
+            success: function (response)
+            {
+                tabley.ajax.reload(null, false);
+                // alert(response.msg);
+            },
+
+        });
+    }
+
+
     let urlPrintHistory = "{% url 'print_calibration_history' %}"
     let urlReturnByRange = "{% url 'return_meters_by_range' %}"
+    let urlReturnByOne = "{% url 'return_meters_one_by_one' %}"
 
 
     function print_calibration_history(params)
@@ -937,7 +977,8 @@
         window.open(urlPrintHistory + "?id=" + 2 + "&range=" + date_from + "|" + date_to, "_blank");
     }
 
-    function custom_return(params) {
+    function custom_return(params)
+    {
         Swal.fire({
             title: "Custom Meter Return",
             text: "Enter meter serial by range, ex: 000001-000100",
