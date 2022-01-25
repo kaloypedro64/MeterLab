@@ -197,17 +197,19 @@
                     },
                     success: function (data) {
                         if (Number(data.found) == 1) {
-                            alert(data.stats);
+                            Swal.fire('Saved!', ' Successfully saved!', 'success');
+                            // alert(data.stats);
                         } else {
                             window.location = "login.php";
                         }
                     },
-                    error: function () {
-                        alert('err');
+                    error: function (e) {
+                        Swal.fire('Error!', e, 'warning');
                     }
                 });
             } else {
-                alert('Password mismatch...');
+                Swal.fire('Error!', 'Mismatch password.', 'warning');
+                // alert('Password mismatch...');
             }
         };
 

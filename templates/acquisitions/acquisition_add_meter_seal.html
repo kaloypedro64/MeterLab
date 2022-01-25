@@ -432,13 +432,14 @@
                 {
                     if (data.msg == 'deleted')
                     {
-                        msgAlert('Delete', 'Successfully deleted!', 3);
+                        Swal.fire('Successfully deleted!', '', 'success');
+                        // msgAlert('Delete', 'Successfully deleted!', 3);
                         $('#table_brand').DataTable().ajax.reload(null, false);
                     }
                 },
                 error: function (e)
                 {
-                    alert('err: brand delete');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         }
@@ -509,7 +510,7 @@
                 },
                 error: function (e)
                 {
-                    alert('err: seal delete');
+                    Swal.fire('Error!', e, 'warning');
                 },
             });
         }
@@ -525,7 +526,7 @@
 
     $('#id_ppb').on('change keyup', function ()
     { // on change
-        alert('asdf');
+        // alert('asdf');
         getTotal(); // trigger this
     });
 

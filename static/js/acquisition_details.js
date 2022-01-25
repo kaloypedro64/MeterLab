@@ -288,7 +288,6 @@ function brand_delete(params)
                 if (data.msg == 'deleted')
                 {
                     Swal.fire('Successfully deleted!', '', 'success');
-                    // msgAlert('Delete', 'Successfully deleted!', 3);
                     $('#table_brand').DataTable().ajax.reload(null, false);
                 }
             },

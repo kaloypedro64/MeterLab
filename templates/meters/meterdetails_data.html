@@ -2,7 +2,7 @@
 
 <script>
     let id = '{{ id }}';
-    alert(id);
+    // alert(id);
     let tabledetails;
 
 
@@ -51,7 +51,7 @@
                 },
                 error: function (e)
                 {
-                    alert('err: delete serials');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         }

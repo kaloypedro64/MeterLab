@@ -231,11 +231,6 @@ function loadMultiple(params)
 {
     window.open(mMultiUrl.replace('0', selectedmeterid), "_self");
 }
-function loadSelectedMeter(id)
-{
-    alert(id);
-}
-
 
 // function return_selectedTable() {
 //     var itemcode, qty;

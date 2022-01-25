@@ -772,7 +772,7 @@
             },
             error: function (e)
             {
-                alert('err: selected_consumer');
+                Swal.fire('Error!', e, 'warning');
             }
         });
     }
@@ -803,7 +803,7 @@
             },
             error: function (e)
             {
-                alert('err: selected_consumer');
+                Swal.fire('Error!', e, 'warning');
             }
         });
     }
@@ -894,7 +894,7 @@
             },
             error: function (e)
             {
-                alert('err: ' + data.msg);
+                Swal.fire('Error!', e, 'warning');
             }
         });
     }
@@ -958,7 +958,6 @@
             success: function (response)
             {
                 tabley.ajax.reload(null, false);
-                // alert(response.msg);
             },
 
         });
@@ -1001,9 +1000,7 @@
                     contentType: false,
                     data: { serial: serial, },
                     success: function (response)
-                    {
-
-                    },
+                    {},
                     error: function (respose)
                     {
                         Swal.fire('Not Found.', response, 'error')

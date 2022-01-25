@@ -410,9 +410,9 @@
                 $('#id_brandid').val(response[0][5]);
 
             },
-            error: function (respose)
+            error: function (e)
             {
-                alert(response);
+                Swal.fire('Error!', e, 'warning');
                 // Swal.fire('Not Found.', response, 'error')
             }
         });

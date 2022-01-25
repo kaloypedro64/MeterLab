@@ -207,7 +207,7 @@
                 {
                     if (Number(data.found) == 1)
                     {
-                        alert(data.stats);
+                        Swal.fire('Saved!', 'Successfully calibrated!', 'success');
                     } else
                     {
                         window.location = "login.php";
@@ -215,12 +215,12 @@
                 },
                 error: function ()
                 {
-                    alert('err');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         } else
         {
-            alert('Password mismatch...');
+            Swal.fire('Error!', "Mismatch password", 'warning');
         }
     };
 
