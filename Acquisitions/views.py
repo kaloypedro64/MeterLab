@@ -522,15 +522,12 @@ def get_meter_details(request):
 
         query += """and a.area = '{0}' """.format(transaction_area.area)
         query += """group by metercondition """
-        print('query', query)
         cursor.execute(query)
         row_headers = [x[0] for x in cursor.description]
         cnt = cursor.fetchall()
-
         json_data=[]
         for result in cnt:
             json_data.append(dict(zip(row_headers,result)))
-
         data = {"data": json_data}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 

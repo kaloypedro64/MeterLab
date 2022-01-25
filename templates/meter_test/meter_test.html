@@ -1,17 +1,16 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block header %}
-{% include 'base/header.html' %}
-{% endblock header %}
-
 {% block content %}
+
+
 <style type="text/css">
     label {
         /* text-align: right; */
         color: darkslategray;
         font-size-adjust: 0.45;
     }
+
 </style>
 
 
@@ -63,7 +62,8 @@
 
                                         <div class="form-group">
                                             <div class="text-center">
-                                                <img class="profile-user-img img-fluid img-circle" src="{% static "dist/img/user4-128x128.jpg" %}" alt="User profile picture">
+                                                <!-- <img class="profile-user-img img-fluid img-circle" src="{% static "dist/img/AdminLTELogo.png" %}" alt="User profile picture"> -->
+                                                <div id="profileImage" class="mx-auto"></div>
                                             </div>
                                             <h3 class="profile-username text-center" id="lblName">...</h3>
                                             <p class="text-muted text-center" id="lblAddress">...</p>
@@ -91,20 +91,9 @@
                                             </div>
                                         </div>
 
-
                                         <input type="hidden" class="form-control form-control-sm" id="id_idmeterserials"
                                             name="idmeterserials" readonly required>
 
-
-                                        <!-- <div class="form-group row">
-                                            <label for="id_supplier" class="col-sm-4 col-form-label mlabel">Consumer:</label>
-                                            <div class="col"> -->
-                                        <!-- <select class="form-control form-control-sm dropdown-list-consumer" id="id_consumer" name="consumer"
-                                                    onchange="consumer_selected()"></select> -->
-                                        <!-- <span class="col-form-label mr-2" id="lblName" style="font-size: 13px;">Albert Tan</span><br>
-                                                <span class="col-form-label mr-2" id="lblAddress" style="font-size: 13px;">Dapitan City</span>
-                                            </div>
-                                        </div> -->
                                         <div class="form-group row">
                                             <label for="id_brand" class="col-sm-4 col-form-label">Meter</label>
                                             <div class="col">
@@ -302,6 +291,10 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <button type="submit" class="btn btn-success btn-sm mr-1"><i class="fal fa-save mr-1" tabindex="-1"></i>Save &
+                                            Next</button>
+
                                     </div>
                                 </div>
                             </div>
@@ -408,6 +401,9 @@
                 $('#lblAddress').html(response[0][2]);
                 $('#id_brand').val(response[0][4]);
                 $('#id_brandid').val(response[0][5]);
+                var names = response[0][1].split(",");
+                var intials = names[0].charAt(0) + names[1].trim().charAt(0);
+                var profileImage = $('#profileImage').text(intials);
 
             },
             error: function (e)

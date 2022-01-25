@@ -4,7 +4,7 @@
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-info">
     <div class="container">
         <a href="/" class="navbar-brand">
-            <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            <img src="{% static 'dist/img/zaneco.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                 style="opacity: .8">
             <span class="brand-text font-weight-light">Meter Lab</span>
         </a>
@@ -95,7 +95,8 @@
             <li class="nav-item clearfix" style="border-right: 10px;">
                 <div class="user-panel d-flex">
                     <div class="image">
-                        <img src="{% static 'dist/img/user1-128x128.jpg' %}" class="img-circle img-bordered-sm">
+                        <!-- <img src="{% static 'dist/img/user1-128x128.jpg' %}" class="img-circle img-bordered-sm"> -->
+                        <div id="profileImage-sm" class="mx-auto"></div>
                     </div>
                 </div>
             <li class="nav-item dropdown">
@@ -109,8 +110,9 @@
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <a data-toggle="modal" href="#change_user_picture">
-                                <img class="profile-user-img img-fluid img-circle img-bordered-sm"
-                                    src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture">
+                                <div id="profileImage" class="mx-auto"></div>
+                                <!-- <img class="profile-user-img img-fluid img-circle img-bordered-sm"
+                                    src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture"> -->
                             </a>
                         </div>
                         <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name }} {{request.user.last_name }}</p>
@@ -159,6 +161,7 @@
 
 
 <script type="text/javascript">
+
     function change_theme_color(params) {
         var check = $('#customSwitch3').is(':checked');
         let basebody = document.getElementById("base_body");
@@ -167,7 +170,15 @@
         } else {
             basebody.className = "layout-top-nav light-mode text-sm"
         }
-        // alert(basebody.className);
+    }
+
+    function display_name_image(params) {
+        let fn = "{{ request.user.first_name }}".toUpperCase();
+        let ln = "{{ request.user.last_name }}".toUpperCase();
+        var intials = fn.charAt(0) + ln.charAt(0);
+        var profileImage = $('#profileImage-sm').text(intials);
+
+        var profileImage2 = $('#profileImage').text(intials);
     }
 
 </script>

@@ -2,6 +2,7 @@ from queue import Empty
 from typing import cast
 from django.http.response import HttpResponse, JsonResponse
 from MeterLab.settings import AREA_CHOICES
+from Signatory.models import signatory
 from Users.models import userarea
 import datetime
 import json
@@ -268,7 +269,7 @@ def dt_meterseal_details(request, id):
 
 def print_calibration_history(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
-
+    signs = signatory.objects.all().first()
     date_from = request.GET.get('range')
     d_range = date_from.split('|')
 
@@ -288,7 +289,6 @@ def print_calibration_history(request):
             left join auth_user_area ua on ua.userid = a.userid
             left join meterseal ms on ms.meterdetailsid = md.id
             """
-    # let condition = ['Good', 'Damage', 'Substandard', 'Rehab'];
 
     cursor = connection.cursor()
     query += "where md.status = 2 " + isfiltered
@@ -300,7 +300,7 @@ def print_calibration_history(request):
     cursor.execute(query)
 
     mList = cursor.fetchall()
-    context = {'mList': mList, 'date_from': d_range[0], 'date_to': d_range[1]}
+    context = {'mList': mList, 'signs': signs, 'date_from': d_range[0], 'date_to': d_range[1]}
     return render(request, html_print_calibration_history, context)
 
 
@@ -315,7 +315,7 @@ def return_meters_one_by_one(request):
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
-
+ 
 def return_meters_by_range(request):
     if request.is_ajax():
         serial = request.GET.get('range')
