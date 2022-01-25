@@ -151,6 +151,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_CHARSET = 'utf-8'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -169,7 +171,7 @@ AREA_CHOICES = (
     ('3', 'Liloy Area Services'),
 )
 
-SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+# SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 # Logout after a period of inactivity
 # INACTIVE_TIME = 3*60  # 3 minutes - or whatever period you think appropriate

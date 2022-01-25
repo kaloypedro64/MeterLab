@@ -5,6 +5,7 @@ import types
 from django.db.models import query
 from django.db.models.query_utils import Q
 from MeterLab.settings import AREA_CHOICES
+from Signatory.models import signatory
 from Users.models import userarea
 from Users.forms import AreaForm
 from django.contrib.auth.decorators import login_required
@@ -159,18 +160,16 @@ def search_for_meter(request):
 
 # print
 def load_test_print(request, id):
-    #         return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'acquisitionid__transactiondate', 'brandid__brand',
-    #                                                                                          'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
-    # queryset = metertest.objects.select_related('consumers', 'brands').get(id=id)
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    signs = signatory.objects.filter(area=transaction_area.area).first()
     queryset = metertest.objects.select_related('brandid', 'consumersid').values('id', 'testdate', 'serialno', 'gen_average', 'fullload_average', 'lightload_average', 'fl1',
                                                                                  'fl2', 'fl3', 'll1', 'll2', 'll3', 'reading', 'type', 'volts', 'phase', 'kh', 'ta', 'remarks', 'active', 'isdamage', 'userid', 'brandid__brand', 'consumersid__consumer', 'consumersid__address').get(pk=id)
-    # print('queryset', queryset)
-    # serials = meterdetails.objects.get(pk=queryset.meterdetailsid.id)
-    context = {'form': queryset,'idmeters': id}
+    context = { 'form': queryset, 'idmeters': id, 'signs':signs }
     return render(request, html_metertestreport, context)
 
 
 def prepare_summary(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
     status = request.GET.get('id')
     date_from = request.GET.get('range')
     d_range = date_from.split('|')
@@ -184,9 +183,10 @@ def prepare_summary(request):
         lookupdate = Q(testdate__range=[d_range[0], d_range[1]])
     else:
         lookupdate = Q(testdate__range=[datenow.replace(day=1), datenow.replace(day=31)])
+    signs = signatory.objects.filter(area=transaction_area.area).first()
     query = metertest.objects.select_related('consumers').filter(lookupb, lookupdate).values(
     'id', 'consumersid__consumer', 'serialno', 'reading',  'gen_average')
-    context = { 'form': query, 'date_from': d_range[0], 'date_to': d_range[1] }
+    context = {'form': query, 'signs': signs, 'date_from': d_range[0], 'date_to': d_range[1]}
     return render(request, html_metertestreport_summary, context)
 
 # def preview_summary(request):

@@ -181,7 +181,7 @@
                             '    <div class="dropdown-menu">' +
                             '      <a class="dropdown-item" href="#"><i class="fal fa-tags mr-1"></i> Edit</a>' +
                             '      <div class="dropdown-divider"></div>' +
-                            '      <a class="dropdown-item" href="print_test/' + data + '" ><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
+                            '      <a class="dropdown-item" href="print_test/' + data + '" target = "_blank"><i class="fal fa-print mr-1"></i> Print Test Report</a>' +
                             '    </div>' +
                             '  </div >'
                     }
@@ -258,7 +258,7 @@
                             $('#lblName').html(response[0][1]);
                             $('#lblAddress').html(response[0][2]);
                             $('#id_brand').val(response[0][6]);
-                            window.open(urlNewMeterTest.replace('0', response[0][3]), "_self");
+                            window.open(urlNewMeterTest.replace('0', response[0][3]), "_blank");
                             Swal.fire(response[0][1], response[0][2], "success");
                         }
                     },

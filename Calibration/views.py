@@ -269,7 +269,7 @@ def dt_meterseal_details(request, id):
 
 def print_calibration_history(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
-    signs = signatory.objects.all().first()
+    signs = signatory.objects.filter(area=transaction_area.area).first()
     date_from = request.GET.get('range')
     d_range = date_from.split('|')
 
@@ -315,7 +315,7 @@ def return_meters_one_by_one(request):
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
- 
+
 def return_meters_by_range(request):
     if request.is_ajax():
         serial = request.GET.get('range')

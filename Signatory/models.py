@@ -5,6 +5,8 @@ from django.db import models
 
 class signatory(models.Model):
     id = models.AutoField(primary_key=True)
+    area = models.PositiveSmallIntegerField(
+        default=0, null=False)  # 0=dmo, 1=pas, 2=sas, 3=las
     calibratedby = models.CharField(max_length=45)
     calibratedby_position = models.CharField(max_length=45)
     checkedby = models.CharField(max_length=45)

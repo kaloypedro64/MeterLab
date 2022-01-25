@@ -6,6 +6,8 @@ from django.db import connection
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
+
+from Users.models import userarea
 from .models import *
 from .forms import *
 
@@ -27,6 +29,7 @@ class Signs(FormView):
 
 
 def Signatories(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
     if request.method == "POST":
         id = request.POST['id']
         if id == '':
@@ -40,8 +43,9 @@ def Signatories(request):
     else:
         form = signatory
         if form:
-            form = signatory.objects.all().first()
+            form = signatory.objects.filter(
+                area=transaction_area.area).all().first()
         template_name = 'signatory/signatory.html'
-        context = {'form': form, }
+        context = { 'form': form, 'transaction_area': transaction_area.area }
         return render(request, template_name, context)
 

@@ -6,7 +6,7 @@ class signatoryForm(forms.ModelForm):
     class Meta:
         model = signatory
         fields = ['id', 'calibratedby', 'calibratedby_position', 'checkedby',
-                  'checkedby_position', 'notedby', 'notedby_position', 'preparedby', 'preparedby_position', 'receivedby', 'receivedby_position']
+                  'checkedby_position', 'notedby', 'notedby_position', 'preparedby', 'preparedby_position', 'receivedby', 'receivedby_position', 'area']
         # labels = {
         #     'dateforwarded': 'Date Forwarded', 'rrnumber': 'RR# ', 'brand': 'Brand Name', 'metertype': 'Meter Type', 'units': 'Unit'
         # }
