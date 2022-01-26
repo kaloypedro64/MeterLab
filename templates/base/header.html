@@ -101,30 +101,30 @@
                         <div id="profileImage-sm" class="mx-auto"></div>
                     </div>
                 </div>
-            <li class="nav-item dropdown">
-                <a class="nav-link" href="#" data-toggle="dropdown">
-                    <p data-toggle="tooltip" title="Logout" href="#">
-                        <i class="fa fa-caret-down fa-fw"></i>
-                    </p>
-                    <!-- <p data-toggle="tooltip" title="Logout" href="#">{{ request.userarea.area|title }}</p> -->
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <a data-toggle="modal" href="#change_user_picture">
-                                <div id="profileImage" class="mx-auto"></div>
-                                <!-- <img class="profile-user-img img-fluid img-circle img-bordered-sm"
-                                    src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture"> -->
-                            </a>
+                <!-- <p data-toggle="tooltip" title="Logout" href="#">{{ request.user.username|title }}</p> -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" data-toggle="dropdown">
+                        <p data-toggle="tooltip" title="Logout" href="#">
+                            <i class="fa fa-caret-down fa-fw"></i>
+                        </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <a data-toggle="modal" href="#change_user_picture">
+                                    <div id="profileImage" class="mx-auto"></div>
+                                    <!-- <img class="profile-user-img img-fluid img-circle img-bordered-sm"
+                                        src="{% static 'dist/img/user1-128x128.jpg' %}" alt="User profile picture"> -->
+                                </a>
+                            </div>
+                            <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name|upper }} {{request.user.last_name|upper }}</p>
+                            <p class="text-muted text-center">{{ transaction_area.1 }}</p>
                         </div>
-                        <p class="text-muted text-center mt-1" style="font-weight: bold;">{{ request.user.first_name }} {{request.user.last_name }}</p>
-                        <p class="text-muted text-center">{{ transaction_area.1 }}</p>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item dropdown-footer" style="font-size: 12px;"><i
+                                class="fal fa-sign-out-alt mr-1"></i>Logout</a>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'logout' %}" class="dropdown-item dropdown-footer" style="font-size: 12px;"><i
-                            class="fal fa-sign-out-alt mr-1"></i>Logout</a>
-                </div>
-            </li>
+                </li>
             </li>
             {% endif %}
             <li class="nav-item">

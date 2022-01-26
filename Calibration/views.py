@@ -145,7 +145,6 @@ def seal_list(request):
                         where a.area = '{0}' and serialno like '%{1}%' and active = 0
                         order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area.area, search)
         cursor = connection.cursor()
-        # print('query', query)
         cursor.execute(query)
         row_headers = [x[0] for x in cursor.description]
         cnt = cursor.fetchall()
@@ -169,11 +168,28 @@ def seal_list(request):
 def meters_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
-        query = meterdetails.objects.filter(serialno__icontains=search, active__icontains=0, status=0).values('id', 'meterid', 'serialno', 'accuracy', 'wms_status', 'status', 'active').order_by('serialno')
+        transaction_area = userarea.objects.get(userid=request.user.id)
+        # query = meterdetails.objects.filter(serialno__icontains=search, active__icontains=0, status=0).values('id', 'meterid', 'serialno', 'accuracy', 'wms_status', 'status', 'active').order_by('serialno')
+        # SELECT `meterdetails`.`id`, `meterdetails`.`meterid`, `meterdetails`.`serialno`, `meterdetails`.`accuracy`, `meterdetails`.`wms_status`, `meterdetails`.`status`, `meterdetails`.`active` FROM `meterdetails` WHERE(`meterdetails`.`active` LIKE % 0 % AND `meterdetails`.`serialno` LIKE % a % AND `meterdetails`.`status`=0) ORDER BY `meterdetails`.`serialno` ASC
+        query = """SELECT md.id, md.serialno
+                    FROM meterdetails md
+                    left join meters m on m.id = md.meterid
+                    left join acquisition a on a.id = m.acquisitionid
+                        where a.area = '{0}' and serialno like '%{1}%' and active = 0 and md.status = 0
+                        order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area.area, search)
+        cursor = connection.cursor()
+        print('query', query)
+        cursor.execute(query)
+        row_headers = [x[0] for x in cursor.description]
+        cnt = cursor.fetchall()
+
+        json_data=[]
+        for result in cnt:
+            json_data.append(dict(zip(row_headers,result)))
+
         list_data = []
         datas = []
-        list_data = []
-        for index, item in enumerate(query):
+        for index, item in enumerate(json_data):
             list_data.append(item)
         for s in range(len(list_data)):
             data = {
