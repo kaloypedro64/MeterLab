@@ -23,6 +23,11 @@ urlpatterns = [
     path('print_calibration_history', views.print_calibration_history,
          name='print_calibration_history'),
 
+    path('calibration_details', views.calibration_details,
+         name='calibration_details'),
+    path('print_calibration_details', views.print_calibration_details,
+         name='print_calibration_details'),
+
 
     path('return_meters_one_by_one', views.return_meters_one_by_one,
          name='return_meters_one_by_one'),

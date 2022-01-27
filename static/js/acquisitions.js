@@ -23,6 +23,17 @@ function loadAcquisition(params)
             { "targets": [0], "searchable": false, "orderable": false, "visible": true },
             // { "targets": [5], "className": "text-left" }
         ],
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
+        {
+            if (aData['status'] == "1")
+            {
+                $('td', nRow).css('font-size', '13px');
+                $('td', nRow).css('font-weight', 'bold');
+            } else
+            {
+                // $('td', nRow).css('color', 'gray');
+            }
+        },
         "keys": true,
         "keys": { "blurable": false },
         "select": true,
@@ -53,6 +64,19 @@ function loadAcquisition(params)
             });
         },
         columns: [
+            // {
+            //     "data": "transactiondate", "render": function (data, type, row)
+            //     {
+            //         if (row["status"] != "1")
+            //         {
+            //             return '<p>' + row["transactiondate"] + '</p>'
+            //         } else
+            //         {
+            //             return '<span>' + row["transactiondate"] + '</span>' +
+            //                 '<small class="badge badge-danger ml-2 mb-2" style="margin-top:-6px;"> New</small>'
+            //         }
+            //     }
+            // },
             {
                 "data": "id", "render": function (data, type, row)
                 {
@@ -69,7 +93,8 @@ function loadAcquisition(params)
                         return '<div class="btn-group">' +
                             '<a href="#" class="btn btn-info btn-xs" title="Accept" onclick = "acquisition_response(' + row["id"] + ', 0)" ><i class="fal fa-check mr-1"></i><span style="font-size: 12px;">Accept</span></a>' +
                             '<a href="#" class="btn btn-danger btn-xs" title="Cancel" onclick="acquisition_response(' + row["id"] + ', 1)" ><i class="fal fa-times"></i><span style="font-size: 12px;"></span></a>' +
-                            '</div>'
+                            '</div>' +
+                            '<small class="badge badge-danger ml-2 mb-2" style="margin-top:-6px;"> New</small>'
                         // '<span class="badge bg-success float-right" style="font-size:8px"> 3 </span>'
 
                     }

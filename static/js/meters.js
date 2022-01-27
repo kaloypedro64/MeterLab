@@ -62,7 +62,7 @@ window.onload = function ()
                 // },
                 { "data": "acquisitionid__transactiondate" },
                 { "data": "brandid__brand" },
-                { "data": "ampheres" },
+                { "data": "Amperes" },
                 { "data": "mtypeid__metertype" },
                 { "data": "units" },
 

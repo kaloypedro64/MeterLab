@@ -177,7 +177,7 @@ class Migration(migrations.Migration):
             name='meters',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('ampheres', models.CharField(max_length=45, null=True)),
+                ('Amperes', models.CharField(max_length=45, null=True)),
                 ('serialnos', models.CharField(max_length=145, null=True)),
                 ('units', models.IntegerField(default=0)),
                 ('acquisitionid', models.ForeignKey(db_column='acquisitionid', on_delete=django.db.models.deletion.PROTECT, to='Meters.acquisition')),

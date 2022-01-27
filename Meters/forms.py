@@ -48,7 +48,7 @@ class meterForm(forms.ModelForm):
     class Meta:
         model = meters
         fields = ['id', 'acquisitionid', 'brandid',
-                  'mtypeid', 'ampheres', 'serialnos', 'units']
+                  'mtypeid', 'Amperes', 'serialnos', 'units']
     def __init__(self, *args, **kwargs):
         super(meterForm, self).__init__(*args, **kwargs)
         # self.fields['rrnumber'].required = Falseclass meterForm(forms.ModelForm):

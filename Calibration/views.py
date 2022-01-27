@@ -22,6 +22,9 @@ html_calibration_edit = 'calibration/calibration_edit.html'
 html_test_preview = 'calibration/print_test.html'
 html_print_calibration_history = 'calibration/print_calibration_history.html'
 
+html_calibration_details = 'calibration/calibration_details.html'
+html_print_calibration_details = 'calibration/print_calibration_details.html'
+
 
 def calibration(request):
     transaction_area = userarea.objects.get(userid=request.user.id)
@@ -41,8 +44,8 @@ def calibration(request):
                 select md.id, md.serialno,
                     (select brand from brands where id=m.brandid) brand,
                     (select metertype from metertype where id=m.mtypeid) metertype,
-                 ampheres, ms.accuracy, md.status,
-                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype,
+                 amperes, ms.accuracy, md.status,
+                 ms.transactiondate, metercondition, reading, seal_a, seal_b, metertype,
                  wms_status
                 from meters m
                 inner join acquisition a on a.id = m.acquisitionid and a.status <> 1
@@ -70,13 +73,20 @@ def calibration(request):
             query += " order by cast(md.serialno as SIGNED) asc"
 
         cursor.execute(query)
-        mList = cursor.fetchall()
+        row_headers = [x[0] for x in cursor.description]
+        cnt = cursor.fetchall()
+
+        json_data = []
+        for result in cnt:
+            json_data.append(dict(zip(row_headers, result)))
+
+        # mList = cursor.fetchall()
 
         list_data = []
-        for index, item in enumerate(mList[start:start+limit], start):
+        for index, item in enumerate(json_data[start:start+limit], start):
             list_data.append(item)
         data = {
-            'length': len(mList),
+            'length': len(cnt),
             'objects': list_data,
         }
         return HttpResponse(json.dumps(data, default=default), 'application/json')
@@ -263,7 +273,6 @@ def calibration_update_save(request):
         return HttpResponse(json.dumps(data, default=default), 'application/json')
 
 
-
 def dt_meterseal_details(request, id):
     if request.is_ajax():
         start = int(request.GET.get('start'))
@@ -296,7 +305,7 @@ def print_calibration_history(request):
             select md.id, md.serialno,
                 (select brand from brands where id=m.brandid) brand,
                 (select metertype from metertype where id=m.mtypeid) metertype,
-                ampheres, ms.accuracy, md.status,
+                Amperes, ms.accuracy, md.status,
                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
             from meters m
             inner join acquisition a on a.id = m.acquisitionid
@@ -312,7 +321,8 @@ def print_calibration_history(request):
     query += " and ms.transactiondate between '{0}' and '{1}'".format(
         d_range[0], d_range[1])
     query += " and ms.transactiondate is not null "
-    query += " group by md.serialno order by cast(md.serialno as SIGNED) asc"
+    # query += " group by md.serialno order by cast(md.serialno as SIGNED) asc, transactiondate desc"
+    query += " group by md.serialno order by ms.transactiondate desc"
     cursor.execute(query)
 
     mList = cursor.fetchall()
@@ -344,6 +354,113 @@ def return_meters_by_range(request):
         else:
             data = {"msg": 'Not saved'}
         return HttpResponse(json.dumps(data, default=default), 'application/json')
+
+
+def calibration_details(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    if request.is_ajax():
+        status = int(request.GET.get('status'))
+        start = int(request.GET.get('start'))
+        limit = int(request.GET.get('limit'))
+        filter = request.GET.get('filter')
+        order_by = request.GET.get('order_by')
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+        isfiltered = ''
+
+        # status 0 and 6
+        cursor = connection.cursor()
+        query = """
+                select md.id, md.serialno,
+                    (select brand from brands where id=m.brandid) brand,
+                    (select metertype from metertype where id=m.mtypeid) metertype,
+                 Amperes, ms.accuracy, md.status,
+                 ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype,
+                 wms_status
+                from meters m
+                inner join acquisition a on a.id = m.acquisitionid and a.status <> 1
+                left join metertype mt on mt.id = m.mtypeid
+                left join meterdetails md on m.id = md.meterid
+                left join meterseal ms on ms.meterdetailsid = md.id
+                where 1 = 1
+                """
+
+        if filter:
+            isfiltered = " and ( md.serialno like '%" + filter + "%' ) "
+        if status == '':
+            status = 0
+        if status <= 3:
+            query += " and ms.metercondition = " + str(status)
+        query += isfiltered
+        query += " and a.area = " + str(transaction_area.area)
+
+        if date_from:
+            query += " and ms.transactiondate between '{0}' and '{1}' ".format(date_from, date_to)
+        query += " and ms.transactiondate is not null "
+        cursor.execute(query)
+
+        row_headers = [x[0] for x in cursor.description]
+        cnt = cursor.fetchall()
+
+        json_data = []
+        for result in cnt:
+            json_data.append(dict(zip(row_headers, result)))
+
+        list_data = []
+        for index, item in enumerate(json_data[start:start+limit], start):
+            list_data.append(item)
+        data = {
+            'length': len(cnt),
+            'objects': list_data,
+        }
+        # print('data', data)
+        return HttpResponse(json.dumps(data, default=default), 'application/json')
+    else:
+        context = {'datetoday': datetoday, 'header': 'Calibration Details',
+                   'transaction_area': AREA_CHOICES[int(transaction_area.area)]}
+        return render(request, html_calibration_details, context)
+
+
+def print_calibration_details(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
+    signs = signatory.objects.filter(area=transaction_area.area).first()
+    status = int(request.GET.get('status'))
+    date_from = request.GET.get('range')
+    d_range = date_from.split('|')
+
+    isfiltered = ''
+
+    # status 0 and 6
+    query = """
+            select md.id, md.serialno,
+                (select brand from brands where id=m.brandid) brand,
+                (select metertype from metertype where id=m.mtypeid) metertype,
+                Amperes, ms.accuracy, md.status,
+                ms.transactiondate, metercondition, ms.accuracy, reading, seal_a, seal_b, metertype
+            from meters m
+            inner join acquisition a on a.id = m.acquisitionid
+            left join metertype mt on mt.id = m.mtypeid
+            left join meterdetails md on m.id = md.meterid
+            left join auth_user_area ua on ua.userid = a.userid
+            left join meterseal ms on ms.meterdetailsid = md.id
+            where 1= 1
+            """
+
+    cursor = connection.cursor()
+    query += " and md.status = 2 " + isfiltered
+    query += " and ua.area = " + str(transaction_area.area)
+    query += " and ms.transactiondate between '{0}' and '{1}'".format(d_range[0], d_range[1])
+    query += " and ms.transactiondate is not null "
+    if status <= 3:
+        query += " and ms.metercondition = " + str(status)
+    query += " group by md.serialno order by ms.transactiondate desc"
+    cursor.execute(query)
+
+    mList = cursor.fetchall()
+    context = { 'mList': mList, 'signs': signs,
+               'date_from': d_range[0], 'date_to': d_range[1], 'status': status }
+    return render(request, html_print_calibration_details, context)
+
 
 def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):

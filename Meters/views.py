@@ -56,7 +56,7 @@ html_calibration_multi = 'calibration/calibration_multiple.html'
 
 #     def get_queryset(self):
 #         return self.model.objects.select_related('brand', 'mtype', 'acquisition').values('id', 'acquisitionid', 'acquisitionid__transactiondate', 'brandid__brand',
-#                                                                                          'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
+#                                                                                          'mtypeid__metertype', 'mtypeid', 'Amperes', 'serialnos', 'units', 'acquisitionid__area').order_by(self.request.GET.get('order_by'))
 #     def get(self, request, *args, **kwargs):
 #         transaction_area = userarea.objects.get(userid=request.user.id)
 #         if request.is_ajax():
@@ -107,7 +107,7 @@ html_calibration_multi = 'calibration/calibration_multiple.html'
 #         mType = meters.objects.values(
 #             'metertype').order_by('metertype').distinct()
 #         mAmp = meters.objects.values(
-#             'ampheres').order_by('ampheres').distinct()
+#             'Amperes').order_by('Amperes').distinct()
 #         mSupplier = get_supplier()
 #         context = {'form': form, 'header': 'Add Meter', 'datetoday': datetoday, 'area': transaction_area.area,
 #                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}
@@ -133,7 +133,7 @@ html_calibration_multi = 'calibration/calibration_multiple.html'
 #         mType = meters.objects.values(
 #             'metertype').order_by('metertype').distinct()
 #         mAmp = meters.objects.values(
-#             'ampheres').order_by('ampheres').distinct()
+#             'Amperes').order_by('Amperes').distinct()
 #         mSupplier = get_supplier()
 #         context = {'form': queryset, 'header': 'Edit Meter',
 #                    'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mType': mType, 'mAmp': mAmp, 'mSupplier': mSupplier}

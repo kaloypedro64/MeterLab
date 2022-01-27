@@ -1,0 +1,205 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4 mr-2">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-sm btn-info dropdown-toggle lbl_status" data-toggle="dropdown"
+                            style="height: 31px">
+                            All Meter Test
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onclick="selected_status(0)"> Good Meters</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(1)"> Damage Meters</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(2)"> Substandard Meters</a>
+                            <a class="dropdown-item" href="#" onclick="selected_status(3)"> Rehab Meters</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="selected_status(4)"> All Meters</a>
+                        </div>
+                        <!-- <button onclick="search_for_meter()" class="btn btn-info btn-sm mb-2 ml-1">
+                            <i class="fal fa-plus mr-1"></i>
+                            <span style="font-size: small">
+                                New Test
+                            </span>
+                        </button> -->
+                    </div>
+                </div>
+                <div class="ml-auto">
+                    <div class="form-group row">
+
+                        <p class="col-form-label col-form-label-sm">From </p>
+                        <div class="col input-group nput-group-sm">
+                            <input type="date" class="form-control form-control-sm" id="id_datefrom" name="datefrom"
+                                data-mask value="{{ datetoday|date:'Y-m-01' }}">
+                        </div>
+                        <p class="col-form-label col-form-label-sm" style="text-align: right;">To</p>
+                        <div class="col input-group input-group-sm">
+                            <input type="date" class="form-control form-control-sm" id="id_dateto" name="dateto"
+                                data-mask value="{{ datetoday|date:'Y-m-d' }}">
+                        </div>
+                        <button onclick="reload_metertest_history()" type="button"
+                            class="btn btn-default btn-sm mr-2"><i class="fas fa-sync-alt"></i></button>
+
+                        <button onclick="summary_report()" class="btn btn-info btn-sm mr-2">
+                            <i class="fal fa-print"></i>
+                            <span style="font-size: small">
+                                Print
+                            </span>
+                        </button>
+                        <button onclick="history.go(-1)" class="btn btn-info btn-sm mr-2"><i class="fal fa-share-square"></i>
+                            <span style="font-size: 12px;"> Done</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="row">
+                <section class="col-lg-12 connectedSortable">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table id="tablex" class="table table-nowrap table-hover table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="width: 60px;">Date</th>
+                                        <th>Serial No.</th>
+                                        <th>Brand</th>
+                                        <th>Reading</th>
+                                        <th>Accuracy</th>
+                                        <th>Ampere</th>
+                                        <th>Type</th>
+                                        <th>Meter Seal</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                </section>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- <script src="{% static " js/alert.js" %}"></script> -->
+<script type="text/javascript">
+
+    let tablex;
+    let lbl_status = ['Good Meters', 'Damage Meters', 'Substandard Meters', 'Rehab Meters'];
+    let status = 0
+    let urlPrintDetails = "{% url 'print_calibration_details' %}"
+    function selected_status(params)
+    {
+        status = params
+        $('.lbl_status').html(lbl_status[status]);
+        $("#tablex").dataTable().fnDestroy();
+        Load_serials_tabley(params);
+    }
+
+    function reload_metertest_history(params)
+    {
+        var date_from = $('#id_datefrom').val();
+        var date_to = $('#id_dateto').val();
+        $("#tablex").dataTable().fnDestroy();
+        Load_serials_tabley(status, date_from, date_to);
+    }
+
+    function Load_serials_tabley(params, date_from, date_to)
+    {
+        tabley = $('#tablex').DataTable({
+            "searching": true,
+            "info": true,
+            "paging": true,
+            "autoWidth": false,
+            "responsive": true,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false, },
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                'style': 'multi',
+                'selector': 'td:first-child'
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings)
+            {
+                var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                var direction = "";
+                if (data.order[0].dir == "desc") { direction = "-" };
+                $.get("{% url 'calibration_details' %}", {
+                    status: params,
+                    limit: data.length,
+                    start: data.start,
+                    filter: data.search.value,
+                    order_by: direction + sort_column_name,
+                    date_from: date_from,
+                    date_to: date_to,
+                }, function (res)
+                {
+                    callback({
+                        recordsTotal: res.length,
+                        recordsFiltered: res.length,
+                        data: res.objects
+                    });
+                });
+            },
+            columns: [
+                { "data": "id" },
+                { "data": "transactiondate" },
+                { "data": "serialno" },
+                { "data": "brand" },
+                { "data": "reading" },
+                { "data": "Amperes" },
+                { "data": "metertype" },
+                { "data": "seal_a" },
+                {
+                    "data": "seal_a", "render": function (data, type, row)
+                    {
+                        return '<span style=""> ' + [row["seal_a"]] + '-' + [row["seal_b"]] + '</span>'
+                    }
+                },
+            ],
+        });
+        tabley.column(6).visible(false);
+    }
+
+
+    window.onload = function ()
+    {
+        Load_serials_tabley(2);
+    };
+
+    const inputOptions = new Promise((resolve) =>
+    {
+        // setTimeout(() =>
+        // {
+        resolve({
+            '1': 'All',
+            '2': 'Passed',
+            '3': 'Failed',
+            '4': 'Damage'
+        })
+        // }, 1000)
+    })
+
+    function summary_report(params)
+    {
+
+        var datefrom = $('#id_datefrom').val();
+        var dateto = $('#id_dateto').val();
+        window.open(urlPrintDetails + "?status=" + status + "&range=" + datefrom + "|" + dateto, "_blank");
+
+    }
+
+
+
+</script>
+
+
+{% endblock content %}

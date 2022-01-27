@@ -71,7 +71,7 @@
                                     <th>Serial No.</th>
                                     <th>Brand</th>
                                     <th>Type</th>
-                                    <th>Amphere</th>
+                                    <th>Ampere</th>
                                     <th>Accuracy</th>
                                     <th>Status</th>
                                 </tr>
@@ -89,6 +89,8 @@
                                     <button onclick="custom_return()" class="btn btn-info btn-sm">
                                         <i class="fal fa-undo mr-1"></i><span style="font-size: small">Custom
                                             Return</span></button>
+                                    <a href="calibration_details" onclick="" class="btn btn-info btn-sm">
+                                        <i class="fal fa-info-square mr-1"></i><span style="font-size: small">Details</span></a>
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="form-group row">
@@ -121,13 +123,13 @@
                                             for="select_all"><span></span></label>
                                     </th>
                                     <th style="width: 90px;">Action</th>
-                                    <th style="width: 60px;">Date</th>
+                                    <th style="width: 70px;">Date</th>
                                     <th>Serial No.</th>
                                     <th>Brand</th>
                                     <th>Reading</th>
                                     <th>Condition</th>
                                     <th>Accuracy</th>
-                                    <th>Amphere</th>
+                                    <th>Ampere</th>
                                     <th>Type</th>
                                     <th>Meter Seal</th>
                                 </tr>
@@ -137,6 +139,9 @@
                 </div>
             </div>
             <div class="card-footer clearfix">
+                <span style="background-color: #90EE90;">
+                    Legend: Green = Returned meters
+                </span>
                 <!-- <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button> -->
 
             </div>
@@ -377,6 +382,8 @@
     let urlSealList = "{% url 'seal_list' %}";
     let urlMeterList = "{% url 'meters_list' %}";
 
+    let urlCalibrationDetails = "{% url 'calibration_details' %}";
+
     let status, data;
     var count = 0;
 
@@ -446,34 +453,34 @@
             },
             columns: [
                 {
-                    "data": "0", "render": function (data, type, row)
+                    "data": "id", "render": function (data, type, row)
                     {
                         return '<td class="selected"><label for=""><span></span></label></td>'
                     }
                 },
                 {
-                    "data": "0", "render": function (data, type, row)
+                    "data": "id", "render": function (data, type, row)
                     {
                         return '<div class="btn-group">' +
-                            '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_calibration_update(' + row[0] + ')" ><i class="fal fa-tags mr-1"></i><span style="font-size: 12px;">Calibrate</span></a>' +
-                            // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
+                            '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_calibration_update(' + row["id"] + ')" ><i class="fal fa-tags mr-1"></i><span style="font-size: 12px;">Calibrate</span></a>' +
+                            // '<a href="#" class="btn btn-default btn-xs" title="View" onclick = "modal_details(' + row["id"] + ')" ><i class="fal fa-info ml-1 mr-1"></i><span style="font-size: 12px;"> </span></a>' +
                             '</div>'
                     }
                 },
-                { "data": "1" },
-                { "data": "2" },
-                { "data": "3" },
-                { "data": "4" },
-                { "data": "5" },
+                { "data": "serialno" },
+                { "data": "brand" },
+                { "data": "metertype" },
+                { "data": "amperes" },
+                { "data": "accuracy" },
                 {
-                    "data": "6", "render": function (data, type, row)
+                    "data": "status", "render": function (data, type, row)
                     {
                         if (data != 2)
                         {
                             return '<span style=""> ' + meterstatus[data] + '</span>'
                         } else
                         {
-                            return '<span style=""> ' + condition[row[7]] + '</span>'
+                            return '<span style=""> ' + condition[data] + '</span>'
                         }
                     }
                 },
@@ -492,14 +499,16 @@
             "autoWidth": false,
             "responsive": true,
             "columnDefs": [
-                // { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
                 { orderable: false, className: 'select-checkbox', targets: 0 }
             ],
             "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull)
             {
-                if (aData[14] == "2")
+                if (aData["wms_status"] == "0")
                 {
-                    $('td', nRow).css('background-color', '#90EE90');
+                    $('td', nRow).css('font-size', '13px');
+                    $('td', nRow).css('font-weight', 'bold');
+                } else {
+                    $('td', nRow).css('color', 'gray');
                 }
             },
             "keys": true,
@@ -536,9 +545,9 @@
             },
             columns: [
                 {
-                    "data": "0", "render": function (data, type, row)
+                    "data": "id", "render": function (data, type, row)
                     {
-                        if (row[14] == 2)
+                        if (row["wms_status"] == 2)
                         {
                             return '<td></td>'
                         } else
@@ -548,30 +557,37 @@
                     }
                 },
                 {
-                    "data": "0", "render": function (data, type, row)
+                    "data": "id", "render": function (data, type, row)
                     {
-                        return '<div class="btn-group">' +
-                            '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_details(' + row[0] + ')" ><i class="fal fa-info mr-1"></i><span style="font-size: 12px;">Info</span></a>' +
-                            '</div>'
+                        if (row["wms_status"] != "2")
+                        {
+                            return  '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_details(' + row["id"] + ')" ><i class="fal fa-info mr-1"></i><span style="font-size: 12px;">Info</span>' +
+                                '</a>' +
+                                '<small class="badge badge-danger ml-2 mb-2" style="margin-top:-6px;"> New</small>'
+                        } else {
+                            return '<a href="#" class="btn btn-info btn-xs" title="" onclick = "modal_details(' + row["id"] + ')" ><i class="fal fa-info mr-1"></i><span style="font-size: 12px;">Info</span>' +
+                            '</a>'
+                        }
                     }
                 },
-                { "data": "7" },
-                { "data": "1" },
-                { "data": "2" },
-                { "data": "10" },
+                { "data": "transactiondate" },
+                { "data": "serialno" },
+                { "data": "brand" },
+                { "data": "reading" },
+                { "data": "accuracy" },
+                // {
+                //     "data": "accuracy", "render": function (data, type, row)
+                //     {
+                //         return '<span style=""> ' + condition[row["accuracy"]] + '</span>'
+                //     }
+                // },
+                { "data": "amperes" },
+                { "data": "metertype" },
+                { "data": "seal_a" },
                 {
-                    "data": "8", "render": function (data, type, row)
+                    "data": "seal_a", "render": function (data, type, row)
                     {
-                        return '<span style=""> ' + condition[row[8]] + '</span>'
-                    }
-                },
-                { "data": "4" },
-                { "data": "9" },
-                { "data": "13" },
-                {
-                    "data": "11", "render": function (data, type, row)
-                    {
-                        return '<span style=""> ' + [row[11]] + '-' + [row[12]] + '</span>'
+                        return '<span style=""> ' + [row["seal_a"]] + '-' + [row["seal_b"]] + '</span>'
                     }
                 },
             ],
@@ -585,30 +601,30 @@
         Load_serials_table(0);
         Load_serials_tabley(2);
 
-        // tabley.on("click", "th.select-checkbox", function ()
-        // {
-        //     if ($("th.select-checkbox").hasClass("selected"))
-        //     {
-        //         tabley.rows().deselect();
-        //         $("th.select-checkbox").removeClass("selected");
-        //     } else
-        //     {
-        //         tabley.rows().select();
-        //         $("th.select-checkbox").addClass("selected");
-        //     }
-        // }).on("select deselect", function ()
-        // {
-        //     ("Some selection or deselection going on")
-        //     if (tabley.rows({
-        //         selected: true
-        //     }).count() !== tablez.rows().count())
-        //     {
-        //         $("th.select-checkbox").removeClass("selected");
-        //     } else
-        //     {
-        //         $("th.select-checkbox").addClass("selected");
-        //     }
-        // });
+        tabley.on("click", "th.select-checkbox", function ()
+        {
+            if ($("th.select-checkbox").hasClass("selected"))
+            {
+                tabley.rows().deselect();
+                $("th.select-checkbox").removeClass("selected");
+            } else
+            {
+                tabley.rows().select();
+                $("th.select-checkbox").addClass("selected");
+            }
+        }).on("select deselect", function ()
+        {
+            ("Some selection or deselection going on")
+            if (tabley.rows({
+                selected: true
+            }).count() !== tablez.rows().count())
+            {
+                $("th.select-checkbox").removeClass("selected");
+            } else
+            {
+                $("th.select-checkbox").addClass("selected");
+            }
+        });
 
         dropdownlist('Enter Consumer', '.dropdown-list-consumer', urlConsumerList);
         dropdownlist('Enter Seal Number', '.dropdown-list-seal_a', urlSealList);
@@ -640,6 +656,12 @@
             });
         };
 
+
+
+
+        // var oTable = $("#tablez").DataTable();
+        // anyRowSelected = oTable.rows({ selected: true }).indexes().length === 0 ? false : true;//false - nothing selected. true - 1 or more are selected.
+        // alert(anyRowSelected);
     };
 
     function loadMeterSealDetails(id)
@@ -726,9 +748,11 @@
     function modal_assign(params)
     {
         var data = tablez.rows('.selected').data();
-        var id = data[0][0];
-        var meterserial = data[0][2];
-        var metertestid = data[0][9];
+        var id = data[0]['id'];
+        var meterserial = data[0]['serial'];
+        var metertestid = data[0]['metertestid'];
+
+        alert(metertestid);
 
         $('#id_id').val(id);
         $('#id_metertestid').val(metertestid);
@@ -741,8 +765,8 @@
     {
         ismulti_update("none")
         var data = tablez.rows('.selected').data();
-        var id = data[0][0];
-        var meterserial = data[0][1];
+        var id = data[0]['id'];
+        var meterserial = data[0]['serialno'];
         $('#id_meterdetailsid').val(id);
         $('#modal-calibration-update').find('.modal-title').text("Serial " + meterserial);
         $('#modal-calibration-update').modal('show').draggable({ handle: ".modal-header" });
@@ -903,7 +927,7 @@
         var data = tabley.rows('.selected').data();
         // var id = data[0][0];
         var id = params;
-        var meterserial = data[0][1];
+        var meterserial = data[0]['serialno'];
         // var metertestid = data[0][7];
 
         $('#modal-details').find('.modal-title').text("Details of: " + meterserial);
@@ -935,7 +959,7 @@
                 data = rows.data();
                 data.each(function (value, index)
                 {
-                    return_meters(value[0])
+                    return_meters(value["id"])
                 });
                 Swal.fire('Successfully returned!', '', 'info')
             } else if (result.isDenied)

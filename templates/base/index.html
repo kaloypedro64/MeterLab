@@ -101,12 +101,12 @@
                       aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Meter Seal</a>
                   </li>
                   <div class="ml-auto card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                       <i class="fas fa-minus"></i>
                     </button>
                     <button type="button" class="btn btn-tool" data-card-widget="remove">
                       <i class="fas fa-times"></i>
-                    </button>
+                    </button> -->
                   </div>
                 </ul>
               </div>
@@ -122,7 +122,7 @@
                   <table id="acqTable" class="table table-nowrap table-striped table-sm ">
                     <thead>
                       <tr>
-                        <th style="width: 80px;">Date</th>
+                        <th style="width: 100px;">Date</th>
                         <th style="width: 120px;">RR Number</th>
                         <th>Supplier</th>
                         <th>Address</th>
@@ -135,7 +135,7 @@
                   <table id="acqTable_mSeal" class="table table-nowrap table-striped table-sm">
                     <thead>
                       <tr>
-                        <th style="width: 80px;">Date</th>
+                        <th style="width: 100px;">Date</th>
                         <th style="width: 120px;">RR Number</th>
                         <th>Supplier</th>
                         <th>Address</th>
@@ -162,10 +162,11 @@
         <!-- /.col -->
 
         <div class="col-md-4">
-          <p class="text-center">
+          <div class="card">
+            <div class="card-header">
             <strong>Calibration Status</strong>
-          </p>
-
+          </div>
+          <div class="card-body">
           <div class="progress-group">
             Good
             <span class="float-right"><b id="id_good">0</b></span>
@@ -204,6 +205,8 @@
             <div class="progress progress-sm">
               <div class="progress-bar bg-success notcalibrated" style="width: 0%"></div>
             </div>
+          </div>
+          </div>
           </div>
         </div>
 
@@ -313,7 +316,11 @@
       {
         if (aData['status'] == "1")
         {
-          $('td', nRow).css('background-color', '#D2B48C');
+          $('td', nRow).css('font-size', '13px');
+          $('td', nRow).css('font-weight', 'bold');
+        } else
+        {
+          // $('td', nRow).css('color', 'gray');
         }
       },
       "select": true,
@@ -343,7 +350,20 @@
         });
       },
       columns: [
-        { "data": "transactiondate" },
+        // { "data": "transactiondate" },
+        {
+          "data": "transactiondate", "render": function (data, type, row)
+          {
+            if (row["status"] != "1")
+            {
+              return '<td>' + row["transactiondate"] + '</td>'
+            } else
+            {
+              return '<td>'+ row["transactiondate"] +'</td>' +
+              '<small class="badge badge-danger ml-2 mb-2" style="margin-top:-6px;"> New</small>'
+            }
+          }
+        },
         { "data": "rrnumber" },
         { "data": "supplierid__suppliername" },
         // {
@@ -354,7 +374,6 @@
         //       '<div class="progress-bar progress-bar-danger" style="width: 10%"></div>' +
         //       '</div>' +
         //       '</td>'
-
         //   }
         // },
         { "data": "supplierid__address" },
@@ -427,6 +446,17 @@
 
   function load_calibratiion_status(params)
   {
+    $('#id_good').html(0);
+    $('#id_damage').html(0);
+    $('#id_substandard').html(0);
+    $('#id_rehab').html(0);
+    $('#id_notcalibrated').html(0);
+    $('.good').attr('style', 'width: 0%');
+    $('.damage').attr('style', 'width: 0%');
+    $('.substandard').attr('style', 'width: 0%');
+    $('.rehab').attr('style', 'width: 0%');
+    $('.notcalibrated').attr('style', 'width: 0%');
+
     $.ajax({
       url: urlGetMeterDetails,
       type: 'GET',
@@ -441,14 +471,6 @@
       {
         // alert(response.data);
         if ( response.data == "" ) return;
-        $('#id_good').html(0);
-        $('#id_damage').html(0);
-        $('#id_substandard').html(0);
-        $('#id_rehab').html(0);
-        $('.good').attr('style', 'width: 0%');
-        $('.damage').attr('style', 'width: 0%');
-        $('.substandard').attr('style', 'width: 0%');
-        $('.rehab').attr('style', 'width: 0%');
 
         num1 = 0
         $.each(response.data, function (key, value)

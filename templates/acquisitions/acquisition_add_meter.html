@@ -104,7 +104,7 @@
                                         <th>Actions</th>
                                         <th>Brand</th>
                                         <th>Type</th>
-                                        <th>Ampheres</th>
+                                        <th>Amperes</th>
                                         <th>Units</th>
                                         <th>Serial No. Start</th>
                                     </tr>
@@ -152,11 +152,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="id_ampheres" class="col-sm-3 col-form-label">Ampheres:</label>
+                    <label for="id_Amperes" class="col-sm-3 col-form-label">Amperes:</label>
                     <div class="col">
-                        <select class="form-control form-control-sm" id="id_ampheres" name="ampheres">
+                        <select class="form-control form-control-sm" id="id_Amperes" name="Amperes">
                             {% for row in mAmp %}
-                            <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
+                            <option value="{{row.Amperes}}">{{ row.Amperes }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -226,11 +226,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="id_ampheres_b" class="col-sm-3 col-form-label">Ampheres:</label>
+                    <label for="id_Amperes_b" class="col-sm-3 col-form-label">Amperes:</label>
                     <div class="col">
-                        <select class="form-control form-control-sm select2" id="id_ampheres_b" name="ampheres_b">
+                        <select class="form-control form-control-sm select2" id="id_Amperes_b" name="Amperes_b">
                             {% for row in mAmp %}
-                            <option value="{{row.ampheres}}">{{ row.ampheres }}</option>
+                            <option value="{{row.Amperes}}">{{ row.Amperes }}</option>
                             {% endfor %}
                         </select>
                     </div>

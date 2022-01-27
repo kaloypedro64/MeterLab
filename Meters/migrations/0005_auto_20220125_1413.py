@@ -11,16 +11,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='meterdetails',
-            name='rtw_at',
-            field=models.DateTimeField(null=sqlalchemy.sql.expression.true),
-            preserve_default=sqlalchemy.sql.expression.true,
-        ),
-        migrations.AddField(
-            model_name='meterdetails',
-            name='updated_at',
-            field=models.DateTimeField(null=sqlalchemy.sql.expression.true),
-            preserve_default=sqlalchemy.sql.expression.true,
-        ),
     ]

@@ -180,7 +180,7 @@ def acquisition_add(request, id):
         'id', 'transactiondate', 'rrnumber', 'supplierid__suppliername', 'supplierid__address').get(pk=id)
     mBrand = brands.objects.order_by('brand').distinct()
     mTypes = mtype.objects.order_by('metertype').distinct()
-    mAmp = meters.objects.values('ampheres').order_by('ampheres').distinct()
+    mAmp = meters.objects.values('Amperes').order_by('Amperes').distinct()
     mSupplier = suppliers.objects.order_by('suppliername').distinct()
     context = {'header': 'Meter Acquisition', 'datetoday': datetoday, 'acq':acq, 'area': transaction_area.area,
                 'transaction_area': AREA_CHOICES[int(transaction_area.area)], 'mBrand': mBrand, 'mTypes': mTypes, 'mAmp': mAmp, 'mSupplier': mSupplier}
@@ -216,7 +216,7 @@ def meter_ss(request):
         filter = request.GET.get('filter')
         order_by = request.GET.get('order_by')
         query = meters.objects.select_related('brand', 'mtype').filter(acquisitionid=id).values('id', 'acquisitionid', 'brandid', 'brandid__brand',
-                                                                                            'mtypeid__metertype', 'mtypeid', 'ampheres', 'serialnos', 'units').order_by(order_by)
+                                                                                            'mtypeid__metertype', 'mtypeid', 'Amperes', 'serialnos', 'units').order_by(order_by)
         # print('query', query.query)
         list_data = []
         for index, item in enumerate(query[start:start+limit], start):
@@ -233,12 +233,12 @@ def meter_save(request):
         acquisitionid = str(request.GET.get('acquisitionid'))
         brandid = str(request.GET.get('brandid'))
         mtypeid = str(request.GET.get('mtypeid'))
-        ampheres = str(request.GET.get('ampheres'))
+        Amperes = str(request.GET.get('Amperes'))
         serialnos = str(request.GET.get('serialnos'))
         units = str(request.GET.get('units'))
 
         cursor = connection.cursor()
-        cursor.execute('insert into zanecometerpy.meters (acquisitionid, brandid, mtypeid, ampheres, serialnos, units) values ("' + acquisitionid + '","' + brandid + '","' + mtypeid + '","' + ampheres + '","' + serialnos + '","' + units + '")')
+        cursor.execute('insert into zanecometerpy.meters (acquisitionid, brandid, mtypeid, Amperes, serialnos, units) values ("' + acquisitionid + '","' + brandid + '","' + mtypeid + '","' + Amperes + '","' + serialnos + '","' + units + '")')
         cursor.fetchall()
         meterid = cursor.lastrowid
 
@@ -268,16 +268,16 @@ def meter_edit(request):
             id = str(request.GET.get('id'))
             info = meters.objects.get(pk=id)
             data = {"id": info.id, "brandid": info.brandid.id, "brand": info.brandid.brand,
-                    "mtypeid": info.mtypeid.id, "metertype": info.mtypeid.metertype, "ampheres": info.ampheres, "serialnos": info.serialnos, "units": info.units}
+                    "mtypeid": info.mtypeid.id, "metertype": info.mtypeid.metertype, "Amperes": info.Amperes, "serialnos": info.serialnos, "units": info.units}
         else:
             id = str(request.GET.get('id'))
             brandid = str(request.GET.get('brandid'))
             mtypeid = str(request.GET.get('mtypeid'))
-            ampheres = str(request.GET.get('ampheres'))
+            Amperes = str(request.GET.get('Amperes'))
 
             cursor = connection.cursor()
-            cursor.execute("update zanecometerpy.meters set brandid = '{0}', mtypeid = '{1}', ampheres = '{2}' where id = {3}".format(
-                brandid, mtypeid, ampheres, id))
+            cursor.execute("update zanecometerpy.meters set brandid = '{0}', mtypeid = '{1}', Amperes = '{2}' where id = {3}".format(
+                brandid, mtypeid, Amperes, id))
             cursor.fetchall()
             data = {"msg": "updated"}
     return HttpResponse(json.dumps(data, default=default), content_type='application/json')

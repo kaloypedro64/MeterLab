@@ -14,8 +14,8 @@
     }
 </style>
 
-<!-- <section class="content" style="size: 8.5in 11in; size: landscape;"> -->
-<section class="content" style="size: 8.5in 11in; ">
+
+<section class="content" style="size: 8.5in 11in;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -39,7 +39,8 @@
                                     <b>PERIOD COVERED  {{ date_from }} - {{ date_to }}</b>
                                     <br>
                                     <strong></strong><br>
-                                    <b>CALIBRATION REPORT</b>
+                                    <b>CALIBRATION REPORT</b> <br>
+                                    {{ status }}
                                 </address>
                             </center>
                         </div>
@@ -129,12 +130,11 @@
     </div>
 </section>
 <script>
+
     window.addEventListener("", window.print());
-</script>
-
-<script type="text/javascript">
-
 
 </script>
+
+<script type="text/javascript"></script>
 
 {% endblock content %}

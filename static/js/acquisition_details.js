@@ -72,7 +72,7 @@ window.onload = function ()
                 },
                 { "data": "brandid__brand" },
                 { "data": "mtypeid__metertype" },
-                { "data": "ampheres" },
+                { "data": "Amperes" },
                 { "data": "units" },
                 { "data": "serialnos" },
             ],
@@ -236,7 +236,7 @@ window.onload = function ()
 
 function add_meter_modal(params)
 {
-    $('#id_ampheres').editableSelect({ effects: 'fade' });
+    $('#id_Amperes').editableSelect({ effects: 'fade' });
     $('#modal-add_meter').modal('show').draggable( { handle: ".modal-header" } );
 }
 
@@ -364,7 +364,7 @@ function meter_save(params)
     var mtypeid = $('#id_mtypeid').val();
     var units = $('#id_units').val();
     var serialnos = $('#id_serialnos').val();
-    var ampheres = $('#id_ampheres').val();
+    var Amperes = $('#id_Amperes').val();
 
     // var csrf = document.querySelector('[name="csrfmiddlewaretoken"]').value;
     $.ajax({
@@ -373,7 +373,7 @@ function meter_save(params)
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         contentType: false,
-        data: { acquisitionid: acquisitionid, units: units, serialnos: serialnos, brandid: brandid, mtypeid: mtypeid, ampheres: ampheres },
+        data: { acquisitionid: acquisitionid, units: units, serialnos: serialnos, brandid: brandid, mtypeid: mtypeid, Amperes: Amperes },
         // beforeSend: function (xhr)
         // {
         //     xhr.setRequestHeader("X-CSRFToken", csrf);
@@ -411,7 +411,7 @@ function edit_meter_modal(params)
             $("#id_mtypeid_b").select2().val(data.mtypeid).trigger('change.select2');
             $('#id_units_b').val(data.units);
             $('#id_serialnos_b').val(data.serialnos);
-            $('#id_ampheres_b').val(data.ampheres);
+            $('#id_Amperes_b').val(data.Amperes);
             $('#modal-edit_meter').modal('show').draggable({ handle: ".modal-header" });
 
         },
@@ -429,14 +429,14 @@ function meter_update(params)
     var mtypeid = $('#id_mtypeid_b').val();
     var units = $('#id_units_b').val();
     var serialnos = $('#id_serialnos_b').val();
-    var ampheres = $('#id_ampheres_b').val();
+    var Amperes = $('#id_Amperes_b').val();
     $.ajax({
         url: mEditUrl,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         contentType: false,
-        data: { option:"update", id: id, brandid: brandid, mtypeid: mtypeid, ampheres: ampheres },
+        data: { option:"update", id: id, brandid: brandid, mtypeid: mtypeid, Amperes: Amperes },
         success: function (data)
         {
             if (data.msg == 'updated')

@@ -75,7 +75,7 @@ class meters(models.Model):
         brands, db_column='brandid', on_delete=models.PROTECT, db_index=True)
     mtypeid = models.ForeignKey(
         mtype, db_column='mtypeid', on_delete=models.PROTECT, db_index=True)
-    ampheres = models.CharField(max_length=45, null=True)
+    Amperes = models.CharField(max_length=45, null=True)
     serialnos = models.CharField(max_length=145, null=True)
     units = models.IntegerField(default=0)              # meter count
     class Meta:
@@ -97,6 +97,7 @@ class meterdetails(models.Model):
         default=0, null=True)        # active, deleted
     updated_at = models.DateTimeField(null=true)
     rtw_at = models.DateTimeField(null=true)  # return to warehouse
+    is_read = models.PositiveSmallIntegerField(default=0, null=True)        # active, deleted
     class Meta:
         db_table = "meterdetails"
 

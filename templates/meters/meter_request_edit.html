@@ -111,16 +111,16 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="id_ampheres" class="col-sm-2 col-form-label">Amphere
+                                            <label for="id_Amperes" class="col-sm-2 col-form-label">Ampere
                                                 Rating:</label>
                                             <div class="col">
-                                                <select class="form-control form-control-sm" id="id_ampheres"
-                                                    name="ampheres">
+                                                <select class="form-control form-control-sm" id="id_Amperes"
+                                                    name="Amperes">
                                                     {% for row in mAmp %}
-                                                    {% if row.ampheres == form.ampheres %}
-                                                    <option selected value="{{ row.ampheres }}">{{row.ampheres }}</option>
+                                                    {% if row.Amperes == form.Amperes %}
+                                                    <option selected value="{{ row.Amperes }}">{{row.Amperes }}</option>
                                                     {% else %}
-                                                    <option value="{{ row.ampheres }}">{{row.ampheres}}</option>
+                                                    <option value="{{ row.Amperes }}">{{row.Amperes}}</option>
                                                     {% endif %}
                                                     {% endfor %}
                                                 </select>
@@ -160,7 +160,7 @@
         $('.select2').select2();
         $('#id_brand').editableSelect({ effects: 'fade' });
         $('#id_metertype').editableSelect({ effects: 'fade' });
-        $('#id_ampheres').editableSelect({ effects: 'fade' });
+        $('#id_Amperes').editableSelect({ effects: 'fade' });
     }
 
 
