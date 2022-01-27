@@ -30,7 +30,7 @@ urlpatterns = [
     path('meters/', include('Meters.urls')),
     path('calibration/', include('Calibration.urls')),
     path('metertest/', include('MeterTest.urls')),
-
+    path('suppliers/', include('Suppliers.urls')),
     path('signatory/', include('Signatory.urls')),
 
     path('users/', include('Users.urls')),

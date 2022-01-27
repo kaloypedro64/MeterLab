@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'Users',
     'Assign',
     'MeterTest',
+    'Suppliers',
     'service_objects',
-    # 'django_windows_tools',
     'django_extensions',
     'sslserver'
 ]

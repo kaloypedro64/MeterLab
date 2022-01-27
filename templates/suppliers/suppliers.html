@@ -1,0 +1,143 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "base/header.html" %}
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4 mr-2">
+                    <div class="input-group-prepend">
+
+                    </div>
+                </div>
+                <div class="ml-auto">
+                    <button onclick="" class="btn btn-info btn-sm mb-2 ml-1">
+                        <i class="fad fa-plus-hexagon mr-1"></i>New Test
+                    </button>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="row">
+                <section class="col-lg-6 connectedSortable ui-sortable">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table id="table-supplier" class="table table-nowrap table-hover table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th data-sort-column="" class="leftmost">
+                                            <input type="checkbox" id="select_all"><label
+                                                for="select_all"><span></span></label>
+                                        </th>
+                                        <th style="width: 60px;">Action</th>
+                                        <th>Supplier</th>
+                                        <th>Address</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                </section>
+                <section class="col-lg-6 connectedSortable ui-sortable">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table id="table-supplier-details" class="table table-nowrap table-hover table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th data-sort-column="" class="leftmost">
+                                            <input type="checkbox" id="select_all"><label
+                                                for="select_all"><span></span></label>
+                                        </th>
+                                        <th style="width: 60px;"></th>
+                                        <th>RR Number</th>
+                                        <th>Units</th>
+                                        <th>Serial Start</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                </section>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- <script src="{% static " js/alert.js" %}"></script> -->
+<script type="text/javascript">
+
+let tablez;
+    window.onload = function ()
+    {
+        Load_serials_table(0);
+        $('#table-test-history tbody').on('click', 'tr', function ()
+        {
+            if ($(this).hasClass('selected'))
+            {
+                $(this).removeClass('selected');
+            }
+            else
+            {
+                tablez.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    };
+
+
+    function Load_serials_table(params, datefrom, dateto)
+    {
+        tablez = $('#table-supplier').DataTable({
+            // "scrollX": true,
+            "searching": true,
+            "stateSave": true,
+            "info": false,
+            "paging": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            "responsive": true,
+            "columnDefs": [
+                { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
+                { "targets": [4], "className": "text-right" }
+            ],
+            "keys": true,
+            "keys": { "blurable": false },
+            "select": true,
+            "select": {
+                'style': 'single',
+                'selector': 'td:first-child'
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, callback, settings)
+            {
+                var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                var direction = "";
+                if (data.order[0].dir == "desc") { direction = "-" };
+                $.get("{% url 'suppliers' %}", {
+                    limit: data.length,
+                    start: data.start,
+                    filter: data.search.value,
+                    order_by: direction + sort_column_name
+                }, function (res)
+                {
+                    callback({
+                        recordsTotal: res.length,
+                        recordsFiltered: res.length,
+                        data: res.objects
+                    });
+                });
+            },
+            columns: [
+                { "data": "id" },
+                { "data": "suppliername" },
+                { "data": "address" },
+            ]
+        });
+        tablez.column(0).visible(false);
+    }
+
+
+</script>
+
+
+{% endblock content %}

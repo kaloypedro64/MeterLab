@@ -8,12 +8,10 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-2 mr-2">
-                </div>
-                <div class="ml-auto ">
+                <!-- <div class="ml-auto "> -->
                     <a href="new" type="button" class="btn btn-info btn-sm mb-2"><span style="font-size: 12px;"><i
                                 class="fal fa-plus mr-1"></i>Add User</span></a>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
         <section class="content">
@@ -111,7 +109,6 @@
                     { "data": "username" },
                     { "data": "first_name" },
                     { "data": "last_name" },
-                    // { "data": "userarea__area" },
                     {
                         "data": "userarea__area", "render": function (data, type, row)
                         {
@@ -163,28 +160,6 @@
                 Swal.fire('Changes are not saved', '', 'info')
             }
         });
-
-        // var ok = confirm('Are you sure to delete this entry?');
-        // if (ok == true)
-        // {
-        //     $.ajax({
-        //         url: "",
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         contentType: 'application/json; charset=utf-8',
-        //         contentType: false,
-        //         data: { id: id, },
-        //         success: function (data)
-        //         {
-        //             if (data == 'deleted')
-        //                 table_meters.draw();
-        //         },
-        //         error: function (e)
-        //         {
-        //             alert('err: meter list 158');
-        //         }
-        //     });
-        // }
     }
 
 </script>
