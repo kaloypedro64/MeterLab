@@ -139,9 +139,9 @@
                 </div>
             </div>
             <div class="card-footer clearfix">
-                <span style="background-color: #90EE90;">
+                <!-- <span style="background-color: #90EE90;">
                     Legend: Green = Returned meters
-                </span>
+                </span> -->
                 <!-- <button type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button> -->
 
             </div>
@@ -161,23 +161,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card card-primary card-tabs">
-                    <div class="card-header p-0 pt-1">
-                        <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-                            <li class="nav-item ">
-                                <a class="nav-link active" id="custom-tabs-two-profile-tab" data-toggle="pill"
-                                    href="#custom-tabs-meter-seal" role="tab" aria-controls="custom-tabs-meter-seal"
-                                    aria-selected="false"><i class="fal fa-solid fa-lasso mr-2"></i>Calibration History</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link " id="custom-tabs-two-home-tab" data-toggle="pill"
-                                    href="#custom-tabs-consumer" role="tab" aria-controls="custom-tabs-consumer"
-                                    aria-selected="true">
-                                    <i class="fal fad fa-books-medical mr-2"></i>Consumer
-                                </a>
-                            </li> -->
-                        </ul>
-                    </div>
+                <div class="card card-primary">
                     <div class="card-body">
                         <div class="tab-content" id="custom-tabs-two-tabContent">
                             <div class="tab-pane fade show active" id="custom-tabs-meter-seal" role="tabpanel"
@@ -575,12 +559,6 @@
                 { "data": "brand" },
                 { "data": "reading" },
                 { "data": "accuracy" },
-                // {
-                //     "data": "accuracy", "render": function (data, type, row)
-                //     {
-                //         return '<span style=""> ' + condition[row["accuracy"]] + '</span>'
-                //     }
-                // },
                 { "data": "amperes" },
                 { "data": "metertype" },
                 { "data": "seal_a" },
@@ -655,13 +633,6 @@
                 }
             });
         };
-
-
-
-
-        // var oTable = $("#tablez").DataTable();
-        // anyRowSelected = oTable.rows({ selected: true }).indexes().length === 0 ? false : true;//false - nothing selected. true - 1 or more are selected.
-        // alert(anyRowSelected);
     };
 
     function loadMeterSealDetails(id)
@@ -745,21 +716,18 @@
         multi.style.display = params;
     }
 
-    function modal_assign(params)
-    {
-        var data = tablez.rows('.selected').data();
-        var id = data[0]['id'];
-        var meterserial = data[0]['serial'];
-        var metertestid = data[0]['metertestid'];
-
-        alert(metertestid);
-
-        $('#id_id').val(id);
-        $('#id_metertestid').val(metertestid);
-        $('#id_serialno').val(meterserial);
-        $('#modal-assign').find('.modal-title').text("Assign Meter");
-        $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
-    }
+    // function modal_assign(params)
+    // {
+    //     var data = tablez.rows('.selected').data();
+    //     var id = data[0]['id'];
+    //     var meterserial = data[0]['serial'];
+    //     var metertestid = data[0]['metertestid'];
+    //     $('#id_id').val(id);
+    //     $('#id_metertestid').val(metertestid);
+    //     $('#id_serialno').val(meterserial);
+    //     $('#modal-assign').find('.modal-title').text("Assign Meter");
+    //     $('#modal-assign').modal('show').draggable({ handle: ".modal-header" });
+    // }
 
     function modal_calibration_update(params)
     {

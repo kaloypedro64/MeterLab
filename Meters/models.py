@@ -1,5 +1,6 @@
 import datetime
 from decimal import Decimal
+from pyexpat import model
 from django.db import models
 from datetime import date
 from django.utils import timezone
@@ -85,7 +86,7 @@ class meterdetails(models.Model):
     id = models.AutoField(primary_key=True)
     meterid = models.ForeignKey(
         meters, db_column='meterid', on_delete=models.CASCADE, db_index=True)
-    serialno = models.CharField(max_length=45, null=False)
+    serialno = models.CharField(max_length=45, null=False, db_index=True)
     accuracy = models.CharField(max_length=45, null=True)
     wms_status = models.PositiveSmallIntegerField(
         default=0, null=True)    # 0=forwarded, 1=pending, 2=returned
@@ -98,6 +99,7 @@ class meterdetails(models.Model):
     updated_at = models.DateTimeField(null=true)
     rtw_at = models.DateTimeField(null=true)  # return to warehouse
     is_read = models.PositiveSmallIntegerField(default=0, null=True)        # active, deleted
+    info = models.TextField(null=true)
     class Meta:
         db_table = "meterdetails"
 
@@ -127,7 +129,7 @@ class sealdetails(models.Model):
         seals, db_column='sealid', on_delete=models.CASCADE, db_index=True)
     meterdetailsid = models.ForeignKey(
         meterdetails, db_column='meterdetailsid', on_delete=models.PROTECT, db_index=True, null=True)
-    serialno = models.CharField(max_length=45, null=False)
+    serialno = models.CharField(max_length=45, null=False, db_index=True)
     techcrew = models.CharField(max_length=45, null=True)
 
     status = models.PositiveSmallIntegerField(

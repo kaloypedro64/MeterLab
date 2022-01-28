@@ -253,7 +253,7 @@
                     },
                     error: function (e)
                     {
-                        Swal.fire('Error!', e, 'info');
+                        Swal.fire('Error!', e, 'warning');
                     }
                 });
 
@@ -286,7 +286,7 @@
             },
             error: function (e)
             {
-                Swal.fire('Error!', e, 'info');
+                Swal.fire('Error!', e, 'warning');
             }
         });
 
@@ -328,7 +328,7 @@
                 },
                 error: function (e)
                 {
-                    alert('err: acquisition_save');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         }
@@ -350,7 +350,7 @@
                 },
                 error: function (e)
                 {
-                    Swal.fire('Error!', e, 'info');
+                    Swal.fire('Error!', e, 'warning');
                 }
             });
         }

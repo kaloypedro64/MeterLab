@@ -143,11 +143,6 @@ def seal_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
         transaction_area = userarea.objects.get(userid=request.user.id)
-        # .filter(area=transaction_area.area, acqtype=acqtype)
-        # acquisitionid__area=transaction_area.area,
-        # query = sealdetails.objects.select_related('acquisition', 'seals').filter(serialno__icontains=search, active__icontains=0).extra(select={'serialnos': 'cast(serialno AS UNSIGNED INTEGER)'}).values('id', 'sealid', 'meterdetailsid',
-        #                                                                                                                                                                                                    'serialno', 'techcrew', 'status', 'active').order_by('serialnos')
-        # print('query', query.query)
         query = """select sd.id, sd.serialno
                         from sealdetails sd
                         left join seals s on s.id = sd.sealid
@@ -179,8 +174,6 @@ def meters_list(request):
     if request.is_ajax():
         search = request.GET.get('searchTerm')
         transaction_area = userarea.objects.get(userid=request.user.id)
-        # query = meterdetails.objects.filter(serialno__icontains=search, active__icontains=0, status=0).values('id', 'meterid', 'serialno', 'accuracy', 'wms_status', 'status', 'active').order_by('serialno')
-        # SELECT `meterdetails`.`id`, `meterdetails`.`meterid`, `meterdetails`.`serialno`, `meterdetails`.`accuracy`, `meterdetails`.`wms_status`, `meterdetails`.`status`, `meterdetails`.`active` FROM `meterdetails` WHERE(`meterdetails`.`active` LIKE % 0 % AND `meterdetails`.`serialno` LIKE % a % AND `meterdetails`.`status`=0) ORDER BY `meterdetails`.`serialno` ASC
         query = """SELECT md.id, md.serialno
                     FROM meterdetails md
                     left join meters m on m.id = md.meterid
