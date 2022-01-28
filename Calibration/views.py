@@ -188,7 +188,6 @@ def meters_list(request):
                         where a.area = '{0}' and serialno like '%{1}%' and active = 0 and md.status = 0
                         order by cast(serialno AS UNSIGNED INTEGER)""".format(transaction_area.area, search)
         cursor = connection.cursor()
-        print('query', query)
         cursor.execute(query)
         row_headers = [x[0] for x in cursor.description]
         cnt = cursor.fetchall()

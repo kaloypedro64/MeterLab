@@ -13,25 +13,28 @@
 
                     </div>
                 </div>
-                <div class="ml-auto">
-                    <button onclick="" class="btn btn-info btn-sm mb-2 ml-1">
-                        <i class="fad fa-plus-hexagon mr-1"></i>New Test
-                    </button>
-                </div>
+
             </div>
         </div>
         <section class="content">
             <div class="row">
                 <section class="col-lg-6 connectedSortable ui-sortable">
                     <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="row">
+                                <h4>Suppliers</h4>
+                                <div class="ml-auto">
+                                    <button onclick="addSupplier()" class="btn btn-info btn-sm">
+                                        <i class="fad fa-plus-hexagon mr-1"></i>New Supplier
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <table id="table-supplier" class="table table-nowrap table-hover table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th data-sort-column="" class="leftmost">
-                                            <input type="checkbox" id="select_all"><label
-                                                for="select_all"><span></span></label>
-                                        </th>
+                                        <th></th>
                                         <th style="width: 60px;">Action</th>
                                         <th>Supplier</th>
                                         <th>Address</th>
@@ -42,14 +45,11 @@
                 <section class="col-lg-6 connectedSortable ui-sortable">
                     <div class="card card-primary card-outline">
                         <div class="card-body">
-                            <table id="table-supplier-details" class="table table-nowrap table-hover table-striped table-sm">
+                            <table id="table-supplier-details"
+                                class="table table-nowrap table-hover table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th data-sort-column="" class="leftmost">
-                                            <input type="checkbox" id="select_all"><label
-                                                for="select_all"><span></span></label>
-                                        </th>
-                                        <th style="width: 60px;"></th>
+                                        <th>Date</th>
                                         <th>RR Number</th>
                                         <th>Units</th>
                                         <th>Serial Start</th>
@@ -62,49 +62,86 @@
     </div>
 </div>
 
-<!-- <script src="{% static " js/alert.js" %}"></script> -->
+<div class="modal fade" id="modal-supplier">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header bg-primary ">
+                <h5 class="modal-title">New Supplier</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    {% csrf_token %}
+                    <input type="hidden" class="form-control form-control-sm" id="id_id" name="id" required>
+                    <div class="form-group row">
+                        <label for="id_suppliername" class="col-sm-3 col-form-label">Supplier Name:</label>
+                        <div class="col">
+                            <input type="text" class="form-control form-control-sm" id="id_suppliername"
+                                name="suppliername" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="id_address" class="col-sm-3 col-form-label">Address:</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" class="form-control form-control-sm" id="id_address" name="address"
+                                required></textarea>
+                        </div>
+                    </div>
+            </div>
+            </form>
+            <div class="modal-footer justify-content-left">
+                <button type="button" class="btn btn-info" id="btn_save" data-dismiss="static"
+                    onclick="saveSupplier()"><i class="fal fa-save mr-1"></i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
 
-let tablez;
+    let tables;
+    let urlSuppliers = "{% url 'suppliers' %}";
+    let urlAcquisitions = "{% url 'getsupplierdetails' %}";
+    let urlSaveSupplier = "{% url 'savesupplier' %}";
+    let urlEditSupplier = "{% url 'editsupplier' %}";
+    let urlDelSupplier = "{% url 'delsupplier' %}";
+
     window.onload = function ()
     {
-        Load_serials_table(0);
-        $('#table-test-history tbody').on('click', 'tr', function ()
+        loadTable();
+
+        $('#table-supplier tbody').on('click', 'tr', function (e, datatable, cell)
         {
-            if ($(this).hasClass('selected'))
-            {
-                $(this).removeClass('selected');
-            }
-            else
-            {
-                tablez.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            }
+            $('#table-supplier').DataTable().rows('.selected').nodes().to$().removeClass();
+            $(this).toggleClass('selected');
+
+            $("#table-supplier-details").dataTable().fnDestroy();
+            var data = $('#table-supplier').DataTable().row('.selected').data();
+            loadAcquisitions(data['id']);
         });
+
     };
 
-
-    function Load_serials_table(params, datefrom, dateto)
+    function loadTable(params)
     {
-        tablez = $('#table-supplier').DataTable({
-            // "scrollX": true,
+        tables = $('#table-supplier').DataTable({
             "searching": true,
-            "stateSave": true,
-            "info": false,
+            "info": true,
             "paging": true,
             "lengthChange": true,
             "autoWidth": false,
+            "scrollCollapse": true,
             "responsive": true,
             "columnDefs": [
-                { "targets": [0], "searchable": false, "orderable": false, "visible": true, },
-                { "targets": [4], "className": "text-right" }
+                { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+
             ],
-            "keys": true,
-            "keys": { "blurable": false },
-            "select": true,
-            "select": {
-                'style': 'single',
-                'selector': 'td:first-child'
+            "initComplete": function (settings, json)
+            {
+                $("#table-supplier").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
+                // $('#table-supplier').DataTable().columns.adjust().draw();
             },
             "processing": true,
             "serverSide": true,
@@ -113,7 +150,7 @@ let tablez;
                 var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g, "__");
                 var direction = "";
                 if (data.order[0].dir == "desc") { direction = "-" };
-                $.get("{% url 'suppliers' %}", {
+                $.get(urlSuppliers, {
                     limit: data.length,
                     start: data.start,
                     filter: data.search.value,
@@ -129,13 +166,195 @@ let tablez;
             },
             columns: [
                 { "data": "id" },
+                {
+                    "data": "id", "render": function (data, type, row)
+                    {
+                        return '<div class="btn-group">' +
+                            '<a href="#" class="btn btn-warning btn-xs" title="Edit" onclick = "editSupplier(' + data + ')" ><i class="fal fa-pencil-alt mr-1"></i><span style="font-size: 12px;">Edit</span></a>' +
+                            '<a href="#" class="btn btn-danger btn-xs" title="Delete" onclick = "delSupplier(' + data + ')" ><i class="fal fa-trash-alt"></i><span style="font-size: 12px;"></span></a>' +
+                            '</div>'
+                    }
+                },
                 { "data": "suppliername" },
                 { "data": "address" },
             ]
         });
-        tablez.column(0).visible(false);
     }
 
+    function loadAcquisitions(params)
+    {
+        $('#table-supplier-details').DataTable({
+            "searching": false,
+            "info": false,
+            "paging": true,
+            "autoWidth": false,
+            "columnDefs": [
+                // { "targets": [0], "searchable": false, "orderable": false, "visible": false },
+                { "targets": [0], "width": "25%", },
+            ],
+            "serverSide": true,
+            "processing": true,
+            "ajax": function (data, callback, settings)
+            {
+                var sort_column_namex = data.columns[data.order[0].column].data.replace(/\./g, "__");
+                var direction = "";
+                if (data.order[0].dir == "desc") { direction = "-" };
+                $.get(urlAcquisitions, {
+                    id: params,
+                    limit: data.length,
+                    start: data.start,
+                    filter: data.search.value,
+                    order_by: direction + sort_column_namex
+                }, function (res)
+                {
+                    callback({
+                        recordsTotal: res.length,
+                        recordsFiltered: res.length,
+                        data: res.objects
+                    });
+                });
+            },
+            columns: [
+                { "data": "transactiondate" },
+                { "data": "rrnumber" },
+                { "data": "units" },
+                { "data": "serialnos" },
+            ],
+        });
+    }
+
+    function delSupplier(params)
+    {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You wan't to delete this supplier!",
+            confirmButtonText: "Yes, delete it!",
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            icon: "question",
+        }).then((result) =>
+        {
+            if (result.isConfirmed)
+            {
+                $.ajax({
+                    url: urlDelSupplier,
+                    type: 'GET',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    contentType: false,
+                    data: { id: params },
+                    success: function (data)
+                    {
+                        if (data.msg == 'deleted')
+                        {
+                            Swal.fire('Deleted!', ' Successfully deleted!', 'success');
+                            $('#table-supplier').DataTable().ajax.reload(null, false);
+                        }
+                    },
+                    error: function (e)
+                    {
+                        Swal.fire('Error!', e, 'info');
+                    }
+                });
+
+            }
+        });
+    }
+
+    function addSupplier(params)
+    {
+        $('#modal-supplier').modal('show').draggable({ handle: ".modal-header" });
+    }
+
+    function editSupplier(params)
+    {
+        $.ajax({
+            url: urlEditSupplier,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            contentType: false,
+            data: { id: params },
+            success: function (data)
+            {
+                $('#modal-supplier').modal('show').draggable({ handle: ".modal-header" });
+                $('#id_id').val(data.id);
+                $('#id_suppliername').val(data.suppliername);
+                $('#id_address').val(data.address);
+                $("#btn_save").html('Update');
+
+            },
+            error: function (e)
+            {
+                Swal.fire('Error!', e, 'info');
+            }
+        });
+
+    }
+
+    function clearModal(params)
+    {
+        $('body').on('hidden.bs.modal', '.modal', function ()
+        {
+            $(this).find('input[type="text"],input[type="email"],textarea,select').each(function ()
+            {
+                if (this.defaultValue != '' || this.value != this.defaultValue)
+                {
+                    this.value = this.defaultValue;
+                } else { this.value = ''; }
+            });
+        });
+    }
+
+    function saveSupplier(params)
+    {
+        var part = $("#btn_save").html();
+        var data = $('form').serialize();
+        if (part == "Save")
+        {
+            $.ajax({
+                url: urlSaveSupplier,
+                type: 'POST',
+                data: data,
+                success: function (data)
+                {
+                    if (data.msg == 'saved')
+                    {
+                        $('#modal-supplier').modal('hide');
+                        Swal.fire('Saved!', ' Successfully saved!', 'success');
+                        $('#table-supplier').DataTable().ajax.reload(null, false);
+                        clearModal();
+                    }
+                },
+                error: function (e)
+                {
+                    alert('err: acquisition_save');
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                url: urlEditSupplier,
+                type: 'POST',
+                data: data,
+                success: function (data)
+                {
+                    if (data.msg == 'updated')
+                    {
+                        $('#modal-supplier').modal('hide');
+                        Swal.fire('Updated!', ' Successfully updated!', 'success');
+                        $('#table-supplier').DataTable().ajax.reload(null, false);
+                        clearModal();
+                    }
+                },
+                error: function (e)
+                {
+                    Swal.fire('Error!', e, 'info');
+                }
+            });
+        }
+    }
 
 </script>
 

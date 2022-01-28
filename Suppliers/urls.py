@@ -6,6 +6,9 @@ from .views import *
 
 urlpatterns = [
     path('', SuppliersList.as_view(), name='suppliers'),
-    # path('', views.Signatories, name='signatory'),
+    path('getsupplierdetails', views.getSupplierDetails, name='getsupplierdetails'),
+    path('savesupplier', views.saveSupplier, name='savesupplier'),
+    path('editsupplier', views.editSupplier, name='editsupplier'),
+    path('delsupplier', views.delSupplier, name='delsupplier'),
 ]
 
