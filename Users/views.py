@@ -53,7 +53,7 @@ class UserList(ListView):
 
 def login(request):
     if request.user.is_authenticated:
-        return render(request, 'acquisitions/acquisitions.html')
+        return render(request, 'dashboard.html')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():

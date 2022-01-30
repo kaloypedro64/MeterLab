@@ -40,7 +40,7 @@
                     <a type="button" href="#" onclick="add_meter_modal()" class="btn btn-info"><i
                             class="fad fa-plus-hexagon mr-1"></i><span style="font-size: 12px;">New Meter</span></a>
                     <a type="button" href="/acquisitions" class="btn btn-info"><i
-                            class="fad fa-times-hexagon mr-1"></i><span style="font-size: 12px;">Close</span></a>
+                            class="fad fa-backward mr-1"></i><span style="font-size: 12px;">Close</span></a>
                 </div>
             </div>
         </div>
@@ -172,8 +172,9 @@
                     <label for="id_serialnos" class="col-sm-3 col-form-label">Serial No.
                         Start:</label>
                     <div class="col">
-                        <input type="number" class="form-control form-control-sm" id="id_serialnos" name="serialnos"
-                            placeholder="0001">
+                        <input type="text" class="form-control form-control-sm" id="id_serialnos" name="serialnos">
+                        <div><span style="font-size: 12px; color: rgb(170, 53, 11);"><i class="fas fa-barcode-read mr-1"></i> Use bar code
+                                scanner for serial number entry to avoid error</span></div>
                     </div>
                 </div>
             </div>

@@ -303,20 +303,19 @@ def print_calibration_history(request):
             inner join acquisition a on a.id = m.acquisitionid
             left join metertype mt on mt.id = m.mtypeid
             left join meterdetails md on m.id = md.meterid
-            left join auth_user_area ua on ua.userid = a.userid
+            -- left join auth_user_area ua on ua.userid = a.userid
             left join meterseal ms on ms.meterdetailsid = md.id
             """
 
     cursor = connection.cursor()
     query += "where md.status = 2 " + isfiltered
-    query += "and ua.area = " + str(transaction_area.area)
+    query += "and a.area = " + str(transaction_area.area)
     query += " and ms.transactiondate between '{0}' and '{1}'".format(
         d_range[0], d_range[1])
     query += " and ms.transactiondate is not null "
     # query += " group by md.serialno order by cast(md.serialno as SIGNED) asc, transactiondate desc"
     query += " group by md.serialno order by ms.transactiondate desc"
     cursor.execute(query)
-
     mList = cursor.fetchall()
     context = {'mList': mList, 'signs': signs, 'date_from': d_range[0], 'date_to': d_range[1]}
     return render(request, html_print_calibration_history, context)

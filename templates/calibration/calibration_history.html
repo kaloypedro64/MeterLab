@@ -22,12 +22,12 @@
                     <li class="nav-item">
                         <a class="nav-link" id="custom-content-above-home-tab" data-toggle="pill"
                             href="#custom-content-above-home" role="tab" aria-controls="custom-content-above-home"
-                            aria-selected="true">Home</a>
+                            aria-selected="true">For Calibration</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" id="custom-content-above-profile-tab" data-toggle="pill"
                             href="#custom-content-above-profile" role="tab" aria-controls="custom-content-above-profile"
-                            aria-selected="false">History</a>
+                            aria-selected="false">Calibrated</a>
                     </li>
                 </ul>
                 <div class="tab-custom-content">
@@ -50,7 +50,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#" onclick="selected_status(0)"> For Calibration</a>
-                                <a class="dropdown-item" href="#" onclick="selected_status(6)"> Calibration Repair</a>
+                                <!-- <a class="dropdown-item" href="#" onclick="selected_status(6)"> Calibration Repair</a> -->
                             </div>
                             <button type="button" class="btn btn-default btn-sm"><i
                                     class="fas fa-sync-alt"></i></button>
@@ -127,7 +127,7 @@
                                     <th>Serial No.</th>
                                     <th>Brand</th>
                                     <th>Reading</th>
-                                    <th>Condition</th>
+                                    <!-- <th>Condition</th> -->
                                     <th>Accuracy</th>
                                     <th>Ampere</th>
                                     <th>Type</th>
@@ -339,6 +339,8 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-left">
+                <div><span style="font-size: 12px; color: rgb(170, 53, 11);"><i class="fas fa-barcode-read mr-1"></i> Use bar code
+                        scanner for serial number entry to avoid error</span></div>
                 <button type="button" class="btn btn-info inputs" data-dismiss="static"
                     onclick="calibration_update_save()">
                     <i class="fal fa-save mr-1"></i> Save
@@ -384,7 +386,6 @@
     {
         var date_from = $('#id_datefrom').val();
         var date_to = $('#id_dateto').val();
-        // $('#tabley').DataTable().ajax.reload(null, false);
         $('#tabley').DataTable().destroy();
         Load_serials_tabley(2, date_from, date_to);
     }
@@ -561,7 +562,7 @@
                 { "data": "accuracy" },
                 { "data": "amperes" },
                 { "data": "metertype" },
-                { "data": "seal_a" },
+                // { "data": "seal_a" },
                 {
                     "data": "seal_a", "render": function (data, type, row)
                     {
@@ -570,7 +571,7 @@
                 },
             ],
         });
-        tabley.column(6).visible(false);
+        // tabley.column(6).visible(false);
     }
 
     window.onload = function ()

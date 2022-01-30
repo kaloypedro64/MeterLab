@@ -275,12 +275,18 @@
 
   let acqAdds = "{% url 'acqadds' 0 %}";
 
+
+  function speech(params) {
+    // text = "Hi,,, Welcome to my presentation,, today I present you our new Meter Inventory System. ";
+    // var msg = new SpeechSynthesisUtterance(text);
+    // window.speechSynthesis.speak(msg);
+  }
   window.onload = function ()
   {
 
     loadAcquisition(0);
     loadAcquisition(1);
-
+    speech();
 
     $('#acqTable tbody').on('click', 'tr', function (e, datatable, cell)
     {
