@@ -257,7 +257,6 @@ def calibration_update_save(request):
                 'insert into zanecometerpy.meterseal (transactiondate, seal_a, seal_b, metercondition, accuracy, reading, remarks, meterdetailsid, userid) ' + \
                        'values ("' + transactiondate + '","' + seal_a + '","' + seal_b + '","' + metercondition + '","' + accuracy + '","' + reading + '","' + remarks + '","' + meterdetailsid + '","' + str(request.user.id) + '")'
         cursor.execute(query)
-
         if True:
             data = {"msg": 'saved'}
         else:

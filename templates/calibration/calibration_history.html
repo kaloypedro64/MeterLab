@@ -309,7 +309,7 @@
                     <div class="col">
                         <select class="form-control form-control-sm select2" id="id_metercondition"
                             name="metercondition">
-                            <option value="0">Good</option>
+                            <option value="0" selected>Good</option>
                             <option value="1">Damage</option>
                             <option value="2">Substandard</option>
                             <option value="3">Rehab.</option>
@@ -821,7 +821,7 @@
         $('#id_meterdetailsid2').val(null).trigger('change');
         $('#id_seal_a').val(null).trigger('change');
         $('#id_seal_b').val(null).trigger('change');
-        $('#id_metercondition').val('');
+        // $('#id_metercondition').val('');
         $('#id_accuracy').val('');
         $('#id_reading').val('');
         $('#id_remarks').val('');
@@ -842,7 +842,8 @@
         }
         var seal_a = $('#id_seal_a option:selected').html()
         var seal_b = $('#id_seal_b option:selected').html()
-        var metercondition = $('#id_metercondition').val();
+        var metercondition = document.getElementById("id_metercondition").value;
+        // var metercondition = $('#id_metercondition').val();
         var accuracy = $('#id_accuracy').val();
         var reading = $('#id_reading').val();
         var remarks = $('#id_remarks').val();

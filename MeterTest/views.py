@@ -14,7 +14,7 @@ import datetime
 import time
 import json
 import json as json_util
-from django.db import connection
+from django.db import connection, connections
 from django.db.models.expressions import Window
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -120,12 +120,20 @@ def meter_test_new(request, serialno):
 
 
 def search_for_meter(request):
+    transaction_area = userarea.objects.get(userid=request.user.id)
     if request.is_ajax():
         serial = request.GET.get('serial')
-        cursor = connection.cursor()
-        cursor.execute("select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" +
-                       str(serial) + "'")
-        data = cursor.fetchall()
+        zancursor = connections['zaneco'].cursor()
+        if (transaction_area.area == 1):
+            zancursor = connections['zaneco_pas'].cursor()
+        if (transaction_area.area == 2):
+            zancursor = connections['zaneco_sas'].cursor()
+        if (transaction_area.area == 3):
+            zancursor = connections['zaneco_las'].cursor()
+        zancursor.execute("select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" +
+                        str(serial) + "'")
+
+        data = zancursor.fetchall()
         try:
             name = data[0][1]
             address = data[0][2]
@@ -134,8 +142,8 @@ def search_for_meter(request):
         except:
             data = {'msg':'not found!'}
             return HttpResponse(json.dumps(data, default=default), 'application/json')
-
         # get brand
+        cursor = connection.cursor()
         try:
             _brand = brands.objects.get(brand__contains=brand)
             brandid = _brand.id
