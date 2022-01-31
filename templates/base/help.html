@@ -12,60 +12,52 @@
         font-size-adjust: 0.45;
     }
 </style>
-<form action method="POST" autocomplete="off">
-    {% csrf_token %}
-    <div class="content-wrapper">
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1>How to use</h1>
-                    </div>
-                </div>
-        </section>
-
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card card-success card-outline">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-info-circle mr-2"
-                                        aria-hidden="true"></i>Calibration Signatory</h3>
-                            </div>
-                            <div class="card-body">
-                                <input type="hidden" class="form-control form-control-sm" name="id" id="id_id"
-                                    value="{{ form.id }}">
-                                <div class="form-group has-success has-feedback row">
-                                    <label for="id_calibratedby" class="col-sm-3 col-form-label">Calibrated By:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm" name="calibratedby"
-                                            id="id_calibratedby" value="{{ form.calibratedby }}">
-                                    </div>
-                                </div>
-
-                                <div class="form-group has-success has-feedback row">
-                                    <label for="id_calibratedby_position"
-                                        class="col-sm-3 col-form-label">Position:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="calibratedby_position" id="id_calibratedby_position"
-                                            value="{{ form.calibratedby_position }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-
-                            </div>
-
-                        </div>
-                    </div>
-
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>How to use!</h1>
                 </div>
             </div>
-        </section>
-    </div>
-</form>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="timeline">
+                        <div class="time-label">
+                            <span class="bg-red">Jan. 31, 2022</span>
+                        </div>
+                        <!-- timeline item -->
+                        <div>
+                            <i class="fas fa-video bg-maroon"></i>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fas fa-clock"></i></span>
+                                <h3 class="timeline-header"><a href="#">Acquisition</a> shared a video</h3>
+
+                                <div class="timeline-body">
+                                    <div id="myVid" class="embed-responsive embed-responsive-16by9">
+                                        <video playsinline controls class="embed-responsive-item">
+                                            <source src="{% static "media/mis presentation.mp4" %}#t=15,20"  type="video/mp4" frameborder="0" allowfullscreen="" preload="metadata">
+                                        </video>
+                                    </div>
+                                </div>
+                                <div class="timeline-footer">
+                                    <a href="#" class="btn btn-sm bg-maroon disabled" >See comments</a>
+                                </div>
+                                <!-- <button class="btn btn-sm bg-maroon" onclick="seek('1.51')">Home</button> -->
+                            </div>
+                        </div>
+                        <!-- END timeline item -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
 
 <script>
 
@@ -73,6 +65,26 @@
     {
         document.getElementById("help").className = "nav-link active";
     }
+
+    function seek(params) {
+        let myVideo = document.getElementById("myVid");
+        // myVideo.fastSeek(params);
+        myVideo.currentTime = params;
+    }
+
+    // function seekToTime(ts)
+    // {
+    //     video_element.pause();
+    //     video_element.currentTime = ts;
+    //     var timer = setInterval(function ()
+    //     {
+    //         if (video_element.paused && video_element.readyState == 4 || !video_element.paused)
+    //         {
+    //             video_element.play();
+    //             clearInterval(timer);
+    //         }
+    //     }, 50);
+    // }
 
 </script>
 {% endblock content %}

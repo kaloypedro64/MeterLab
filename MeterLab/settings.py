@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'Assign',
     'MeterTest',
     'Suppliers',
+    'help',
     'service_objects',
     'django_extensions',
     'sslserver'

@@ -35,4 +35,5 @@ urlpatterns = [
 
     path('users/', include('Users.urls')),
     path('assign/', include('Assign.urls')),
+    path('help/', include('help.urls')),
 ]
