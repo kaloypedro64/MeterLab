@@ -1,8 +1,6 @@
 window.onload = function ()
 {
-
-    // select_brand(0);
-    // select_mtypes(0);
+    document.getElementById("aacquisition").className = "nav-link active";
 
     function loadMeters(params)
     {

@@ -110,6 +110,7 @@
 
     window.onload = function ()
     {
+        document.getElementById("suppliers").className = "nav-link active";
         loadTable();
 
         $('#table-supplier tbody').on('click', 'tr', function (e, datatable, cell)

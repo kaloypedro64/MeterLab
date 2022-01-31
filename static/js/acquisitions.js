@@ -1,6 +1,6 @@
 window.onload = function ()
 {
-
+    document.getElementById("acquisition").className = "nav-link active";
     loadAcquisition(0);
     loadAcquisition(1);
 

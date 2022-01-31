@@ -19,7 +19,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1>Signatories</h1>
+                        <h1>Signatory</h1>
                 </div>
                 <input type="hidden" class="form-control form-control-sm" name="area" id="id_area"
                     value="{{ transaction_area }}">
@@ -143,6 +143,9 @@
 
 <script>
 
+    window.onload = function () {
+        document.getElementById("signatory").className = "nav-link active";
+    }
 
 </script>
 {% endblock content %}

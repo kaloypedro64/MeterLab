@@ -126,9 +126,9 @@ def search_for_meter(request):
         zancursor = connections['zaneco'].cursor()
         if (transaction_area.area == 1):
             zancursor = connections['zaneco_pas'].cursor()
-        if (transaction_area.area == 2):
+        elif (transaction_area.area == 2):
             zancursor = connections['zaneco_sas'].cursor()
-        if (transaction_area.area == 3):
+        elif (transaction_area.area == 3):
             zancursor = connections['zaneco_las'].cursor()
         zancursor.execute("select accountnumber, name, address, serial, billmonth, totalbill, meterbrand from zaneco.master where serial <> '' and serial like '" +
                         str(serial) + "'")

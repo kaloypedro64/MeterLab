@@ -205,6 +205,8 @@
 
     window.onload = function ()
     {
+        document.getElementById("metertest").className = "nav-link active";
+
         Load_serials_table(0);
         $('#table-test-history tbody').on('click', 'tr', function ()
         {
@@ -254,7 +256,7 @@
                             $('#lblName').html(response[0][1]);
                             $('#lblAddress').html(response[0][2]);
                             $('#id_brand').val(response[0][6]);
-                            window.open(urlNewMeterTest.replace('0', response[0][3]), "_blank");
+                            window.open(urlNewMeterTest.replace('0', response[0][3]), "_self");
                             Swal.fire(response[0][1], response[0][2], "success");
                         }
                     },

@@ -16,30 +16,29 @@
 
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <!-- Left navbar links -->
-            <ul class="navbar-nav">
-
+            <ul id="navi" class="navbar-nav">
                 <li class="nav-item">
-                    <a href="/acquisitions" class="nav-link">Acquisition</a>
+                    <a href="/acquisitions" class="nav-link" id="acquisition">Acquisition</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/calibration" class="nav-link">Calibration</a>
+                    <a href="/calibration" class="nav-link" id="calibration">Calibration</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/metertest" class="nav-link">Meter Test</a>
+                    <a href="/metertest" class="nav-link" id="metertest">Meter Test</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/suppliers" class="nav-link">Suppliers</a>
+                    <a href="/suppliers" class="nav-link" id="suppliers">Suppliers</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/signatory" class="nav-link">Signatory</a>
+                    <a href="/signatory" class="nav-link" id="signatory">Signatory</a>
                 </li>
                 {% if user.is_superuser %}
                 <li class="nav-item">
-                    <a href="/users/list" class="nav-link">Users</a>
+                    <a href="/users/list" class="nav-link" id="users">Users</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="/signatory" class="nav-link">Help</a>
+                    <a href="/signatory" class="nav-link" id="help">Help</a>
                 </li>
 
             </ul>
